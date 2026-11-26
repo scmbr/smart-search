@@ -93,8 +93,24 @@ jobs:
           --health-cmd "pg_isready -U smart_search -d smart_search_test"
           --health-interval 5s --health-timeout 3s --health-retries 12
           --memory 1g --cpus 2
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.5.7
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: 'false'
+          xpack.ml.enabled: 'false'
+          ingest.geoip.downloader.enabled: 'false'
+          node.store.allow_mmap: 'false'
+          ES_JAVA_OPTS: -Xms512m -Xmx512m
+        ports:
+          - 9200:9200
+        options: >-
+          --health-cmd "curl -fsS http://localhost:9200/_cluster/health"
+          --health-interval 5s --health-timeout 3s --health-retries 36
+          --memory 2g --cpus 2
     env:
       TEST_POSTGRES_DSN: postgres://smart_search:test_only@localhost:5432/smart_search_test?sslmode=disable
+      TEST_ELASTICSEARCH_URL: http://localhost:9200
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -103,8 +119,8 @@ jobs:
         with:
           go-version: ${{ needs.repository.outputs.go_version }}
           cache: true
-      - name: Test PostgreSQL migrations and snapshots
-        run: go test -count=1 -v ./internal/infrastructure/postgres
+      - name: Test PostgreSQL and Elasticsearch integration
+        run: go test -count=1 -v ./internal/infrastructure/...
 
   frontend:
     name: frontend-quality

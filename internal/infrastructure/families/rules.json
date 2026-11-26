@@ -1,0 +1,15 @@
+{
+  "Version": "families-v1",
+  "Rules": [
+    {"ID":"astra-linux-special-edition","Name":"Astra Linux Special Edition","Groups":["121231"],"VendorPath":"/astralinux/","SourceURL":"https://store.softline.ru/astralinux/astra-linux-special-edition/"},
+    {"ID":"microsoft-office","Name":"Microsoft Office","Groups":["391338"],"VendorPath":"/microsoft/","SourceURL":"https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/"},
+    {"ID":"kaspersky-small-office-security","Name":"Kaspersky Small Office Security","Groups":["3761"],"VendorPath":"/kaspersky/","SourceURL":"https://store.softline.ru/kaspersky/kaspersky-small-office-security/"},
+    {"ID":"cryptopro-csp","Name":"КриптоПро CSP","Groups":["22268"],"VendorPath":"/kripto-pro/","SourceURL":"https://store.softline.ru/kripto-pro/cryptopro-csp/"},
+    {"ID":"anydesk","Name":"AnyDesk","Groups":["306539"],"VendorPath":"/anydesk/","SourceURL":"https://store.softline.ru/anydesk/anydesk/"},
+    {"ID":"cyber-backup","Name":"Кибер Бэкап","Groups":["173614"],"VendorPath":"/cyberprotect/","SourceURL":"https://store.softline.ru/cyberprotect/?filter%5Bcategory%5D%5B%5D=1033"},
+    {"ID":"scanner-vs","Name":"Сканер-ВС","Groups":["46421"],"VendorPath":"/npo-echelon/","SourceURL":"https://store.softline.ru/npo-echelon/eshelon-skaner-vs/"},
+    {"ID":"mts-link","Name":"МТС Линк","Groups":["414326"],"VendorPath":"/webinar/","SourceURL":"https://store.softline.ru/webinar/"},
+    {"ID":"maxpatrol-endpoint","Name":"MaxPatrol Endpoint Protection Platform","Groups":["437421"],"VendorPath":"/positive-technologies/","SourceURL":"https://store.softline.ru/positive-technologies/maxpatrol-endpoint-protection-platform/"},
+    {"ID":"microsoft-365","Name":"Microsoft 365","Groups":["165034"],"VendorPath":"/microsoft/","SourceURL":"https://store.softline.ru/microsoft/microsoft-365-for-family/"}
+  ]
+}

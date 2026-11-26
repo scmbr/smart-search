@@ -164,10 +164,14 @@ func (s *session) Finish(ctx context.Context, v domain.Validation) error {
 }
 
 func release(conn *pgxpool.Conn) error {
+	return releaseLock(conn, importLock)
+}
+
+func releaseLock(conn *pgxpool.Conn, lock int64) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	var unlocked bool
-	err := conn.QueryRow(ctx, "SELECT pg_advisory_unlock($1)", importLock).Scan(&unlocked)
+	err := conn.QueryRow(ctx, "SELECT pg_advisory_unlock($1)", lock).Scan(&unlocked)
 	if err != nil || !unlocked {
 		// Never put a connection still holding the session lock back in the pool.
 		closeErr := conn.Conn().Close(ctx)

@@ -8,6 +8,8 @@
   когда go.mod присутствует в коммите. Версия Go берётся из go.mod с актуальным patch.
 - postgres-quality: PostgreSQL 17.12, реальные миграции, атомарность порций,
   возобновление, блокировка writer и переключение active; требуется quality-gate.
+  Тот же job поднимает Elasticsearch 9.5.7 и проверяет реальный индекс/поиск:
+  фильтры, collapse, версии, exact SKU и priced/unpriced fallback.
 - frontend-quality: включается при frontend/package.json; требует .nvmrc,
   npm lockfile и scripts lint, lint:arch, typecheck, test:ci, build.
 - quality-gate: всегда запускается и отклоняет failure/cancelled/неожиданный skip.
