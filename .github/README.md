@@ -14,6 +14,8 @@
 CI не использует ключи моделей и не обращается к платным API. Actions закреплены
 SHA; права workflow — contents:read. Скрипт проверяет git index/commit, а не
 неотслеживаемые файлы. Локальная команда: `python .github/scripts/check_repository.py`.
+Go-файлы и go.mod/go.sum закреплены как LF в .gitattributes, включая Windows checkout;
+иначе core.autocrlf=true вызывает ложное падение gofmt.
 
 Настройки GitHub: auto-merge и удаление слитых веток включены, squash разрешён;
 main защищена обязательным quality-gate, актуальностью ветки, PR и линейной историей.
