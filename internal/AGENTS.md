@@ -9,6 +9,10 @@
 | --- | --- |
 | Зависимости | `go mod download`; после изменения импортов — `go mod tidy` |
 | Запуск текущей CLI | `go run ./cmd/catalog-check -file testdata/catalog/minimal.xml` |
+| PostgreSQL | `docker compose up -d --wait postgres` |
+| Миграции (forward-only) | `go run ./cmd/catalog-import -migrate-only` |
+| Импорт из CATALOG_PATH | `go run ./cmd/catalog-import` |
+| Интеграционные тесты | задать `TEST_POSTGRES_DSN`, затем `go test -count=1 -v ./internal/infrastructure/postgres` |
 | Сборка CLI | `go build -o bin/catalog-check.exe ./cmd/catalog-check` |
 | Форматирование: проверка / исправление | `gofmt -l internal cmd contracts` / `gofmt -w internal cmd contracts` |
 | Статический анализ | `go vet ./...` |
@@ -18,8 +22,11 @@
 | Целостность модулей | `go mod verify` |
 
 `gofmt -l` должен дать пустой вывод. golangci-lint/отдельный task runner не настроены.
-HTTP-сервера, Compose, миграций и PostgreSQL-адаптера пока нет: команд их запуска
-нет. Не подменяй их `catalog-check`: он только читает/проверяет файл и выдаёт отчёт.
+HTTP-сервера пока нет. `catalog-import` читает .env без замены переменных среды,
+применяет встроенные SQL-миграции и пишет staging/active снимки. `catalog-check`
+только читает/проверяет файл. Не передавай DSN с паролем через аргументы команд.
+Тесты PostgreSQL создают/удаляют отдельные схемы; обычные go test их пропускают,
+CI запускает их с отдельным сервисом и требует успех через quality-gate.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.
@@ -28,7 +35,8 @@ CI запускает форматирование, vet, сборку и тес�
 
 Жёсткое правило: **Infrastructure / Presentation → Application → Domain**.
 Внешние слои могут использовать domain, но внутренние никогда не импортируют внешние.
-Целевая структура ниже задаёт места нового кода, а не утверждает, что папки уже созданы:
+Структура нового импорта уже использует domain/application/infrastructure;
+presentation появится вместе с HTTP API:
 
 - `internal/domain/`: сущности, Value Objects, бизнес-инварианты, доменные ошибки
   и интерфейсы репозиториев. Только стандартная библиотека; никаких ORM, SQL,
