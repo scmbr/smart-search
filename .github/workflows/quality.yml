@@ -74,6 +74,38 @@ jobs:
       - name: Test
         run: go test -count=1 ./...
 
+  postgres:
+    name: postgres-quality
+    needs: repository
+    if: needs.repository.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17.12-bookworm
+        env:
+          POSTGRES_DB: smart_search_test
+          POSTGRES_USER: smart_search
+          POSTGRES_PASSWORD: test_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U smart_search -d smart_search_test"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+          --memory 1g --cpus 2
+    env:
+      TEST_POSTGRES_DSN: postgres://smart_search:test_only@localhost:5432/smart_search_test?sslmode=disable
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version: ${{ needs.repository.outputs.go_version }}
+          cache: true
+      - name: Test PostgreSQL migrations and snapshots
+        run: go test -count=1 -v ./internal/infrastructure/postgres
+
   frontend:
     name: frontend-quality
     needs: repository
@@ -112,13 +144,14 @@ jobs:
 
   gate:
     name: quality-gate
-    needs: [repository, backend, frontend]
+    needs: [repository, backend, postgres, frontend]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 2
     env:
       REPOSITORY: ${{ needs.repository.result }}
       BACKEND: ${{ needs.backend.result }}
+      POSTGRES: ${{ needs.postgres.result }}
       FRONTEND: ${{ needs.frontend.result }}
       HAS_GO: ${{ needs.repository.outputs.go }}
       HAS_FRONTEND: ${{ needs.repository.outputs.frontend }}
@@ -129,5 +162,6 @@ jobs:
           set -euo pipefail
           test "$REPOSITORY" = success
           if [ "$HAS_GO" = true ]; then test "$BACKEND" = success; else test "$BACKEND" = skipped; fi
+          if [ "$HAS_GO" = true ]; then test "$POSTGRES" = success; else test "$POSTGRES" = skipped; fi
           if [ "$HAS_FRONTEND" = true ]; then test "$FRONTEND" = success; else test "$FRONTEND" = skipped; fi
           printf 'Go present=%s result=%s\nFrontend present=%s result=%s\n' "$HAS_GO" "$BACKEND" "$HAS_FRONTEND" "$FRONTEND"

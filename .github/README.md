@@ -6,6 +6,8 @@
   JSON, имена PR/веток и actionlint v1.7.12.
 - go-quality: Linux/Windows, gofmt, go vet, go build и go test. Включается,
   когда go.mod присутствует в коммите. Версия Go берётся из go.mod с актуальным patch.
+- postgres-quality: PostgreSQL 17.12, реальные миграции, атомарность порций,
+  возобновление, блокировка writer и переключение active; требуется quality-gate.
 - frontend-quality: включается при frontend/package.json; требует .nvmrc,
   npm lockfile и scripts lint, lint:arch, typecheck, test:ci, build.
 - quality-gate: всегда запускается и отклоняет failure/cancelled/неожиданный skip.
@@ -14,8 +16,8 @@
 CI не использует ключи моделей и не обращается к платным API. Actions закреплены
 SHA; права workflow — contents:read. Скрипт проверяет git index/commit, а не
 неотслеживаемые файлы. Локальная команда: `python .github/scripts/check_repository.py`.
-Go-файлы и go.mod/go.sum закреплены как LF в .gitattributes, включая Windows checkout;
-иначе core.autocrlf=true вызывает ложное падение gofmt.
+Go-файлы, go.mod/go.sum и SQL-миграции закреплены как LF в .gitattributes,
+включая Windows checkout: иначе меняются gofmt и checksum встроенной миграции.
 
 Настройки GitHub: auto-merge и удаление слитых веток включены, squash разрешён;
 main защищена обязательным quality-gate, актуальностью ветки, PR и линейной историей.
