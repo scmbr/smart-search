@@ -1,0 +1,133 @@
+name: Quality
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository:
+    name: repository-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      go: ${{ steps.layout.outputs.go }}
+      frontend: ${{ steps.layout.outputs.frontend }}
+      go_version: ${{ steps.layout.outputs.go_version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Detect committed applications
+        id: layout
+        run: python .github/scripts/check_repository.py --layout >> "$GITHUB_OUTPUT"
+      - name: Check repository content and PR naming
+        run: python .github/scripts/check_repository.py
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version: stable
+          cache: false
+      - name: Lint GitHub Actions workflow
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/quality.yml
+
+  backend:
+    name: go-quality (${{ matrix.os }})
+    needs: repository
+    if: needs.repository.outputs.go == 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version: ${{ needs.repository.outputs.go_version }}
+          cache: true
+      - name: Download dependencies
+        run: go mod download
+      - name: Verify dependencies
+        run: go mod verify
+      - name: Check formatting
+        run: python .github/scripts/check_repository.py --go-format
+      - name: Lint
+        run: go vet ./...
+      - name: Type check and build
+        run: go build ./...
+      - name: Test
+        run: go test -count=1 ./...
+
+  frontend:
+    name: frontend-quality
+    needs: repository
+    if: needs.repository.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Require actual frontend scripts
+        run: node .github/scripts/check_frontend.mjs
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+      - name: Check FSD boundaries
+        working-directory: frontend
+        run: npm run lint:arch
+      - name: Type check
+        working-directory: frontend
+        run: npm run typecheck
+      - name: Test
+        working-directory: frontend
+        run: npm run test:ci
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+  gate:
+    name: quality-gate
+    needs: [repository, backend, frontend]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    env:
+      REPOSITORY: ${{ needs.repository.result }}
+      BACKEND: ${{ needs.backend.result }}
+      FRONTEND: ${{ needs.frontend.result }}
+      HAS_GO: ${{ needs.repository.outputs.go }}
+      HAS_FRONTEND: ${{ needs.repository.outputs.frontend }}
+    steps:
+      - name: Require all applicable checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$REPOSITORY" = success
+          if [ "$HAS_GO" = true ]; then test "$BACKEND" = success; else test "$BACKEND" = skipped; fi
+          if [ "$HAS_FRONTEND" = true ]; then test "$FRONTEND" = success; else test "$FRONTEND" = skipped; fi
+          printf 'Go present=%s result=%s\nFrontend present=%s result=%s\n' "$HAS_GO" "$BACKEND" "$HAS_FRONTEND" "$FRONTEND"
