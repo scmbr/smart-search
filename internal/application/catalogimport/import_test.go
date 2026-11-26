@@ -3,12 +3,14 @@ package catalogimport
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	domain "github.com/scmbr/smart-search/internal/domain/catalog"
 )
 
 type fakeStore struct {
+	identity  domain.Identity
 	state     domain.Snapshot
 	rows      []domain.Record
 	finished  bool
@@ -18,7 +20,8 @@ type fakeStore struct {
 	closeErr  error
 }
 
-func (f *fakeStore) Begin(context.Context, domain.Identity) (domain.ImportSession, error) {
+func (f *fakeStore) Begin(_ context.Context, identity domain.Identity) (domain.ImportSession, error) {
+	f.identity = identity
 	return f, nil
 }
 func (f *fakeStore) Snapshot() domain.Snapshot { return f.state }
@@ -49,6 +52,7 @@ func (f *fakeStore) Finish(_ context.Context, v domain.Validation) error {
 func (f *fakeStore) Close() error { f.closed = true; return f.closeErr }
 
 type fakeSource struct {
+	offer   *domain.Offer
 	count   int
 	fail    bool
 	invalid bool
@@ -65,6 +69,9 @@ func (s *fakeSource) Read(ctx context.Context, emit func(context.Context, domain
 			return domain.Validation{}, err
 		}
 		r := domain.Record{Offer: &domain.Offer{ID: string(rune('a' + i))}}
+		if s.offer != nil {
+			r.Offer = s.offer
+		}
 		if i == 0 {
 			r = domain.Record{Category: &domain.Category{ID: "cat"}}
 		}
@@ -147,5 +154,25 @@ func TestFinishAndCloseErrorsArePreserved(t *testing.T) {
 	r, err := Run(context.Background(), &fakeSource{count: 3}, f, 2)
 	if !errors.Is(err, finishErr) || !errors.Is(err, closeErr) || !f.closed || r.Snapshot.Status != domain.Staging {
 		t.Fatalf("result=%+v err=%v", r, err)
+	}
+}
+
+func TestImportNormalizesCopyAndVersionsIdentity(t *testing.T) {
+	o := &domain.Offer{ID: "license", Parameters: []domain.Parameter{{Name: "Тип лицензии", RawValue: "Продление", Value: "Продление", Known: true}},
+		Characteristics: &domain.Characteristics{OfferKind: domain.TextAttribute{Status: domain.Known, Value: "new_license"}}}
+	s := &fakeSource{count: 2, offer: o}
+	f := &fakeStore{state: domain.Snapshot{Status: domain.Staging}}
+	if _, err := Run(context.Background(), s, f, 2); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.HasSuffix(f.identity.SchemaVersion, "/"+domain.NormalizationVersion) || f.identity.ID() == s.Identity().ID() {
+		t.Fatalf("identity=%+v", f.identity)
+	}
+	stored := f.rows[1].Offer
+	if stored == o || stored.Characteristics == nil || stored.Characteristics.PolicyVersion != domain.NormalizationVersion || stored.Characteristics.OfferKind.Value != "renewal" {
+		t.Fatalf("stored=%+v", stored)
+	}
+	if o.Characteristics.OfferKind.Value != "new_license" {
+		t.Fatal("mutated source offer")
 	}
 }

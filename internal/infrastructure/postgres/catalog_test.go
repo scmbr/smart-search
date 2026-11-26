@@ -164,6 +164,9 @@ func TestPostgresImportResumeAndActivation(t *testing.T) {
 	if priced.PriceMinor == nil || *priced.PriceMinor != 120050 || !priced.Available || len(priced.Parameters) != 4 || priced.Parameters[2].RawValue != "Русский" || priced.Parameters[3].RawValue != "Английский" {
 		t.Fatalf("lost exact price or repeated parameters: %+v", priced)
 	}
+	if priced.Characteristics == nil || priced.Characteristics.PolicyVersion != domain.NormalizationVersion || priced.Characteristics.OfferKind.Value != "new_license" || priced.Characteristics.Version.Value != "1.0" {
+		t.Fatalf("lost normalized characteristics: %+v", priced.Characteristics)
+	}
 	reused, err := catalogimport.Run(ctx, source, repo, 4)
 	if err != nil || !reused.Reused || reused.Snapshot.ID != complete.Snapshot.ID {
 		t.Fatalf("repeat: %+v %v", reused, err)

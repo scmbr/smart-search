@@ -22,6 +22,7 @@ type Offer struct {
 	Parameters                                                        []Parameter
 	Attributes                                                        map[string]string
 	RawFields                                                         map[string][]string
+	Characteristics                                                   *Characteristics
 }
 
 // Record contains exactly one category or offer, in source order.
