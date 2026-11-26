@@ -1,0 +1,152 @@
+{
+  "dataset_role": "frozen_draft_holdout_pending_review",
+  "independent_evaluation": {
+    "eligible": false,
+    "review_status": "pending",
+    "execution_status": "not_run"
+  },
+  "frozen_on": "2026-11-27",
+  "cases_sha256": "4df626635b17782905cc4988be7ed132dd418520f208e2f3740eb18ee0fe4935",
+  "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
+  "policy": "Expected targets frozen before running search. Never tune on these cases; after exposure move to regression. No quality claims before independent review. Family/variant constraints are separate.",
+  "catalog_evidence": {
+    "459": {
+      "offers": 60,
+      "group_name": "Adobe Acrobat Professional",
+      "example_offer_id": "457",
+      "example_url": "https://store.softline.ru/adobe/65234083ba01a12-457/"
+    },
+    "50590": {
+      "offers": 50,
+      "group_name": "TrueConf Server",
+      "example_offer_id": "51167",
+      "example_url": "https://store.softline.ru/trueconf/-51167/"
+    },
+    "193420": {
+      "offers": 68,
+      "group_name": "Dr.Web Security Space",
+      "example_offer_id": "231538",
+      "example_url": "https://store.softline.ru/drweb/lhw-bk-12m-1-a3-231538/"
+    },
+    "43606": {
+      "offers": 3,
+      "group_name": "UserGate NGFW",
+      "example_offer_id": "528070",
+      "example_url": "https://store.softline.ru/entensys/-528070/"
+    }
+  },
+  "cases": [
+    {
+      "id": "hold-v2-adobe-acrobat-1",
+      "family": "adobe-acrobat",
+      "query": "Adobe Acrobat Professional лицензия",
+      "group_ids": [
+        "459"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    },
+    {
+      "id": "hold-v2-adobe-acrobat-2",
+      "family": "adobe-acrobat",
+      "query": "адоб акробат про",
+      "group_ids": [
+        "459"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    },
+    {
+      "id": "hold-v2-trueconf-server-1",
+      "family": "trueconf-server",
+      "query": "TrueConf Server лицензия",
+      "group_ids": [
+        "50590"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    },
+    {
+      "id": "hold-v2-trueconf-server-2",
+      "family": "trueconf-server",
+      "query": "труконф сервер",
+      "group_ids": [
+        "50590"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    },
+    {
+      "id": "hold-v2-drweb-security-space-1",
+      "family": "drweb-security-space",
+      "query": "Dr.Web Security Space",
+      "group_ids": [
+        "193420"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    },
+    {
+      "id": "hold-v2-drweb-security-space-2",
+      "family": "drweb-security-space",
+      "query": "доктор веб секьюрити спейс",
+      "group_ids": [
+        "193420"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    },
+    {
+      "id": "hold-v2-usergate-ngfw-1",
+      "family": "usergate-ngfw",
+      "query": "UserGate NGFW",
+      "group_ids": [
+        "43606"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    },
+    {
+      "id": "hold-v2-usergate-ngfw-2",
+      "family": "usergate-ngfw",
+      "query": "юзергейт ngfw межсетевой экран",
+      "group_ids": [
+        "43606"
+      ],
+      "forbidden_offer_kinds": [
+        "renewal",
+        "upgrade",
+        "support"
+      ],
+      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+    }
+  ]
+}

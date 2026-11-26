@@ -36,6 +36,8 @@ jobs:
         run: python .github/scripts/check_repository.py --layout >> "$GITHUB_OUTPUT"
       - name: Check repository content and PR naming
         run: python .github/scripts/check_repository.py
+      - name: Test offline evidence extraction
+        run: python -m unittest discover -s scripts -p 'test_*.py'
       - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
         with:
           go-version: stable

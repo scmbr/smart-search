@@ -27,7 +27,7 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := app.NewSpec(app.CatalogInfo{ID: "test-" + id, Offers: 9}, "fixture-v1")
+	spec := app.NewSpec(app.CatalogInfo{ID: "test-" + id, Offers: 10}, "fixture-v2")
 	ready, err := c.Prepare(ctx, spec)
 	if err != nil {
 		t.Fatal(err)
@@ -42,7 +42,11 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 	})
 	var rules []domain.FamilyRule
 	for _, group := range []string{"hardware", "software", "csp", "backup", "legacy", "astra", "viewer"} {
-		rules = append(rules, domain.FamilyRule{ID: group, Name: "Common " + group, Groups: []string{group}, VendorPath: "/v/", SourceURL: "https://example.invalid/" + group})
+		groups := []string{group}
+		if group == "backup" {
+			groups = append(groups, "backup-advanced")
+		}
+		rules = append(rules, domain.FamilyRule{ID: group, Name: "Common " + group, Groups: groups, VendorPath: "/v/", SourceURL: "https://example.invalid/" + group})
 	}
 	families, err := domain.NewFamilies(rules)
 	if err != nil {
@@ -60,6 +64,7 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 		{"csp-5", "csp", "Common КриптоПро CSP 5.0", "софт", "Полная версия", 600, true},
 		{"support", "csp", "Common КриптоПро CSP 5.0", "софт", "Техподдержка", 50, true},
 		{"backup", "backup", "Common Backup", "софт", "Полная версия", 700, true},
+		{"backup-advanced", "backup-advanced", "Common Backup Advanced", "софт", "Полная версия", 800, true},
 		{"legacy", "legacy", "Legacy product", "софт", "Полная версия", 0, false},
 		{"astra", "astra", "Операционная система Astra Linux Special Edition для рабочей станции", "софт", "Полная версия", 1000, true},
 		{"viewer", "viewer", "Astra Linux viewer", "софт", "Полная версия", 100, true},
@@ -129,5 +134,9 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 	common, err := app.Search(ctx, c, domain.Request{Query: "Common", Limit: 4})
 	if err != nil || !common.FourFamiliesConfirmed || len(common.Hits) != 4 {
 		t.Fatalf("four families=%+v err=%v", common, err)
+	}
+	backup, err := app.Search(ctx, c, domain.Request{Query: "Backup", Limit: 4})
+	if err != nil || len(backup.Hits) != 1 || backup.Hits[0].Document.FamilyID != "backup" || backup.FourFamiliesConfirmed {
+		t.Fatalf("editions in different source groups took separate family slots: %+v err=%v", backup, err)
 	}
 }

@@ -13,7 +13,7 @@ func TestMappingRetainsReferenceSourcesAndScope(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.HasPrefix(version, "families-v1-") {
+	if !strings.HasPrefix(version, "families-v2-") {
 		t.Fatal("missing mapping version")
 	}
 	var config struct {
