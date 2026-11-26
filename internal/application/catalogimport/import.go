@@ -26,7 +26,9 @@ func Run(ctx context.Context, source Source, repo domain.Repository, batchSize i
 	if err := ctx.Err(); err != nil {
 		return result, err
 	}
-	session, err := repo.Begin(ctx, source.Identity())
+	identity := source.Identity()
+	identity.SchemaVersion += "/" + domain.NormalizationVersion
+	session, err := repo.Begin(ctx, identity)
 	if err != nil {
 		return result, fmt.Errorf("begin import: %w", err)
 	}
@@ -65,6 +67,12 @@ func Run(ctx context.Context, source Source, repo domain.Repository, batchSize i
 		seen++
 		if seen <= state.Checkpoint {
 			return nil
+		}
+		if record.Offer != nil {
+			offer := *record.Offer
+			characteristics := domain.Normalize(offer)
+			offer.Characteristics = &characteristics
+			record.Offer = &offer
 		}
 		batch = append(batch, record)
 		if len(batch) == batchSize {

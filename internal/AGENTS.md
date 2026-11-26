@@ -78,6 +78,9 @@ XML-токены, HTTP request/response или структуры OpenAI/Elastic
   callback и CanActivate не означают завершённую транзакцию или активный каталог.
 - Храни деньги в целых копейках, неизвестные значения явно; не угадывай версии,
   роли лицензий и family_id по одной группе.
+- Характеристики вычисляет domain.Normalize в application импорта; правила —
+  docs/normalization.md. Меняя семантику/маппинг, повышай NormalizationVersion:
+  она включена в identity снимка. Старые ready-снимки не переписывай.
 - Требования поиска/допродаж — в `docs/search.md`, `docs/verification.md` и
   `docs/expert-answers.md`. Проверяй характеристики выбранных SKU программно;
   ссылки и ответ LLM не заменяют passed по обязательным правилам.
