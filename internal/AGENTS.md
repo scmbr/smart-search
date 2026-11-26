@@ -12,6 +12,10 @@
 | PostgreSQL | `docker compose up -d --wait postgres` |
 | Миграции (forward-only) | `go run ./cmd/catalog-import -migrate-only` |
 | Импорт из CATALOG_PATH | `go run ./cmd/catalog-import` |
+| Elasticsearch + PostgreSQL | `docker compose --profile search up -d --wait postgres elasticsearch` |
+| Индексация активного снимка | `go run ./cmd/catalog-index` |
+| Поиск CLI | `go run ./cmd/search -query "сервер"` |
+| Интеграционные тесты всех адаптеров | задать `TEST_POSTGRES_DSN` и `TEST_ELASTICSEARCH_URL`, затем `go test -count=1 -v ./internal/infrastructure/...` |
 | Интеграционные тесты | задать `TEST_POSTGRES_DSN`, затем `go test -count=1 -v ./internal/infrastructure/postgres` |
 | Сборка CLI | `go build -o bin/catalog-check.exe ./cmd/catalog-check` |
 | Форматирование: проверка / исправление | `gofmt -l internal cmd contracts` / `gofmt -w internal cmd contracts` |
@@ -27,6 +31,12 @@ HTTP-сервера пока нет. `catalog-import` читает .env без �
 только читает/проверяет файл. Не передавай DSN с паролем через аргументы команд.
 Тесты PostgreSQL создают/удаляют отдельные схемы; обычные go test их пропускают,
 CI запускает их с отдельным сервисом и требует успех через quality-gate.
+Elasticsearch-тест создаёт только собственный индекс/alias со случайным ID;
+без TEST_ELASTICSEARCH_URL пропускается. Индексы/volumes пользователя не удаляй.
+CLI search/catalog-index используют порты application; правила baseline —
+docs/lexical-baseline.md. Маппинг семейств — internal/infrastructure/families/rules.json;
+его канонический SHA-256 входит в index version. Новая семантика документа требует
+повышения DocumentSchemaVersion; provisional family keys не означают разные семейства.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.
