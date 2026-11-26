@@ -1,0 +1,552 @@
+openapi: 3.0.3
+info:
+  title: Smart Search API
+  version: 0.2.0
+  description: >-
+    Contract-first local demo. No server is implemented yet. All examples are
+    synthetic. Catalog snapshot availability is not live inventory.
+servers:
+  - url: http://localhost:8080/api/v1
+tags:
+  - name: search
+  - name: catalog
+  - name: analytics
+  - name: diagnostics
+paths:
+  /search:
+    post:
+      operationId: search
+      tags: [search]
+      summary: Search products and select suitable offers
+      description: >-
+        The same Idempotency-Key and body replay the same search without adding
+        an analytics event. Reuse with a different body returns 409. Cursor
+        requests keep the original search_id and snapshot and do not count as a
+        new submitted search. Changed query/context/filters invalidate the cursor.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SearchRequest'}
+            example:
+              query: защита компьютеров для малого бизнеса
+              session_id: demo-session
+              context: {segment: small_business}
+              filters: {availability_policy: priced_first}
+              limit: 4
+      responses:
+        '200':
+          description: Results, empty matches, or lexical fallback; never an infrastructure error disguised as empty results
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SearchResponse'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '413': {$ref: '#/components/responses/TooLarge'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /suggest:
+    get:
+      operationId: suggest
+      tags: [search]
+      summary: Get local suggestions without generation or a search-submitted event
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 256, pattern: '\S'}
+        - name: limit
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 10, default: 5}
+      responses:
+        '200':
+          description: Suggestions; frontend must ignore stale responses
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SuggestResponse'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [catalog]
+      summary: Get a product and its offer variants from the active snapshot
+      parameters:
+        - $ref: '#/components/parameters/ProductID'
+      responses:
+        '200':
+          description: Product variants, including unavailable ones with explicit availability
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Product'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /events:
+    post:
+      operationId: recordEvent
+      tags: [analytics]
+      summary: Record a click or suggestion selection idempotently
+      description: >-
+        Unknown search/suggestion/card references return 400. A duplicate event_id
+        with the same payload returns duplicate=true without recounting. Changed
+        payload under the same ID returns 409. Search submissions are server events.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Event'}
+      responses:
+        '200':
+          description: Event durably accepted, or previously accepted duplicate
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/EventReceipt'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '413': {$ref: '#/components/responses/TooLarge'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /analytics/summary:
+    get:
+      operationId: analyticsSummary
+      tags: [analytics]
+      summary: Aggregate successful searches and attributed clicks
+      parameters:
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/DataOrigin'
+      responses:
+        '200':
+          description: Cohort by search submission time in UTC [from,to), excluding synthetic data by default
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AnalyticsSummary'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /analytics/queries:
+    get:
+      operationId: analyticsQueries
+      tags: [analytics]
+      summary: Frequent and problematic queries with evidence, not automatic catalog changes
+      parameters:
+        - $ref: '#/components/parameters/From'
+        - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/DataOrigin'
+        - name: limit
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 100, default: 20}
+      responses:
+        '200':
+          description: Aggregate per normalized query; hypothesis is not a confirmed catalog gap
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/QueryAnalytics'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /searches/{id}/trace:
+    get:
+      operationId: searchTrace
+      tags: [diagnostics]
+      summary: Observable execution steps, never model chain-of-thought or secrets
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/ID'}
+      responses:
+        '200':
+          description: Actual stages of the requested search
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SearchTrace'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /health/live:
+    get:
+      operationId: liveness
+      tags: [diagnostics]
+      responses:
+        '200':
+          description: Process is alive; does not call external services
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Health'}
+  /health/ready:
+    get:
+      operationId: readiness
+      tags: [diagnostics]
+      description: OpenAI failure alone does not fail readiness when lexical search is available
+      responses:
+        '200':
+          description: Required database, index, and snapshot are ready
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Health'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+components:
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Client-generated key; retained at least 24h and scoped to the session
+      schema: {type: string, minLength: 1, maxLength: 128, pattern: '^[A-Za-z0-9_-]+$'}
+    ProductID:
+      name: id
+      in: path
+      required: true
+      schema: {$ref: '#/components/schemas/ID'}
+    From:
+      name: from
+      in: query
+      required: true
+      schema: {type: string, format: date-time}
+    To:
+      name: to
+      in: query
+      required: true
+      description: Exclusive; must be after from
+      schema: {type: string, format: date-time}
+    DataOrigin:
+      name: origin
+      in: query
+      schema: {type: string, enum: [demo, synthetic], default: demo}
+  responses:
+    BadRequest:
+      description: Invalid request, reference, or cursor; code invalid_request
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}
+    Conflict:
+      description: Idempotency conflict or expired snapshot; code idempotency_conflict or snapshot_expired
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}
+    TooLarge:
+      description: Body exceeds 16384 bytes; code payload_too_large
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}
+    NotFound:
+      description: Resource does not exist; code not_found
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}
+    Unavailable:
+      description: Required service temporarily unavailable; code service_unavailable
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}
+  schemas:
+    ID:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '^[A-Za-z0-9_-]+$'
+    Context:
+      oneOf:
+        - $ref: '#/components/schemas/UnspecifiedContext'
+        - $ref: '#/components/schemas/SyntheticContext'
+    UnspecifiedContext:
+      type: object
+      additionalProperties: false
+      properties:
+        category_id: {$ref: '#/components/schemas/ID'}
+        segment: {type: string, enum: [anonymous, small_business, enterprise], default: anonymous}
+        origin: {type: string, enum: [unspecified], default: unspecified}
+    SyntheticContext:
+      type: object
+      additionalProperties: false
+      required: [origin, profile_id]
+      properties:
+        origin: {type: string, enum: [synthetic]}
+        profile_id: {$ref: '#/components/schemas/ID'}
+        category_id: {$ref: '#/components/schemas/ID'}
+        segment: {type: string, enum: [anonymous, small_business, enterprise]}
+    Filters:
+      type: object
+      additionalProperties: false
+      properties:
+        availability_policy: {type: string, enum: [priced_first, available_only], default: priced_first}
+        platform: {type: string, minLength: 1, maxLength: 80}
+        license_type: {type: string, minLength: 1, maxLength: 80}
+        version: {type: string, minLength: 1, maxLength: 80}
+        min_users: {type: integer, minimum: 1, maximum: 1000000}
+        offer_kind: {type: string, enum: [new_license, renewal, upgrade, support, unknown]}
+    SearchRequest:
+      type: object
+      additionalProperties: false
+      required: [query, session_id]
+      properties:
+        query: {type: string, minLength: 1, maxLength: 256, pattern: '\S'}
+        session_id: {$ref: '#/components/schemas/ID'}
+        context: {$ref: '#/components/schemas/Context'}
+        filters: {$ref: '#/components/schemas/Filters'}
+        limit: {type: integer, minimum: 4, maximum: 20, default: 4}
+        cursor: {type: string, minLength: 1, maxLength: 2048}
+    Price:
+      description: Zero in feed becomes unknown, never a free product. Amount is integer kopecks.
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [status, amount_minor, currency]
+          properties:
+            status: {type: string, enum: [known]}
+            amount_minor: {type: integer, format: int64, minimum: 1}
+            currency: {type: string, enum: [RUB]}
+        - type: object
+          additionalProperties: false
+          required: [status, amount_minor, currency]
+          properties:
+            status: {type: string, enum: [unknown]}
+            amount_minor: {type: integer, nullable: true, enum: [null]}
+            currency: {type: string, enum: [RUB]}
+    Parameter:
+      type: object
+      additionalProperties: false
+      required: [name, values]
+      properties:
+        name: {type: string, minLength: 1}
+        values: {type: array, minItems: 1, items: {type: string}}
+    Offer:
+      type: object
+      additionalProperties: false
+      required: [offer_id, name, url, available, price, offer_kind, parameters]
+      properties:
+        offer_id: {$ref: '#/components/schemas/ID'}
+        name: {type: string, minLength: 1}
+        url: {type: string, pattern: '^https://'}
+        available: {type: boolean}
+        offer_kind: {type: string, enum: [new_license, renewal, upgrade, support, unknown]}
+        price: {$ref: '#/components/schemas/Price'}
+        parameters: {type: array, items: {$ref: '#/components/schemas/Parameter'}}
+    Card:
+      type: object
+      additionalProperties: false
+      required: [family_id, product_id, name, category_id, selected_offer, reasons]
+      properties:
+        family_id: {$ref: '#/components/schemas/ID'}
+        product_id: {$ref: '#/components/schemas/ID'}
+        name: {type: string, minLength: 1}
+        category_id: {$ref: '#/components/schemas/ID'}
+        image_url: {type: string, pattern: '^https://'}
+        selected_offer: {$ref: '#/components/schemas/Offer'}
+        reasons: {type: array, minItems: 1, items: {type: string, minLength: 1}}
+    Evidence:
+      type: object
+      additionalProperties: false
+      required: [url, checked_at, statement, limitations]
+      properties:
+        url: {type: string, pattern: '^https://'}
+        checked_at: {type: string, format: date-time}
+        statement: {type: string, minLength: 1}
+        limitations: {type: array, minItems: 1, items: {type: string, minLength: 1}}
+    Recommendation:
+      type: object
+      additionalProperties: false
+      required: [card, relation, explanation, evidence, verification]
+      properties:
+        card: {$ref: '#/components/schemas/Card'}
+        relation: {type: string, enum: [complementary, compatible]}
+        explanation: {type: string, minLength: 1}
+        evidence: {type: array, minItems: 1, items: {$ref: '#/components/schemas/Evidence'}}
+        verification: {$ref: '#/components/schemas/RecommendationVerification'}
+    RecommendationVerification:
+      type: object
+      additionalProperties: false
+      required: [status, policy_id, anchor_offer_id, recommended_offer_id, checked_at, checks]
+      description: Only passed reports may be published. Failed/unknown candidates remain diagnostics, not recommendations.
+      properties:
+        status: {type: string, enum: [passed]}
+        policy_id: {$ref: '#/components/schemas/ID'}
+        anchor_offer_id: {$ref: '#/components/schemas/ID'}
+        recommended_offer_id: {$ref: '#/components/schemas/ID'}
+        checked_at: {type: string, format: date-time}
+        checks:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            additionalProperties: false
+            required: [rule_id, field, operator, expected, observed, status, source_url]
+            properties:
+              rule_id: {$ref: '#/components/schemas/ID'}
+              field: {type: string, enum: [platform, version, architecture, users, nodes, license_type, organization_type]}
+              operator: {type: string, enum: [equals, contains, at_least, license_eligible]}
+              expected: {type: string, minLength: 1}
+              observed: {type: string, minLength: 1}
+              status: {type: string, enum: [passed]}
+              source_url: {type: string, pattern: '^https://'}
+    RankedFamily:
+      type: object
+      additionalProperties: false
+      required: [section, product_id, family_id]
+      properties:
+        section: {type: string, enum: [matches, alternatives, recommendations]}
+        product_id: {$ref: '#/components/schemas/ID'}
+        family_id: {$ref: '#/components/schemas/ID'}
+    Correction:
+      type: object
+      additionalProperties: false
+      required: [original, replacement, kind]
+      properties:
+        original: {type: string, minLength: 1}
+        replacement: {type: string, minLength: 1}
+        kind: {type: string, enum: [typo, synonym, transliteration, keyboard_layout]}
+    SearchResponse:
+      type: object
+      additionalProperties: false
+      required: [search_id, query, corrections, context, catalog_version, index_version, mode, degraded_reasons, matches, alternatives, recommendations, total_matches, clarification, duration_ms, next_cursor, top4, shortfall_reason, unpriced_fallback_used]
+      properties:
+        search_id: {$ref: '#/components/schemas/ID'}
+        query: {type: string, minLength: 1}
+        corrections: {type: array, items: {$ref: '#/components/schemas/Correction'}}
+        context: {$ref: '#/components/schemas/Context'}
+        catalog_version: {$ref: '#/components/schemas/ID'}
+        index_version: {$ref: '#/components/schemas/ID'}
+        mode: {type: string, enum: [hybrid, lexical]}
+        degraded_reasons:
+          type: array
+          uniqueItems: true
+          items: {type: string, enum: [openai_unavailable, budget_exhausted, embeddings_not_ready]}
+        matches: {type: array, items: {$ref: '#/components/schemas/Card'}}
+        alternatives: {type: array, items: {$ref: '#/components/schemas/Card'}}
+        recommendations: {type: array, items: {$ref: '#/components/schemas/Recommendation'}}
+        total_matches: {type: integer, minimum: 0, description: 'Distinct matching families before pagination, excluding cross-sells'}
+        top4: {type: array, maxItems: 4, items: {$ref: '#/components/schemas/RankedFamily'}}
+        shortfall_reason: {type: string, nullable: true, enum: [insufficient_relevant_families, verification_incomplete, availability_filter, null]}
+        unpriced_fallback_used: {type: boolean, description: True only when matching priced offers are absent and unpriced matches are returned}
+        clarification: {type: array, items: {type: string, minLength: 1}}
+        duration_ms: {type: integer, minimum: 0}
+        next_cursor: {type: string, nullable: true, minLength: 1, maxLength: 2048}
+    Suggestion:
+      type: object
+      additionalProperties: false
+      required: [suggestion_id, label, query, kind]
+      properties:
+        suggestion_id: {$ref: '#/components/schemas/ID'}
+        label: {type: string, minLength: 1}
+        query: {type: string, minLength: 1, maxLength: 256}
+        kind: {type: string, enum: [product, category, correction]}
+    SuggestResponse:
+      type: object
+      additionalProperties: false
+      required: [query, suggestions]
+      properties:
+        query: {type: string}
+        suggestions: {type: array, maxItems: 10, items: {$ref: '#/components/schemas/Suggestion'}}
+    Product:
+      type: object
+      additionalProperties: false
+      required: [family_id, product_id, name, category_id, catalog_version, offers]
+      properties:
+        family_id: {$ref: '#/components/schemas/ID'}
+        product_id: {$ref: '#/components/schemas/ID'}
+        name: {type: string, minLength: 1}
+        category_id: {$ref: '#/components/schemas/ID'}
+        catalog_version: {$ref: '#/components/schemas/ID'}
+        offers: {type: array, minItems: 1, items: {$ref: '#/components/schemas/Offer'}}
+    Event:
+      oneOf:
+        - $ref: '#/components/schemas/ClickEvent'
+        - $ref: '#/components/schemas/SuggestionEvent'
+    ClickEvent:
+      type: object
+      additionalProperties: false
+      required: [event_id, search_id, session_id, type, occurred_at, product_id, offer_id, position, section]
+      properties:
+        event_id: {$ref: '#/components/schemas/ID'}
+        search_id: {$ref: '#/components/schemas/ID'}
+        session_id: {$ref: '#/components/schemas/ID'}
+        type: {type: string, enum: [product_clicked, recommendation_clicked]}
+        occurred_at: {type: string, format: date-time}
+        product_id: {$ref: '#/components/schemas/ID'}
+        offer_id: {$ref: '#/components/schemas/ID'}
+        position: {type: integer, minimum: 1}
+        section: {type: string, enum: [matches, alternatives, recommendations]}
+    SuggestionEvent:
+      type: object
+      additionalProperties: false
+      required: [event_id, session_id, type, occurred_at, suggestion_id]
+      properties:
+        event_id: {$ref: '#/components/schemas/ID'}
+        session_id: {$ref: '#/components/schemas/ID'}
+        type: {type: string, enum: [suggestion_selected]}
+        occurred_at: {type: string, format: date-time}
+        suggestion_id: {$ref: '#/components/schemas/ID'}
+    EventReceipt:
+      type: object
+      additionalProperties: false
+      required: [event_id, duplicate]
+      properties:
+        event_id: {$ref: '#/components/schemas/ID'}
+        duplicate: {type: boolean}
+    AnalyticsSummary:
+      type: object
+      additionalProperties: false
+      required: [from, to, origin, searches, failed_searches, zero_match_searches, clicked_searches, zero_match_rate, click_rate, as_of]
+      properties:
+        from: {type: string, format: date-time}
+        to: {type: string, format: date-time}
+        origin: {type: string, enum: [demo, synthetic]}
+        searches: {type: integer, minimum: 0, description: Successful distinct initial searches in cohort}
+        failed_searches: {type: integer, minimum: 0}
+        zero_match_searches: {type: integer, minimum: 0}
+        clicked_searches: {type: integer, minimum: 0, description: Distinct cohort searches with a valid click received by as_of}
+        zero_match_rate: {type: number, nullable: true, minimum: 0, maximum: 1}
+        click_rate: {type: number, nullable: true, minimum: 0, maximum: 1}
+        as_of: {type: string, format: date-time}
+    QueryAnalytics:
+      type: object
+      additionalProperties: false
+      required: [from, to, origin, items]
+      properties:
+        from: {type: string, format: date-time}
+        to: {type: string, format: date-time}
+        origin: {type: string, enum: [demo, synthetic]}
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [query, searches, zero_match_searches, hypothesis, evidence_search_ids]
+            properties:
+              query: {type: string}
+              searches: {type: integer, minimum: 1}
+              zero_match_searches: {type: integer, minimum: 0}
+              hypothesis: {type: string, nullable: true, enum: [missing_synonym, incomplete_content, no_matching_license, no_available_offer, possible_catalog_gap, null]}
+              evidence_search_ids: {type: array, minItems: 1, items: {$ref: '#/components/schemas/ID'}}
+    SearchTrace:
+      type: object
+      additionalProperties: false
+      required: [search_id, index_version, stages]
+      properties:
+        search_id: {$ref: '#/components/schemas/ID'}
+        index_version: {$ref: '#/components/schemas/ID'}
+        stages:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            additionalProperties: false
+            required: [name, status, duration_ms, facts]
+            properties:
+              name: {type: string, enum: [normalize, interpret, lexical, vector, fusion, constraints, grouping, recommendations, verification]}
+              status: {type: string, enum: [completed, skipped, failed]}
+              duration_ms: {type: integer, minimum: 0}
+              facts: {type: array, items: {type: string}}
+    Health:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status: {type: string, enum: [ok]}
+    Error:
+      type: object
+      additionalProperties: false
+      required: [request_id, code, message]
+      properties:
+        request_id: {$ref: '#/components/schemas/ID'}
+        code: {type: string, enum: [invalid_request, idempotency_conflict, snapshot_expired, payload_too_large, not_found, service_unavailable]}
+        message: {type: string, minLength: 1}

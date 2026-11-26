@@ -1,0 +1,11 @@
+{
+  "synthetic": true,
+  "policy": "Do not activate a snapshot with category cycles or duplicate IDs. Other invalid records must be reported; no silent repair.",
+  "issues": [
+    {"code": "category_cycle", "ids": ["cycle-a", "cycle-b"]},
+    {"code": "duplicate_offer_id", "id": "duplicate"},
+    {"code": "negative_price", "id": "negative"},
+    {"code": "unknown_category", "id": "missing-category"},
+    {"code": "group_id_conflict", "id": "group-conflict"}
+  ]
+}

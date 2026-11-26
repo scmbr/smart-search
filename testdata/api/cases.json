@@ -1,0 +1,1265 @@
+{
+  "synthetic": true,
+  "cases": [
+    {
+      "name": "search preserves version",
+      "schema": "SearchRequest",
+      "valid": true,
+      "value": {
+        "query": "крипто про csp 5.0",
+        "session_id": "session-1",
+        "filters": {
+          "version": "5.0"
+        },
+        "limit": 4
+      }
+    },
+    {
+      "name": "blank query rejected",
+      "schema": "SearchRequest",
+      "valid": false,
+      "value": {
+        "query": "   ",
+        "session_id": "session-1"
+      }
+    },
+    {
+      "name": "session is required",
+      "schema": "SearchRequest",
+      "valid": false,
+      "value": {
+        "query": "сервер"
+      }
+    },
+    {
+      "name": "unknown request field rejected",
+      "schema": "SearchRequest",
+      "valid": false,
+      "value": {
+        "query": "сервер",
+        "session_id": "session-1",
+        "margin_boost": 100
+      }
+    },
+    {
+      "name": "unknown filter rejected",
+      "schema": "SearchRequest",
+      "valid": false,
+      "value": {
+        "query": "сервер",
+        "session_id": "session-1",
+        "filters": {
+          "free": true
+        }
+      }
+    },
+    {
+      "name": "unsupported segment rejected",
+      "schema": "SearchRequest",
+      "valid": false,
+      "value": {
+        "query": "сервер",
+        "session_id": "session-1",
+        "context": {
+          "segment": "other_customer_history"
+        }
+      }
+    },
+    {
+      "name": "minimum four requested",
+      "schema": "SearchRequest",
+      "valid": false,
+      "value": {
+        "query": "сервер",
+        "session_id": "session-1",
+        "limit": 3
+      }
+    },
+    {
+      "name": "known price uses integer kopecks",
+      "schema": "Price",
+      "valid": true,
+      "value": {
+        "status": "known",
+        "amount_minor": 120050,
+        "currency": "RUB"
+      }
+    },
+    {
+      "name": "unknown price is null",
+      "schema": "Price",
+      "valid": true,
+      "value": {
+        "status": "unknown",
+        "amount_minor": null,
+        "currency": "RUB"
+      }
+    },
+    {
+      "name": "zero is not free",
+      "schema": "Price",
+      "valid": false,
+      "value": {
+        "status": "known",
+        "amount_minor": 0,
+        "currency": "RUB"
+      }
+    },
+    {
+      "name": "negative price rejected",
+      "schema": "Price",
+      "valid": false,
+      "value": {
+        "status": "known",
+        "amount_minor": -100,
+        "currency": "RUB"
+      }
+    },
+    {
+      "name": "fractional kopecks rejected",
+      "schema": "Price",
+      "valid": false,
+      "value": {
+        "status": "known",
+        "amount_minor": 1.25,
+        "currency": "RUB"
+      }
+    },
+    {
+      "name": "unknown price must not contain zero",
+      "schema": "Price",
+      "valid": false,
+      "value": {
+        "status": "unknown",
+        "amount_minor": 0,
+        "currency": "RUB"
+      }
+    },
+    {
+      "name": "safe unavailable offer",
+      "schema": "Offer",
+      "valid": true,
+      "value": {
+        "offer_id": "legacy",
+        "name": "Тестовая старая лицензия",
+        "url": "https://example.invalid/legacy",
+        "available": false,
+        "price": {
+          "status": "unknown",
+          "amount_minor": null,
+          "currency": "RUB"
+        },
+        "parameters": [],
+        "offer_kind": "unknown"
+      }
+    },
+    {
+      "name": "unsafe product link rejected",
+      "schema": "Offer",
+      "valid": false,
+      "value": {
+        "offer_id": "bad",
+        "name": "Тест",
+        "url": "javascript:alert(1)",
+        "available": true,
+        "price": {
+          "status": "known",
+          "amount_minor": 100,
+          "currency": "RUB"
+        },
+        "parameters": [],
+        "offer_kind": "new_license"
+      }
+    },
+    {
+      "name": "product click",
+      "schema": "Event",
+      "valid": true,
+      "value": {
+        "event_id": "event-1",
+        "search_id": "search-1",
+        "session_id": "session-1",
+        "type": "product_clicked",
+        "occurred_at": "2026-11-26T10:00:00Z",
+        "product_id": "p-os",
+        "offer_id": "os-new",
+        "position": 1,
+        "section": "matches"
+      }
+    },
+    {
+      "name": "suggestion is not search",
+      "schema": "Event",
+      "valid": true,
+      "value": {
+        "event_id": "event-2",
+        "session_id": "session-1",
+        "type": "suggestion_selected",
+        "occurred_at": "2026-11-26T10:00:00Z",
+        "suggestion_id": "suggestion-1"
+      }
+    },
+    {
+      "name": "frontend cannot submit search count",
+      "schema": "Event",
+      "valid": false,
+      "value": {
+        "event_id": "event-3",
+        "session_id": "session-1",
+        "type": "search_submitted",
+        "occurred_at": "2026-11-26T10:00:00Z"
+      }
+    },
+    {
+      "name": "click needs product reference",
+      "schema": "Event",
+      "valid": false,
+      "value": {
+        "event_id": "event-4",
+        "search_id": "search-1",
+        "session_id": "session-1",
+        "type": "product_clicked",
+        "occurred_at": "2026-11-26T10:00:00Z",
+        "position": 1,
+        "section": "matches"
+      }
+    },
+    {
+      "name": "empty analytics has unavailable rates",
+      "schema": "AnalyticsSummary",
+      "valid": true,
+      "value": {
+        "from": "2026-11-25T00:00:00Z",
+        "to": "2026-11-26T00:00:00Z",
+        "origin": "demo",
+        "searches": 0,
+        "failed_searches": 0,
+        "zero_match_searches": 0,
+        "clicked_searches": 0,
+        "zero_match_rate": null,
+        "click_rate": null,
+        "as_of": "2026-11-26T10:00:00Z"
+      }
+    },
+    {
+      "name": "rate cannot exceed one",
+      "schema": "AnalyticsSummary",
+      "valid": false,
+      "value": {
+        "from": "2026-11-25T00:00:00Z",
+        "to": "2026-11-26T00:00:00Z",
+        "origin": "demo",
+        "searches": 1,
+        "failed_searches": 0,
+        "zero_match_searches": 0,
+        "clicked_searches": 1,
+        "zero_match_rate": 0,
+        "click_rate": 2,
+        "as_of": "2026-11-26T10:00:00Z"
+      }
+    },
+    {
+      "name": "infrastructure failure",
+      "schema": "Error",
+      "valid": true,
+      "value": {
+        "request_id": "request-1",
+        "code": "service_unavailable",
+        "message": "Поиск временно недоступен"
+      }
+    },
+    {
+      "name": "empty matches are success",
+      "schema": "SearchResponse",
+      "valid": true,
+      "value": {
+        "search_id": "search-empty",
+        "query": "корм для рыб",
+        "corrections": [],
+        "context": {
+          "segment": "anonymous"
+        },
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "hybrid",
+        "degraded_reasons": [],
+        "matches": [],
+        "alternatives": [],
+        "recommendations": [],
+        "total_matches": 0,
+        "clarification": [
+          "Уточните запрос"
+        ],
+        "duration_ms": 25,
+        "next_cursor": null,
+        "top4": [],
+        "shortfall_reason": "insufficient_relevant_families",
+        "unpriced_fallback_used": false
+      }
+    },
+    {
+      "name": "lexical fallback",
+      "schema": "SearchResponse",
+      "valid": true,
+      "value": {
+        "search_id": "search-fallback",
+        "query": "несуществующий продукт",
+        "corrections": [],
+        "context": {},
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "lexical",
+        "degraded_reasons": [
+          "openai_unavailable"
+        ],
+        "matches": [],
+        "alternatives": [],
+        "recommendations": [],
+        "total_matches": 0,
+        "clarification": [
+          "Доступен поиск по словам"
+        ],
+        "duration_ms": 30,
+        "next_cursor": null,
+        "top4": [],
+        "shortfall_reason": "insufficient_relevant_families",
+        "unpriced_fallback_used": false
+      }
+    },
+    {
+      "name": "four distinct products",
+      "schema": "SearchResponse",
+      "valid": true,
+      "value": {
+        "search_id": "search-four",
+        "query": "программы для рабочего места",
+        "corrections": [],
+        "context": {
+          "segment": "small_business"
+        },
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "hybrid",
+        "degraded_reasons": [],
+        "total_matches": 4,
+        "clarification": [],
+        "duration_ms": 40,
+        "next_cursor": null,
+        "matches": [
+          {
+            "product_id": "p-os",
+            "name": "Тестовая ОС",
+            "category_id": "os",
+            "selected_offer": {
+              "offer_id": "os-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/os/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 120050,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Операционная система"
+            ],
+            "family_id": "family-p-os"
+          },
+          {
+            "product_id": "p-security",
+            "name": "Тестовая защита",
+            "category_id": "security",
+            "selected_offer": {
+              "offer_id": "security-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/security/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 300000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Защита рабочего места"
+            ],
+            "family_id": "family-p-security"
+          },
+          {
+            "product_id": "p-backup",
+            "name": "Тестовое резервное копирование",
+            "category_id": "backup",
+            "selected_offer": {
+              "offer_id": "backup-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/backup/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 700000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Сохранение данных"
+            ],
+            "family_id": "family-p-backup"
+          },
+          {
+            "product_id": "p-remote",
+            "name": "Тестовый удалённый доступ",
+            "category_id": "remote",
+            "selected_offer": {
+              "offer_id": "remote-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/remote/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 80000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Удалённая работа"
+            ],
+            "family_id": "family-p-remote"
+          }
+        ],
+        "alternatives": [],
+        "recommendations": [],
+        "top4": [
+          {
+            "section": "matches",
+            "product_id": "p-os",
+            "family_id": "family-p-os"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-security",
+            "family_id": "family-p-security"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-backup",
+            "family_id": "family-p-backup"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-remote",
+            "family_id": "family-p-remote"
+          }
+        ],
+        "shortfall_reason": null,
+        "unpriced_fallback_used": false
+      }
+    },
+    {
+      "name": "recommendation has evidence",
+      "schema": "Recommendation",
+      "valid": true,
+      "value": {
+        "card": {
+          "product_id": "p-backup",
+          "name": "Тестовый бэкап",
+          "category_id": "backup",
+          "selected_offer": {
+            "offer_id": "backup-new",
+            "name": "Новая лицензия",
+            "url": "https://example.invalid/backup/new",
+            "available": true,
+            "price": {
+              "status": "known",
+              "amount_minor": 700000,
+              "currency": "RUB"
+            },
+            "parameters": [],
+            "offer_kind": "new_license"
+          },
+          "reasons": [
+            "Сохранение данных"
+          ],
+          "family_id": "family-p-backup"
+        },
+        "relation": "compatible",
+        "explanation": "Синтетический пример связи",
+        "evidence": [
+          {
+            "url": "https://example.invalid/vendor/compatibility",
+            "checked_at": "2026-11-26T10:00:00Z",
+            "statement": "Синтетическое подтверждение для теста",
+            "limitations": [
+              "Только тестовая версия 1.0; не реальная совместимость"
+            ]
+          }
+        ],
+        "verification": {
+          "status": "passed",
+          "anchor_offer_id": "os-new",
+          "recommended_offer_id": "backup-new",
+          "checked_at": "2026-11-26T10:00:00Z",
+          "checks": [
+            {
+              "rule_id": "platform-match",
+              "field": "platform",
+              "operator": "equals",
+              "expected": "TestOS 1.0",
+              "observed": "TestOS 1.0",
+              "status": "passed",
+              "source_url": "https://example.invalid/vendor/compatibility"
+            },
+            {
+              "rule_id": "license-check",
+              "field": "license_type",
+              "operator": "license_eligible",
+              "expected": "new_license",
+              "observed": "new_license",
+              "status": "passed",
+              "source_url": "https://example.invalid/vendor/licensing"
+            }
+          ],
+          "policy_id": "synthetic-policy-v1"
+        }
+      }
+    },
+    {
+      "name": "recommendation without source rejected",
+      "schema": "Recommendation",
+      "valid": false,
+      "value": {
+        "card": {
+          "product_id": "p-backup",
+          "name": "Тестовый бэкап",
+          "category_id": "backup",
+          "selected_offer": {
+            "offer_id": "backup-new",
+            "name": "Новая лицензия",
+            "url": "https://example.invalid/backup/new",
+            "available": true,
+            "price": {
+              "status": "known",
+              "amount_minor": 700000,
+              "currency": "RUB"
+            },
+            "parameters": [],
+            "offer_kind": "new_license"
+          },
+          "reasons": [
+            "Сохранение данных"
+          ],
+          "family_id": "family-p-backup"
+        },
+        "relation": "compatible",
+        "explanation": "Без доказательств",
+        "evidence": [],
+        "verification": {
+          "status": "passed",
+          "anchor_offer_id": "os-new",
+          "recommended_offer_id": "backup-new",
+          "checked_at": "2026-11-26T10:00:00Z",
+          "checks": [
+            {
+              "rule_id": "platform-match",
+              "field": "platform",
+              "operator": "equals",
+              "expected": "TestOS 1.0",
+              "observed": "TestOS 1.0",
+              "status": "passed",
+              "source_url": "https://example.invalid/vendor/compatibility"
+            },
+            {
+              "rule_id": "license-check",
+              "field": "license_type",
+              "operator": "license_eligible",
+              "expected": "new_license",
+              "observed": "new_license",
+              "status": "passed",
+              "source_url": "https://example.invalid/vendor/licensing"
+            }
+          ],
+          "policy_id": "synthetic-policy-v1"
+        }
+      }
+    },
+    {
+      "name": "source alone is insufficient",
+      "schema": "Recommendation",
+      "valid": false,
+      "value": {
+        "card": {
+          "product_id": "p-backup",
+          "name": "Тестовый бэкап",
+          "category_id": "backup",
+          "selected_offer": {
+            "offer_id": "backup-new",
+            "name": "Новая лицензия",
+            "url": "https://example.invalid/backup/new",
+            "available": true,
+            "price": {
+              "status": "known",
+              "amount_minor": 700000,
+              "currency": "RUB"
+            },
+            "parameters": [],
+            "offer_kind": "new_license"
+          },
+          "reasons": [
+            "Сохранение данных"
+          ],
+          "family_id": "family-p-backup"
+        },
+        "relation": "compatible",
+        "explanation": "Синтетический пример связи",
+        "evidence": [
+          {
+            "url": "https://example.invalid/vendor/compatibility",
+            "checked_at": "2026-11-26T10:00:00Z",
+            "statement": "Синтетическое подтверждение для теста",
+            "limitations": [
+              "Только тестовая версия 1.0; не реальная совместимость"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknown characteristic rejected",
+      "schema": "Recommendation",
+      "valid": false,
+      "value": {
+        "card": {
+          "product_id": "p-backup",
+          "name": "Тестовый бэкап",
+          "category_id": "backup",
+          "selected_offer": {
+            "offer_id": "backup-new",
+            "name": "Новая лицензия",
+            "url": "https://example.invalid/backup/new",
+            "available": true,
+            "price": {
+              "status": "known",
+              "amount_minor": 700000,
+              "currency": "RUB"
+            },
+            "parameters": [],
+            "offer_kind": "new_license"
+          },
+          "reasons": [
+            "Сохранение данных"
+          ],
+          "family_id": "family-p-backup"
+        },
+        "relation": "compatible",
+        "explanation": "Синтетический пример связи",
+        "evidence": [
+          {
+            "url": "https://example.invalid/vendor/compatibility",
+            "checked_at": "2026-11-26T10:00:00Z",
+            "statement": "Синтетическое подтверждение для теста",
+            "limitations": [
+              "Только тестовая версия 1.0; не реальная совместимость"
+            ]
+          }
+        ],
+        "verification": {
+          "status": "passed",
+          "anchor_offer_id": "os-new",
+          "recommended_offer_id": "backup-new",
+          "checked_at": "2026-11-26T10:00:00Z",
+          "checks": [
+            {
+              "rule_id": "platform-match",
+              "field": "platform",
+              "operator": "equals",
+              "expected": "TestOS 1.0",
+              "observed": "TestOS 1.0",
+              "status": "unknown",
+              "source_url": "https://example.invalid/vendor/compatibility"
+            },
+            {
+              "rule_id": "license-check",
+              "field": "license_type",
+              "operator": "license_eligible",
+              "expected": "new_license",
+              "observed": "new_license",
+              "status": "passed",
+              "source_url": "https://example.invalid/vendor/licensing"
+            }
+          ],
+          "policy_id": "synthetic-policy-v1"
+        }
+      }
+    },
+    {
+      "name": "failed characteristic rejected",
+      "schema": "Recommendation",
+      "valid": false,
+      "value": {
+        "card": {
+          "product_id": "p-backup",
+          "name": "Тестовый бэкап",
+          "category_id": "backup",
+          "selected_offer": {
+            "offer_id": "backup-new",
+            "name": "Новая лицензия",
+            "url": "https://example.invalid/backup/new",
+            "available": true,
+            "price": {
+              "status": "known",
+              "amount_minor": 700000,
+              "currency": "RUB"
+            },
+            "parameters": [],
+            "offer_kind": "new_license"
+          },
+          "reasons": [
+            "Сохранение данных"
+          ],
+          "family_id": "family-p-backup"
+        },
+        "relation": "compatible",
+        "explanation": "Синтетический пример связи",
+        "evidence": [
+          {
+            "url": "https://example.invalid/vendor/compatibility",
+            "checked_at": "2026-11-26T10:00:00Z",
+            "statement": "Синтетическое подтверждение для теста",
+            "limitations": [
+              "Только тестовая версия 1.0; не реальная совместимость"
+            ]
+          }
+        ],
+        "verification": {
+          "status": "passed",
+          "anchor_offer_id": "os-new",
+          "recommended_offer_id": "backup-new",
+          "checked_at": "2026-11-26T10:00:00Z",
+          "checks": [
+            {
+              "rule_id": "platform-match",
+              "field": "platform",
+              "operator": "equals",
+              "expected": "TestOS 1.0",
+              "observed": "TestOS 1.0",
+              "status": "failed",
+              "source_url": "https://example.invalid/vendor/compatibility"
+            },
+            {
+              "rule_id": "license-check",
+              "field": "license_type",
+              "operator": "license_eligible",
+              "expected": "new_license",
+              "observed": "new_license",
+              "status": "passed",
+              "source_url": "https://example.invalid/vendor/licensing"
+            }
+          ],
+          "policy_id": "synthetic-policy-v1"
+        }
+      }
+    },
+    {
+      "name": "empty programmatic checks rejected",
+      "schema": "Recommendation",
+      "valid": false,
+      "value": {
+        "card": {
+          "product_id": "p-backup",
+          "name": "Тестовый бэкап",
+          "category_id": "backup",
+          "selected_offer": {
+            "offer_id": "backup-new",
+            "name": "Новая лицензия",
+            "url": "https://example.invalid/backup/new",
+            "available": true,
+            "price": {
+              "status": "known",
+              "amount_minor": 700000,
+              "currency": "RUB"
+            },
+            "parameters": [],
+            "offer_kind": "new_license"
+          },
+          "reasons": [
+            "Сохранение данных"
+          ],
+          "family_id": "family-p-backup"
+        },
+        "relation": "compatible",
+        "explanation": "Синтетический пример связи",
+        "evidence": [
+          {
+            "url": "https://example.invalid/vendor/compatibility",
+            "checked_at": "2026-11-26T10:00:00Z",
+            "statement": "Синтетическое подтверждение для теста",
+            "limitations": [
+              "Только тестовая версия 1.0; не реальная совместимость"
+            ]
+          }
+        ],
+        "verification": {
+          "status": "passed",
+          "anchor_offer_id": "os-new",
+          "recommended_offer_id": "backup-new",
+          "checked_at": "2026-11-26T10:00:00Z",
+          "checks": [],
+          "policy_id": "synthetic-policy-v1"
+        }
+      }
+    },
+    {
+      "name": "synthetic B2B profile",
+      "schema": "Context",
+      "valid": true,
+      "value": {
+        "origin": "synthetic",
+        "profile_id": "small-business-5",
+        "segment": "small_business"
+      }
+    },
+    {
+      "name": "synthetic profile needs ID",
+      "schema": "Context",
+      "valid": false,
+      "value": {
+        "origin": "synthetic",
+        "segment": "small_business"
+      }
+    },
+    {
+      "name": "profile must declare origin",
+      "schema": "Context",
+      "valid": false,
+      "value": {
+        "profile_id": "small-business-5"
+      }
+    },
+    {
+      "name": "two direct families and two verified cross-sells",
+      "schema": "SearchResponse",
+      "valid": true,
+      "value": {
+        "search_id": "search-two-plus-two",
+        "query": "программы для рабочего места",
+        "corrections": [],
+        "context": {
+          "segment": "small_business"
+        },
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "hybrid",
+        "degraded_reasons": [],
+        "total_matches": 2,
+        "clarification": [],
+        "duration_ms": 40,
+        "next_cursor": null,
+        "matches": [
+          {
+            "product_id": "p-os",
+            "name": "Тестовая ОС",
+            "category_id": "os",
+            "selected_offer": {
+              "offer_id": "os-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/os/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 120050,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Операционная система"
+            ],
+            "family_id": "family-p-os"
+          },
+          {
+            "product_id": "p-security",
+            "name": "Тестовая защита",
+            "category_id": "security",
+            "selected_offer": {
+              "offer_id": "security-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/security/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 300000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Защита рабочего места"
+            ],
+            "family_id": "family-p-security"
+          }
+        ],
+        "alternatives": [],
+        "recommendations": [
+          {
+            "card": {
+              "product_id": "p-backup",
+              "name": "Тестовое резервное копирование",
+              "category_id": "backup",
+              "selected_offer": {
+                "offer_id": "backup-new",
+                "name": "Новая лицензия",
+                "url": "https://example.invalid/backup/new",
+                "available": true,
+                "price": {
+                  "status": "known",
+                  "amount_minor": 700000,
+                  "currency": "RUB"
+                },
+                "parameters": [],
+                "offer_kind": "new_license"
+              },
+              "reasons": [
+                "Сохранение данных"
+              ],
+              "family_id": "family-p-backup"
+            },
+            "relation": "compatible",
+            "explanation": "Синтетический пример связи",
+            "evidence": [
+              {
+                "url": "https://example.invalid/vendor/compatibility",
+                "checked_at": "2026-11-26T10:00:00Z",
+                "statement": "Синтетическое подтверждение для теста",
+                "limitations": [
+                  "Только тестовая версия 1.0; не реальная совместимость"
+                ]
+              }
+            ],
+            "verification": {
+              "status": "passed",
+              "anchor_offer_id": "os-new",
+              "recommended_offer_id": "backup-new",
+              "checked_at": "2026-11-26T10:00:00Z",
+              "checks": [
+                {
+                  "rule_id": "platform-match",
+                  "field": "platform",
+                  "operator": "equals",
+                  "expected": "TestOS 1.0",
+                  "observed": "TestOS 1.0",
+                  "status": "passed",
+                  "source_url": "https://example.invalid/vendor/compatibility"
+                },
+                {
+                  "rule_id": "license-check",
+                  "field": "license_type",
+                  "operator": "license_eligible",
+                  "expected": "new_license",
+                  "observed": "new_license",
+                  "status": "passed",
+                  "source_url": "https://example.invalid/vendor/licensing"
+                }
+              ],
+              "policy_id": "synthetic-policy-v1"
+            }
+          },
+          {
+            "card": {
+              "product_id": "p-remote",
+              "name": "Тестовый удалённый доступ",
+              "category_id": "remote",
+              "selected_offer": {
+                "offer_id": "remote-new",
+                "name": "Новая лицензия",
+                "url": "https://example.invalid/remote/new",
+                "available": true,
+                "price": {
+                  "status": "known",
+                  "amount_minor": 80000,
+                  "currency": "RUB"
+                },
+                "parameters": [],
+                "offer_kind": "new_license"
+              },
+              "reasons": [
+                "Удалённая работа"
+              ],
+              "family_id": "family-p-remote"
+            },
+            "relation": "compatible",
+            "explanation": "Синтетический пример связи",
+            "evidence": [
+              {
+                "url": "https://example.invalid/vendor/compatibility",
+                "checked_at": "2026-11-26T10:00:00Z",
+                "statement": "Синтетическое подтверждение для теста",
+                "limitations": [
+                  "Только тестовая версия 1.0; не реальная совместимость"
+                ]
+              }
+            ],
+            "verification": {
+              "status": "passed",
+              "anchor_offer_id": "os-new",
+              "recommended_offer_id": "remote-new",
+              "checked_at": "2026-11-26T10:00:00Z",
+              "checks": [
+                {
+                  "rule_id": "platform-match",
+                  "field": "platform",
+                  "operator": "equals",
+                  "expected": "TestOS 1.0",
+                  "observed": "TestOS 1.0",
+                  "status": "passed",
+                  "source_url": "https://example.invalid/vendor/compatibility"
+                },
+                {
+                  "rule_id": "license-check",
+                  "field": "license_type",
+                  "operator": "license_eligible",
+                  "expected": "new_license",
+                  "observed": "new_license",
+                  "status": "passed",
+                  "source_url": "https://example.invalid/vendor/licensing"
+                }
+              ],
+              "policy_id": "synthetic-policy-v1"
+            }
+          }
+        ],
+        "top4": [
+          {
+            "section": "matches",
+            "product_id": "p-os",
+            "family_id": "family-p-os"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-security",
+            "family_id": "family-p-security"
+          },
+          {
+            "section": "recommendations",
+            "product_id": "p-backup",
+            "family_id": "family-p-backup"
+          },
+          {
+            "section": "recommendations",
+            "product_id": "p-remote",
+            "family_id": "family-p-remote"
+          }
+        ],
+        "shortfall_reason": null,
+        "unpriced_fallback_used": false
+      }
+    },
+    {
+      "name": "unpriced unavailable fallback is explicit",
+      "schema": "SearchResponse",
+      "valid": true,
+      "value": {
+        "search_id": "search-no-priced-offers",
+        "query": "программы для рабочего места",
+        "corrections": [],
+        "context": {
+          "segment": "small_business"
+        },
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "hybrid",
+        "degraded_reasons": [],
+        "total_matches": 1,
+        "clarification": [],
+        "duration_ms": 40,
+        "next_cursor": null,
+        "matches": [
+          {
+            "product_id": "legacy-product",
+            "name": "Тестовая ОС",
+            "category_id": "os",
+            "selected_offer": {
+              "offer_id": "unavailable-zero",
+              "name": "Недоступный тестовый продукт",
+              "url": "https://example.invalid/legacy",
+              "available": false,
+              "price": {
+                "status": "unknown",
+                "amount_minor": null,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "unknown"
+            },
+            "reasons": [
+              "Нет подходящих предложений с ценой; второй приоритет"
+            ],
+            "family_id": "family-legacy"
+          }
+        ],
+        "alternatives": [],
+        "recommendations": [],
+        "top4": [
+          {
+            "section": "matches",
+            "product_id": "legacy-product",
+            "family_id": "family-legacy"
+          }
+        ],
+        "shortfall_reason": "insufficient_relevant_families",
+        "unpriced_fallback_used": true
+      }
+    },
+    {
+      "name": "top4 has at most four references",
+      "schema": "SearchResponse",
+      "valid": false,
+      "value": {
+        "search_id": "search-four",
+        "query": "программы для рабочего места",
+        "corrections": [],
+        "context": {
+          "segment": "small_business"
+        },
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "hybrid",
+        "degraded_reasons": [],
+        "total_matches": 4,
+        "clarification": [],
+        "duration_ms": 40,
+        "next_cursor": null,
+        "matches": [
+          {
+            "product_id": "p-os",
+            "name": "Тестовая ОС",
+            "category_id": "os",
+            "selected_offer": {
+              "offer_id": "os-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/os/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 120050,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Операционная система"
+            ],
+            "family_id": "family-p-os"
+          },
+          {
+            "product_id": "p-security",
+            "name": "Тестовая защита",
+            "category_id": "security",
+            "selected_offer": {
+              "offer_id": "security-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/security/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 300000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Защита рабочего места"
+            ],
+            "family_id": "family-p-security"
+          },
+          {
+            "product_id": "p-backup",
+            "name": "Тестовое резервное копирование",
+            "category_id": "backup",
+            "selected_offer": {
+              "offer_id": "backup-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/backup/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 700000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Сохранение данных"
+            ],
+            "family_id": "family-p-backup"
+          },
+          {
+            "product_id": "p-remote",
+            "name": "Тестовый удалённый доступ",
+            "category_id": "remote",
+            "selected_offer": {
+              "offer_id": "remote-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/remote/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 80000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Удалённая работа"
+            ],
+            "family_id": "family-p-remote"
+          }
+        ],
+        "alternatives": [],
+        "recommendations": [],
+        "top4": [
+          {
+            "section": "matches",
+            "product_id": "p-os",
+            "family_id": "family-p-os"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-security",
+            "family_id": "family-p-security"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-backup",
+            "family_id": "family-p-backup"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-remote",
+            "family_id": "family-p-remote"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-os",
+            "family_id": "family-p-os"
+          }
+        ],
+        "shortfall_reason": null,
+        "unpriced_fallback_used": false
+      }
+    }
+  ]
+}
