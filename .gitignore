@@ -1,0 +1,39 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Go build and test output
+/bin/
+/build/
+/dist/
+*.exe
+*.test
+*.out
+/coverage/
+coverage.txt
+
+# Frontend dependencies and generated output
+node_modules/
+.vite/
+*.tsbuildinfo
+playwright-report/
+test-results/
+
+# Catalog snapshots, indexes, database volumes and generated reports
+/data/
+/artifacts/
+/tmp/
+*.yml.gz.xml
+*.xml.gz
+*.gz
+*.log
+
+# Local editor and OS state
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
