@@ -12,6 +12,7 @@
 *.exe
 *.test
 *.out
+__pycache__/
 /coverage/
 coverage.txt
 

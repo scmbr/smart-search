@@ -29,11 +29,16 @@ type Families struct{ groups map[string]FamilyRule }
 
 func NewFamilies(rules []FamilyRule) (*Families, error) {
 	r := &Families{groups: make(map[string]FamilyRule)}
+	identities := make(map[string]FamilyRule)
 	for _, rule := range rules {
 		u, err := url.Parse(rule.SourceURL)
 		if rule.ID == "" || rule.Name == "" || len(rule.Groups) == 0 || !strings.HasPrefix(rule.VendorPath, "/") || !strings.HasSuffix(rule.VendorPath, "/") || rule.VendorPath == "/" || err != nil || u.Scheme != "https" || u.Host == "" {
 			return nil, errors.New("invalid family rule")
 		}
+		if previous, exists := identities[rule.ID]; exists && (previous.Name != rule.Name || previous.VendorPath != rule.VendorPath || previous.SourceURL != rule.SourceURL) {
+			return nil, errors.New("conflicting family identity")
+		}
+		identities[rule.ID] = rule
 		for _, group := range rule.Groups {
 			if _, exists := r.groups[group]; exists || group == "" {
 				return nil, errors.New("duplicate/empty family group")

@@ -1,6 +1,10 @@
 package contracts_test
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"encoding/xml"
 	"os"
 	"path/filepath"
@@ -88,11 +92,20 @@ func TestCatalogFixtureCoverage(t *testing.T) {
 	}
 }
 
-func TestEvaluationFamilySeparation(t *testing.T) {
+func TestEvaluationDoesNotClaimExposedCasesAsHoldout(t *testing.T) {
 	var fixture struct {
+		Role   string `json:"dataset_role"`
+		Review struct {
+			Eligible    bool   `json:"eligible"`
+			Status      string `json:"review_status"`
+			Replacement string `json:"replacement_holdout_status"`
+		} `json:"independent_evaluation"`
 		Cases []struct{ ID, Split, Family, Query string } `json:"cases"`
 	}
 	readJSON(t, filepath.Join("..", "testdata", "evaluation", "scenarios.json"), &fixture)
+	if fixture.Role != "development_regression_not_holdout" || fixture.Review.Eligible || fixture.Review.Status != "pending" || fixture.Review.Replacement != "frozen_draft_pending_review" {
+		t.Fatal("exposed development data must not be presented as reviewed independent evaluation")
+	}
 	ids := make(map[string]bool)
 	families := make(map[string]string)
 	splits := make(map[string]int)
@@ -104,7 +117,7 @@ func TestEvaluationFamilySeparation(t *testing.T) {
 			t.Errorf("duplicate scenario ID: %s", c.ID)
 		}
 		ids[c.ID] = true
-		if c.Split != "tuning" && c.Split != "holdout" {
+		if c.Split != "tuning" && c.Split != "regression" {
 			t.Errorf("unknown split: %s", c.Split)
 		}
 		if previous, ok := families[c.Family]; ok && previous != c.Split {
@@ -113,8 +126,84 @@ func TestEvaluationFamilySeparation(t *testing.T) {
 		families[c.Family] = c.Split
 		splits[c.Split]++
 	}
-	if splits["tuning"] == 0 || splits["holdout"] == 0 {
-		t.Fatal("both splits must contain cases")
+	if splits["tuning"] == 0 || splits["regression"] == 0 {
+		t.Fatal("both development sets must contain cases")
+	}
+}
+
+func TestReplacementHoldoutFrozenBeforeSearchAndDisjoint(t *testing.T) {
+	var holdout struct {
+		Role   string `json:"dataset_role"`
+		SHA    string `json:"cases_sha256"`
+		Review struct {
+			Eligible  bool   `json:"eligible"`
+			Status    string `json:"review_status"`
+			Execution string `json:"execution_status"`
+		} `json:"independent_evaluation"`
+		Evidence map[string]struct {
+			Offers  int    `json:"offers"`
+			Name    string `json:"group_name"`
+			Example string `json:"example_offer_id"`
+		} `json:"catalog_evidence"`
+		Cases json.RawMessage `json:"cases"`
+	}
+	readJSON(t, "../testdata/evaluation/holdout-v2.json", &holdout)
+	if holdout.Role != "frozen_draft_holdout_pending_review" || holdout.Review.Eligible || holdout.Review.Status != "pending" || holdout.Review.Execution != "not_run" {
+		t.Fatal("draft holdout has not had independent semantic review or search execution")
+	}
+	var compact bytes.Buffer
+	if err := json.Compact(&compact, holdout.Cases); err != nil {
+		t.Fatal(err)
+	}
+	hash := sha256.Sum256(compact.Bytes())
+	if hex.EncodeToString(hash[:]) != holdout.SHA {
+		t.Fatal("frozen queries/labels changed: review exposure before replacing holdout")
+	}
+	type evalCase struct {
+		ID, Family, Query string
+		Groups            []string `json:"group_ids"`
+	}
+	var cases []evalCase
+	if err := json.Unmarshal(holdout.Cases, &cases); err != nil {
+		t.Fatal(err)
+	}
+	var exposed struct {
+		Cases []evalCase `json:"cases"`
+	}
+	readJSON(t, "../testdata/evaluation/scenarios.json", &exposed)
+	var source struct {
+		Cases []evalCase `json:"cases"`
+	}
+	readJSON(t, "../testdata/evaluation/source-queries.json", &source)
+	var mapping struct{ Rules []struct{ Groups []string } }
+	readJSON(t, "../internal/infrastructure/families/rules.json", &mapping)
+	usedGroups, usedFamilies := map[string]bool{}, map[string]bool{}
+	for _, c := range append(exposed.Cases, source.Cases...) {
+		usedFamilies[c.Family] = true
+		for _, g := range c.Groups {
+			usedGroups[g] = true
+		}
+	}
+	for _, rule := range mapping.Rules {
+		for _, g := range rule.Groups {
+			usedGroups[g] = true
+		}
+	}
+	ids, families := map[string]bool{}, map[string]bool{}
+	for _, c := range cases {
+		if c.ID == "" || ids[c.ID] || c.Query == "" || c.Family == "" || usedFamilies[c.Family] || len(c.Groups) == 0 {
+			t.Fatalf("incomplete, duplicate or exposed holdout case: %s", c.ID)
+		}
+		ids[c.ID], families[c.Family] = true, true
+		for _, g := range c.Groups {
+			e := holdout.Evidence[g]
+			if usedGroups[g] || e.Offers == 0 || e.Name == "" || e.Example == "" {
+				t.Fatalf("unsubstantiated or exposed target: %s", g)
+			}
+		}
+	}
+	if len(cases) < 8 || len(families) < 4 {
+		t.Fatal("replacement draft lost required breadth")
 	}
 }
 

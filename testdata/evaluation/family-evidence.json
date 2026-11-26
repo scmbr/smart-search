@@ -1,0 +1,341 @@
+{
+  "evidence_role": "catalog_structure_not_independent_relevance_review",
+  "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
+  "catalog_offers": 136040,
+  "mapping_version": "families-v2",
+  "groups": {
+    "121231": {
+      "family_id": "astra-linux-special-edition",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/astra-linux-special-edition/",
+      "offers": 803,
+      "scope_mismatches": 0,
+      "priced": 803,
+      "available": 803,
+      "license_parameters": {
+        "Полная версия": 664,
+        "Техподдержка": 139
+      },
+      "examples": [
+        {
+          "offer_id": "482091",
+          "name": "Сертификат техподдержки на ОС «Astra Linux Special Edition» для 64-х разрядной платформы на базе п/а x86-64, вариант",
+          "url": "https://store.softline.ru/astralinux/tc1000x8600digsktws00-pr12-482091/",
+          "license_parameters": [
+            "Техподдержка"
+          ]
+        },
+        {
+          "offer_id": "482092",
+          "name": "Сертификат техподдержки на ОС «Astra Linux Special Edition» для 64-х разрядной платформы на базе п/а x86-64, вариант",
+          "url": "https://store.softline.ru/astralinux/tc1000x8600digsktws00-pr24-482092/",
+          "license_parameters": [
+            "Техподдержка"
+          ]
+        }
+      ],
+      "group_name": "Astra Linux Special Edition"
+    },
+    "391338": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Full": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473582",
+          "name": "Microsoft Office для дома и бизнеса 2024, Электронная лицензия на 1 ПК, бессрочная",
+          "url": "https://store.softline.ru/microsoft/ep2-06605-473582/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office 2024 для дома и бизнеса"
+    },
+    "3761": {
+      "family_id": "kaspersky-small-office-security",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kaspersky-small-office-security/",
+      "offers": 31,
+      "scope_mismatches": 0,
+      "priced": 31,
+      "available": 31,
+      "license_parameters": {
+        "Миграция": 9,
+        "Полная версия": 11,
+        "Продление": 11
+      },
+      "examples": [
+        {
+          "offer_id": "248970",
+          "name": "Kaspersky Small Office Security новая лицензия на 5 ПК/мобильных устройств/пользователей на 1 год",
+          "url": "https://store.softline.ru/kaspersky/kl4141rcefs-248970/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "248971",
+          "name": "Kaspersky Small Office Security продление лицензии на 5 ПК/мобильных устройств/пользователей на 1 год",
+          "url": "https://store.softline.ru/kaspersky/kl4141rcefr-248971/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Small Office Security"
+    },
+    "22268": {
+      "family_id": "cryptopro-csp",
+      "vendor_path": "/kripto-pro/",
+      "source_url": "https://store.softline.ru/kripto-pro/cryptopro-csp/",
+      "offers": 42,
+      "scope_mismatches": 0,
+      "priced": 42,
+      "available": 42,
+      "license_parameters": {
+        "Дистрибутив": 4,
+        "Модуль": 2,
+        "Обновление": 4,
+        "Полная версия": 12,
+        "Техподдержка": 20
+      },
+      "examples": [
+        {
+          "offer_id": "25266",
+          "name": "КриптоПро CSP версии 4.0 (Номер ЕРРП: 515), Лицензия на право использования СКЗИ КриптоПро CSP версии 4.0 на одном",
+          "url": "https://store.softline.ru/kripto-pro/-25266/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "25267",
+          "name": "КриптоПро CSP версии 4.0 (Номер ЕРРП: 515), Лицензия на право использования СКЗИ КриптоПро CSP версии 4.0 на сервере",
+          "url": "https://store.softline.ru/kripto-pro/-25267/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Программа КриптоПро CSP 5.0"
+    },
+    "306539": {
+      "family_id": "anydesk",
+      "vendor_path": "/anydesk/",
+      "source_url": "https://store.softline.ru/anydesk/anydesk/",
+      "offers": 11,
+      "scope_mismatches": 0,
+      "priced": 11,
+      "available": 11,
+      "license_parameters": {
+        "Полная версия": 11
+      },
+      "examples": [
+        {
+          "offer_id": "402265",
+          "name": "AnyDesk (лицензия на 1 год), Solo",
+          "url": "https://store.softline.ru/anydesk/-402265/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "402266",
+          "name": "AnyDesk (лицензия на 1 год), Standard",
+          "url": "https://store.softline.ru/anydesk/-402266/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "AnyDesk"
+    },
+    "173614": {
+      "family_id": "cyber-backup",
+      "vendor_path": "/cyberprotect/",
+      "source_url": "https://store.softline.ru/cyberprotect/?filter%5Bcategory%5D%5B%5D=1033",
+      "offers": 48,
+      "scope_mismatches": 0,
+      "priced": 48,
+      "available": 48,
+      "license_parameters": {
+        "Обновление": 3,
+        "Перекрестное обновление": 9,
+        "Полная версия": 6,
+        "Продление": 24,
+        "Техподдержка": 37
+      },
+      "examples": [
+        {
+          "offer_id": "418697",
+          "name": "Киберпротект Кибер Бэкап Стандартная редакция (лицензия для коммерческих организаций), для физического сервера",
+          "url": "https://store.softline.ru/cyberprotect/ps16nl-418697/",
+          "license_parameters": [
+            "Полная версия",
+            "Техподдержка"
+          ]
+        },
+        {
+          "offer_id": "421468",
+          "name": "Киберпротект Кибер Бэкап Стандартная редакция (лицензия для коммерческих организаций), для платформы виртуализации",
+          "url": "https://store.softline.ru/cyberprotect/vs16nl-421468/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Кибер Бэкап Стандартная редакция"
+    },
+    "173615": {
+      "family_id": "cyber-backup",
+      "vendor_path": "/cyberprotect/",
+      "source_url": "https://store.softline.ru/cyberprotect/?filter%5Bcategory%5D%5B%5D=1033",
+      "offers": 450,
+      "scope_mismatches": 0,
+      "priced": 450,
+      "available": 450,
+      "license_parameters": {
+        "Обновление": 6,
+        "Перекрестное обновление": 135,
+        "Полная версия": 69,
+        "Продление": 192,
+        "Техподдержка": 284
+      },
+      "examples": [
+        {
+          "offer_id": "418698",
+          "name": "Киберпротект Кибер Бэкап Расширенная редакция (бессрочная лицензия для коммерческих организаций), для физического",
+          "url": "https://store.softline.ru/cyberprotect/pa16nl-418698/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "419096",
+          "name": "Киберпротект Кибер Бэкап Расширенная редакция (бессрочная лицензия для коммерческих организаций), для платформы",
+          "url": "https://store.softline.ru/cyberprotect/va16nl-419096/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Кибер Бэкап Расширенная редакция"
+    },
+    "46421": {
+      "family_id": "scanner-vs",
+      "vendor_path": "/npo-echelon/",
+      "source_url": "https://store.softline.ru/npo-echelon/eshelon-skaner-vs/",
+      "offers": 472,
+      "scope_mismatches": 0,
+      "priced": 472,
+      "available": 472,
+      "license_parameters": {
+        "Add-on": 64,
+        "Обновление": 88,
+        "Перекрестное обновление": 74,
+        "Полная версия": 174,
+        "Продление": 126
+      },
+      "examples": [
+        {
+          "offer_id": "486957",
+          "name": "НПО «Эшелон» СКАНЕР-ВС 7, Основная лицензия Enterprise на 1 год, рег (№ 231), на 256 IP активов",
+          "url": "https://store.softline.ru/npo-echelon/scaner-vs-7-256-e-f-486957/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "486958",
+          "name": "НПО «Эшелон» СКАНЕР-ВС 7, Основная лицензия Enterprise на 1 год, рег (№ 231), на 512 активов",
+          "url": "https://store.softline.ru/npo-echelon/scaner-vs-7-512-e-f-486958/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Эшелон «СКАНЕР-ВС»"
+    },
+    "414326": {
+      "family_id": "mts-link",
+      "vendor_path": "/webinar/",
+      "source_url": "https://store.softline.ru/webinar/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "535950",
+          "name": "МТС Линк (Webinar Group) МТС Линк Optimum 30 (лицензия в месяц при покупке на год, до 30 участников вебинара), цена за",
+          "url": "https://store.softline.ru/webinar/-535950/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "МТС Линк Optimum 30"
+    },
+    "437421": {
+      "family_id": "maxpatrol-endpoint",
+      "vendor_path": "/positive-technologies/",
+      "source_url": "https://store.softline.ru/positive-technologies/maxpatrol-endpoint-protection-platform/",
+      "offers": 6,
+      "scope_mismatches": 0,
+      "priced": 6,
+      "available": 6,
+      "license_parameters": {
+        "Продление": 6
+      },
+      "examples": [
+        {
+          "offer_id": "531243",
+          "name": "Positive Technologies MaxPatrol Endpoint Protection Platform конфигурация Endpoint Protection, для обеспечения",
+          "url": "https://store.softline.ru/positive-technologies/pt-mxepp-ep-1-50-531243/",
+          "license_parameters": [
+            "Продление"
+          ]
+        },
+        {
+          "offer_id": "531244",
+          "name": "Positive Technologies MaxPatrol Endpoint Protection Platform конфигурация Endpoint Protection, для обеспечения",
+          "url": "https://store.softline.ru/positive-technologies/pt-mxepp-ep-51-100-531244/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "MaxPatrol Endpoint Protection Platform"
+    },
+    "165034": {
+      "family_id": "microsoft-365",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-365-for-family/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "ESD": 1
+      },
+      "examples": [
+        {
+          "offer_id": "195981",
+          "name": "Microsoft 365 для семьи (Family) 6GQ-00084: подписка на 6 пользователей, 1 год",
+          "url": "https://store.softline.ru/microsoft/6gq-00084-195981/",
+          "license_parameters": [
+            "ESD"
+          ]
+        }
+      ],
+      "group_name": "Microsoft 365 Family (для семьи)"
+    }
+  }
+}

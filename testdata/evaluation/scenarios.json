@@ -1,6 +1,6 @@
 {
-  "label_status": "draft_before_implementation_requires_human_review",
-  "split_policy": "Product families are disjoint across tuning and holdout. Source reference cases are not an independent holdout.",
+  "label_status": "draft_requires_independent_review",
+  "split_policy": "Former holdout families were exposed during lexical baseline development. All cases are development/regression only; no independent quality claims.",
   "cases": [
     {
       "id": "tune-astra-typo",
@@ -13,7 +13,8 @@
       "checks": [
         "typo_or_transliteration",
         "base_license_not_support"
-      ]
+      ],
+      "original_split": "tuning"
     },
     {
       "id": "tune-crypto-version",
@@ -27,7 +28,8 @@
         "preserve_5.0",
         "reject_4.0",
         "do_not_default_to_upgrade"
-      ]
+      ],
+      "original_split": "tuning"
     },
     {
       "id": "tune-kaspersky-slang",
@@ -39,7 +41,8 @@
       ],
       "checks": [
         "new_license_not_renewal"
-      ]
+      ],
+      "original_split": "tuning"
     },
     {
       "id": "tune-server-hardware",
@@ -49,7 +52,8 @@
       "intent": "hardware",
       "checks": [
         "hardware_before_server_software"
-      ]
+      ],
+      "original_split": "tuning"
     },
     {
       "id": "tune-server-software",
@@ -59,11 +63,12 @@
       "intent": "software",
       "checks": [
         "server_os_before_hardware"
-      ]
+      ],
+      "original_split": "tuning"
     },
     {
       "id": "hold-anydesk-typo",
-      "split": "holdout",
+      "split": "regression",
       "family": "anydesk",
       "query": "анидеск",
       "group_ids": [
@@ -71,11 +76,12 @@
       ],
       "checks": [
         "transliteration"
-      ]
+      ],
+      "original_split": "holdout"
     },
     {
       "id": "hold-backup-task",
-      "split": "holdout",
+      "split": "regression",
       "family": "cyberbackup",
       "query": "киберпротект резервное копирование сервера",
       "category_id": "1033",
@@ -83,11 +89,12 @@
       "checks": [
         "task_intent",
         "license_constraints"
-      ]
+      ],
+      "original_split": "holdout"
     },
     {
       "id": "hold-scanner-typo",
-      "split": "holdout",
+      "split": "regression",
       "family": "scanner",
       "query": "сканер вс",
       "group_ids": [
@@ -95,11 +102,12 @@
       ],
       "checks": [
         "punctuation_variant"
-      ]
+      ],
+      "original_split": "holdout"
     },
     {
       "id": "hold-office-family",
-      "split": "holdout",
+      "split": "regression",
       "family": "office365",
       "query": "майкрософт 365 для семьи",
       "group_ids": [
@@ -107,18 +115,20 @@
       ],
       "checks": [
         "family_not_business"
-      ]
+      ],
+      "original_split": "holdout"
     },
     {
       "id": "hold-unknown",
-      "split": "holdout",
+      "split": "regression",
       "family": "unknown",
       "query": "корм для аквариумных рыб",
       "intent": "out_of_catalog",
       "checks": [
         "no_fabricated_products",
         "no_random_fill"
-      ]
+      ],
+      "original_split": "holdout"
     }
   ],
   "primary_metrics": [
@@ -127,5 +137,12 @@
     "family_ndcg_at_4_when_graded",
     "distinct_families_in_top4",
     "verified_cross_sell_rate"
-  ]
+  ],
+  "dataset_role": "development_regression_not_holdout",
+  "independent_evaluation": {
+    "eligible": false,
+    "review_status": "pending",
+    "replacement_holdout_status": "frozen_draft_pending_review",
+    "reason": "AnyDesk, Cyber Backup, Scanner and Microsoft 365 families were used in reference smoke and baseline ranking work."
+  }
 }
