@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2026-11-25 14:12"><shop>
+  <categories>
+    <category id="cycle-a" parentId="cycle-b">Цикл A</category>
+    <category id="cycle-b" parentId="cycle-a">Цикл B</category>
+    <category id="valid">Корневая категория</category>
+  </categories>
+  <offers>
+    <offer id="duplicate" available="true"><name>Первое предложение</name><url>https://example.invalid/1</url><price>10.00</price><currencyId>RUR</currencyId><categoryId>valid</categoryId></offer>
+    <offer id="duplicate" available="true"><name>Повтор ID</name><url>https://example.invalid/2</url><price>10.00</price><currencyId>RUR</currencyId><categoryId>valid</categoryId></offer>
+    <offer id="negative" available="true"><name>Отрицательная цена</name><url>https://example.invalid/3</url><price>-1.00</price><currencyId>RUR</currencyId><categoryId>valid</categoryId></offer>
+    <offer id="missing-category" available="true"><name>Неизвестная категория</name><url>https://example.invalid/4</url><price>10.00</price><currencyId>RUR</currencyId><categoryId>absent</categoryId></offer>
+    <offer id="group-conflict" group_id="group-a" available="true"><name>Конфликт группы</name><url>https://example.invalid/5</url><price>10.00</price><currencyId>RUR</currencyId><categoryId>valid</categoryId><group_id>group-b</group_id></offer>
+  </offers>
+</shop></yml_catalog>

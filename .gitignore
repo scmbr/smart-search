@@ -26,6 +26,7 @@ test-results/
 /data/
 /artifacts/
 /tmp/
+/.cache/
 *.yml.gz.xml
 *.xml.gz
 *.gz

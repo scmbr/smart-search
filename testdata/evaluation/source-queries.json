@@ -1,0 +1,147 @@
+{
+  "source_file": "Выборка поисковых запросов.xlsx",
+  "source_sheet": "Sheet1",
+  "dataset_role": "reference_smoke_not_holdout",
+  "catalog_date": "2026-11-25 14:12",
+  "mapping_status": "inspected_snapshot_group_or_category_mapping_not_exhaustive_sku_validation",
+  "cases": [
+    {
+      "id": "source-01",
+      "source_row": 2,
+      "query": "astra linux",
+      "expected_url": "https://store.softline.ru/astralinux/astra-linux-special-edition/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "121231"
+      ],
+      "example_offer_id": "487733",
+      "constraints": [
+        "Prefer base OS license; group also contains support certificates",
+        "Example SKU is Elbrus-specific, not a universal default"
+      ]
+    },
+    {
+      "id": "source-02",
+      "source_row": 3,
+      "query": "Microsoft Office для дома и бизнеса",
+      "expected_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "391338"
+      ],
+      "example_offer_id": "473582",
+      "constraints": [
+        "Office Home and Business 2024"
+      ]
+    },
+    {
+      "id": "source-03",
+      "source_row": 4,
+      "query": "kaspersky small office security",
+      "expected_url": "https://store.softline.ru/kaspersky/kaspersky-small-office-security/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "3761"
+      ],
+      "example_offer_id": "248970",
+      "constraints": [
+        "Do not select renewal/cross-grade without user eligibility"
+      ]
+    },
+    {
+      "id": "source-04",
+      "source_row": 5,
+      "query": "крипто про csp 5.0",
+      "expected_url": "https://store.softline.ru/kripto-pro/cryptopro-csp/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "22268"
+      ],
+      "example_offer_id": "410137",
+      "constraints": [
+        "Version 5.0; same group also contains 4.0",
+        "Prefer new workstation license unless server or upgrade is explicitly requested"
+      ]
+    },
+    {
+      "id": "source-05",
+      "source_row": 6,
+      "query": "anydesk",
+      "expected_url": "https://store.softline.ru/anydesk/anydesk/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "306539"
+      ],
+      "example_offer_id": "402265",
+      "constraints": []
+    },
+    {
+      "id": "source-06",
+      "source_row": 7,
+      "query": "кибер бэкап",
+      "expected_url": "https://store.softline.ru/cyberprotect/?filter%5Bcategory%5D%5B%5D=1033",
+      "target_kind": "vendor_category",
+      "category_id": "1033",
+      "vendor_path": "/cyberprotect/",
+      "example_offer_id": "418697",
+      "constraints": [
+        "Match vendor and category, not any backup product"
+      ]
+    },
+    {
+      "id": "source-07",
+      "source_row": 8,
+      "query": "сканер-вс",
+      "expected_url": "https://store.softline.ru/npo-echelon/eshelon-skaner-vs/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "46421"
+      ],
+      "example_offer_id": "486957",
+      "constraints": []
+    },
+    {
+      "id": "source-08",
+      "source_row": 9,
+      "query": "мтс",
+      "expected_url": "https://store.softline.ru/webinar/",
+      "target_kind": "vendor_page",
+      "vendor_path": "/webinar/",
+      "example_offer_id": "535950",
+      "constraints": [
+        "Ambiguous abbreviation; this target is specific to the provided reference"
+      ]
+    },
+    {
+      "id": "source-09",
+      "source_row": 10,
+      "query": "max patrol",
+      "expected_url": "https://store.softline.ru/positive-technologies/maxpatrol-endpoint-protection-platform/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "437421"
+      ],
+      "example_offer_id": "531243",
+      "constraints": [
+        "Endpoint Protection Platform"
+      ]
+    },
+    {
+      "id": "source-10",
+      "source_row": 11,
+      "source_cell_type": "number",
+      "query": "365",
+      "expected_url": "https://store.softline.ru/microsoft/microsoft-365-for-family/",
+      "target_kind": "product_group",
+      "group_ids": [
+        "165034"
+      ],
+      "example_offer_id": "195981",
+      "constraints": [
+        "Family edition per source; do not hard-code all 365 searches to Family"
+      ]
+    }
+  ],
+  "evaluation_target": "Product family/group in top4; SKU is not the identity match",
+  "family_mapping_status": "Source group mappings retained; normalized cross-group family mapping still requires review"
+}
