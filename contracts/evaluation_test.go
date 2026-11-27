@@ -54,15 +54,20 @@ func TestHundredEvaluationCasesAreGroundedAndSeparated(t *testing.T) {
 		count             int
 	}{
 		{"scenarios.json", "tuning", "development_tuning", 60},
-		{"holdout-v2.json", "holdout", "frozen_draft_holdout_pending_review", 40},
+		{"holdout-v2.json", "holdout", "frozen_holdout_user_reviewed", 40},
 	} {
 		var dataset struct {
-			Version   string `json:"dataset_version"`
-			Role      string `json:"dataset_role"`
-			SHA       string `json:"source_sha256"`
-			CaseSHA   string `json:"cases_sha256"`
-			FamilySHA string `json:"families_sha256"`
-			Review    struct {
+			Version      string `json:"dataset_version"`
+			Role         string `json:"dataset_role"`
+			SHA          string `json:"source_sha256"`
+			CaseSHA      string `json:"cases_sha256"`
+			FamilySHA    string `json:"families_sha256"`
+			ReviewRecord struct {
+				Reviewer string `json:"reviewed_by"`
+				Date     string `json:"reviewed_on"`
+				Scope    string `json:"scope"`
+			} `json:"review_record"`
+			Review struct {
 				Eligible  bool   `json:"eligible"`
 				Status    string `json:"review_status"`
 				Execution string `json:"execution_status"`
@@ -77,8 +82,8 @@ func TestHundredEvaluationCasesAreGroundedAndSeparated(t *testing.T) {
 			Cases    json.RawMessage `json:"cases"`
 		}
 		readJSON(t, "../testdata/evaluation/"+suite.file, &dataset)
-		if dataset.Version != "evaluation-v3" || dataset.Role != suite.role || len(dataset.SHA) != 64 || dataset.Review.Eligible || dataset.Review.Status != "pending" {
-			t.Fatalf("%s: draft/source provenance missing or independent review falsely claimed", suite.file)
+		if dataset.Version != "evaluation-v4-reviewed" || dataset.Role != suite.role || len(dataset.SHA) != 64 || dataset.Review.Eligible != (suite.split == "holdout") || dataset.Review.Status != "accepted_by_user" || dataset.ReviewRecord.Reviewer != "repository_owner" || dataset.ReviewRecord.Date != "2026-11-27" || dataset.ReviewRecord.Scope != "all_100_active_cases" {
+			t.Fatalf("%s: user review/source provenance missing or tuning claimed independent", suite.file)
 		}
 		if suite.split == "holdout" && dataset.Review.Execution != "not_run" {
 			t.Fatal("holdout was used during development")
@@ -99,7 +104,7 @@ func TestHundredEvaluationCasesAreGroundedAndSeparated(t *testing.T) {
 		usedFamilies, tags := map[string]bool{}, map[string]bool{}
 		for _, c := range cases {
 			query := strings.ToLower(strings.Join(strings.Fields(c.Query), " "))
-			if c.ID == "" || ids[c.ID] || query == "" || queries[query] || c.Split != suite.split || c.Brand == "" || c.Review != "pending" {
+			if c.ID == "" || ids[c.ID] || query == "" || queries[query] || c.Split != suite.split || c.Brand == "" || c.Review != "accepted_by_user" {
 				t.Fatalf("incomplete/duplicate/wrong-split case: %s", c.ID)
 			}
 			ids[c.ID], queries[query] = true, true

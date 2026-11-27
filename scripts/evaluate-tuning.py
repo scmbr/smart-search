@@ -1,4 +1,4 @@
-"""Draft tuning diagnostics only: no holdout, no OpenAI, no eligibility claims."""
+"""Reviewed tuning diagnostics only: no holdout, no OpenAI, no eligibility claims."""
 import argparse
 import json
 from pathlib import Path
@@ -52,7 +52,7 @@ def main():
         except (OSError, ValueError, KeyError, RuntimeError, subprocess.TimeoutExpired) as error:
             row["error"] = str(error)
         rows.append(row)
-    report = {"dataset_role":source["dataset_role"], "dataset_cases_sha256":source["cases_sha256"],
+    report = {"dataset_role":source["dataset_role"], "label_status":source["label_status"], "dataset_cases_sha256":source["cases_sha256"],
               "cases":len(rows), "execution_errors":sum("error" in r for r in rows),
               "family_scope_cases":sum(c["target_scope"] == "family" for c in source["cases"]),
               "draft_group_target_hits_at_4":sum(bool(r.get("draft_group_target_hit_at_4")) for r in rows),
@@ -60,7 +60,7 @@ def main():
               "draft_brand_scope_hits_at_4":sum(bool(r.get("draft_brand_scope_hit_at_4")) for r in rows),
               "negative_cases":sum(c["target_scope"] == "empty" for c in source["cases"]),
               "negative_empty_cases":sum(bool(r.get("negative_empty")) for r in rows),
-              "note":"Synthetic draft tuning diagnostics, not independent relevance/Family Precision or SKU eligibility. Only raw query is passed; constraints are recorded but not graded. Timings include CLI startup.",
+              "note":"Synthetic user-reviewed tuning diagnostics, not independent relevance/Family Precision or SKU eligibility. Only raw query is passed; constraints are recorded but not graded. Timings include CLI startup.",
               "results":rows}
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)

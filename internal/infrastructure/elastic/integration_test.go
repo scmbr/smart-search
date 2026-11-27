@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"os"
+	"strings"
 	"testing"
 
 	app "github.com/scmbr/smart-search/internal/application/lexical"
@@ -27,7 +28,7 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := app.NewSpec(app.CatalogInfo{ID: "test-" + id, Offers: 10}, "fixture-v2")
+	spec := app.NewSpec(app.CatalogInfo{ID: "test-" + id, Offers: 13}, "fixture-v3")
 	t.Cleanup(func() {
 		m, exists, err := c.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -80,6 +81,9 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 		{"legacy", "legacy", "Legacy product", "софт", "Полная версия", 0, false},
 		{"astra", "astra", "Операционная система Astra Linux Special Edition для рабочей станции", "софт", "Полная версия", 1000, true},
 		{"viewer", "viewer", "Astra Linux viewer", "софт", "Полная версия", 100, true},
+		{"suite-std-12", "backup", "Common Backup на 6 пользователей для сервера", "софт", "Полная версия", 1000, true},
+		{"suite-std-24", "backup", "Common Backup на 6 пользователей для сервера", "софт", "Полная версия", 100, true},
+		{"suite-ent-12", "backup", "Common Backup на 6 пользователей для сервера", "софт", "Полная версия", 50, true},
 	}
 	var docs []domain.Document
 	for _, row := range rows {
@@ -90,6 +94,16 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 		if row.price > 0 {
 			price := row.price
 			o.PriceMinor = &price
+		}
+		if strings.HasPrefix(row.id, "suite-") {
+			months, edition := "12 мес.", "Standard"
+			if row.id == "suite-std-24" {
+				months = "24 мес."
+			}
+			if row.id == "suite-ent-12" {
+				edition = "Enterprise"
+			}
+			o.Parameters = append(o.Parameters, catalog.Parameter{Name: "Срок действия", Value: months, Known: true}, catalog.Parameter{Name: "Редакция", Value: edition, Known: true})
 		}
 		chars := catalog.Normalize(o)
 		o.Characteristics = &chars
@@ -130,6 +144,7 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 		{"крипто про цсп 5.0", "", "csp-5", false},
 		{"КриптоПро CSP 5.1", "", "", false},
 		{"csp-6", "", "", false},
+		{"Common Backup редакция Standard на год для сервера на 6 пользователей", "", "suite-std-12", false},
 		{"КриптоПро CSP 5.0", "", "csp-5", false}, {"csp-5", "", "csp-5", false},
 		{"Legacy", "", "legacy", true}, {"Legacy", "available_only", "", false},
 	} {

@@ -1,12 +1,13 @@
-# Лексический baseline: lexical-v2
+# Лексический поиск: lexical-v3
 
 Целевой путь: активный PostgreSQL-снимок → Elasticsearch → CLI search.
 Статус: domain/application, адаптеры и CLI реализованы; unit/HTTP/реальные
 PostgreSQL/Elasticsearch-тесты проходят. Полный feed проиндексирован и проверен.
 Публичный HTTP API, рекомендации/verifier и интерфейс — следующие части MVP.
 Этот шаг не расходует OpenAI API и не подбирает параметры по holdout.
-Поверх этого индекса добавлен [query-v1](query-normalization.md): расширение
-запросов не меняет mapping/fingerprint документов и не требует переиндексации.
+Правила опечаток query-v1 описаны в [query-normalization.md](query-normalization.md).
+Новые [условия query-v2](query-constraints.md) используют characteristics-v3 /
+lexical-v3 и требуют нового снимка/индекса. Устаревшая схема возвращает not ready.
 Для воспроизводимости выдачи CLI показывает также версию query policy.
 
 ## Подготовка индекса
@@ -39,7 +40,8 @@ PostgreSQL/Elasticsearch-тесты проходят. Полный feed прои
 BM25: отдельное имя продуктового узла из дерева feed, название/артикул/категории
 имеют больший вес, чем ограниченное описание. ProductName берётся по исходному
 group ID, если узел существует; это поисковый текст, не доказательство семейства.
-Вес ProductName=24, Name=8, FamilyName=4, VendorCode=12, Vendor=2, CategoryNames=3,
+Исторически query-v1: ProductName=24; в query-v2 вес повышен до 64
+после regression-проверки с расширенным каталогом SKU. Name=8, FamilyName=4, VendorCode=12, Vendor=2, CategoryNames=3,
 Description=1. Иначе ПО, которое упоминает платформу в длинном SKU, может вытеснить ОС.
 Reader v2 поддерживает старую схему v1 на время пересборки; новое поле аддитивно.
 Анализатор разделяет CamelCase, сохраняет исходные токены, приводит регистр/ё и

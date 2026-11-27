@@ -38,8 +38,9 @@ CLI search/catalog-index используют порты application; прави
 docs/lexical-baseline.md. Маппинг семейств — internal/infrastructure/families/rules.json;
 его канонический SHA-256 входит в index version. Новая семантика документа требует
 повышения DocumentSchemaVersion; provisional family keys не означают разные семейства.
-Query policy — docs/query-normalization.md, версионируется QueryPolicyVersion отдельно
+Query policy — docs/query-normalization.md и docs/query-constraints.md, версионируется QueryPolicyVersion отдельно
 от индекса. Не расширяй цифры/артикулы fuzzy; фильтры сохраняются во всех попытках.
+Разметка 100 кейсов принята пользователем; не запрашивай это одобрение повторно.
 Не запускай holdout для подбора правил; evaluate-tuning.py читает только tuning.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
@@ -93,7 +94,7 @@ XML-токены, HTTP request/response или структуры OpenAI/Elastic
 - Храни деньги в целых копейках, неизвестные значения явно; не угадывай версии,
   роли лицензий и family_id по одной группе.
 - Характеристики вычисляет domain.Normalize в application импорта; правила —
-  docs/normalization.md. Меняя семантику/маппинг, повышай NormalizationVersion:
+  docs/normalization.md (characteristics-v3). Меняя семантику/маппинг, повышай NormalizationVersion:
   она включена в identity снимка. Старые ready-снимки не переписывай.
 - Требования поиска/допродаж — в `docs/search.md`, `docs/verification.md` и
   `docs/expert-answers.md`. Проверяй характеристики выбранных SKU программно;

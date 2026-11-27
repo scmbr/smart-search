@@ -31,6 +31,10 @@ func run(ctx context.Context) error {
 	flag.StringVar(&r.Platform, "platform", "", "explicit supported OS")
 	flag.StringVar(&r.ProductType, "product-type", "", "hardware or software")
 	flag.IntVar(&r.MinUsers, "min-users", 0, "minimum known user upper bound")
+	flag.StringVar(&r.Edition, "edition", "", "known edition")
+	flag.StringVar(&r.TermKind, "term-kind", "", "fixed or perpetual")
+	flag.IntVar(&r.TermMonths, "term-months", 0, "exact license term in months")
+	flag.StringVar(&r.Deployment, "deployment", "", "server or workstation")
 	flag.Parse()
 	if flag.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
