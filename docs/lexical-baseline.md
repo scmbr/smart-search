@@ -1,4 +1,4 @@
-# Лексический поиск: lexical-v4
+# Лексический поиск: lexical-v5
 
 Целевой путь: активный PostgreSQL-снимок → Elasticsearch → CLI search.
 Статус: domain/application, адаптеры и CLI реализованы; unit/HTTP/реальные
@@ -6,8 +6,8 @@ PostgreSQL/Elasticsearch-тесты проходят. Полный feed прои
 Публичный HTTP API, рекомендации/verifier и интерфейс — следующие части MVP.
 Этот шаг не расходует OpenAI API и не подбирает параметры по holdout.
 Правила опечаток query-v1 описаны в [query-normalization.md](query-normalization.md).
-Новые [условия query-v3](query-constraints.md) используют characteristics-v4 /
-lexical-v4 и требуют нового снимка/индекса. Устаревшая схема возвращает not ready.
+Новые [условия query-v4](freeform-queries.md) используют characteristics-v5 /
+lexical-v5 и требуют нового снимка/индекса. Устаревшая схема возвращает not ready.
 Для воспроизводимости выдачи CLI показывает также версию query policy.
 
 ## Подготовка индекса

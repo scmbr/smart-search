@@ -33,7 +33,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 5}, version)
+	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 9}, version)
 	t.Cleanup(func() {
 		m, exists, err := c.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -61,10 +61,29 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		{"visio-pro", "391347", "Microsoft Visio Professional 2024"},
 		{"visio-standard", "391350", "Microsoft Visio Standard 2024"},
 		{"unknown", "not-reviewed", "Unreviewed product"},
+		{"anydesk", "306539", "AnyDesk Standard на 2 ПК"},
+		{"cyber", "173614", "Кибер Бэкап Стандартная редакция для сервера"},
+		{"astra", "121231", "Astra Linux Special Edition для рабочей станции"},
+		{"scanner", "46421", "СКАНЕР-ВС 7, Основная лицензия Enterprise на 256 IP"},
 	} {
 		price := int64(100)
-		o := catalog.Offer{ID: row.id, GroupID: row.group, Name: row.name, Description: "Mapped", URL: "https://store.softline.ru/microsoft/" + row.id + "/", PriceMinor: &price, Available: true,
-			Parameters: []catalog.Parameter{{Name: "Тип продукта", Value: "софт", Known: true}, {Name: "Тип лицензии", Value: "Full", Known: true}}}
+		vendor := "microsoft"
+		switch row.id {
+		case "anydesk":
+			vendor = "anydesk"
+		case "cyber":
+			vendor = "cyberprotect"
+		case "astra":
+			vendor = "astralinux"
+		case "scanner":
+			vendor = "npo-echelon"
+		}
+		description := "Mapped"
+		if vendor != "microsoft" {
+			description = ""
+		}
+		o := catalog.Offer{ID: row.id, GroupID: row.group, Name: row.name, Description: description, URL: "https://store.softline.ru/" + vendor + "/" + row.id + "/", PriceMinor: &price, Available: true,
+			Parameters: []catalog.Parameter{{Name: "Тип продукта", Value: "софт", Known: true}, {Name: "Тип лицензии", Value: "Full", Known: true}, {Name: "Тип лицензии", Value: "ESD", Known: true}}}
 		chars := catalog.Normalize(o)
 		o.Characteristics = &chars
 		d, err := domain.BuildDocument(o, nil, resolver, spec.CatalogID)
@@ -90,6 +109,11 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		{"Microsoft Visio", "microsoft-visio", "", 1},
 		{"Microsoft Office для дома и бизнеса 2024", "microsoft-office", "office-business", 1},
 		{"Mapped", "", "", 3},
+		{"AnyDesk удаленка на 2 ПК", "anydesk", "anydesk", 1},
+		{"AnyDesk удаленка на 3 ПК", "", "", 0},
+		{"Кибер Бэкап для резервного копирования сервера", "cyber-backup", "cyber", 1},
+		{"Астра Линукс операционная система для рабочей станции в наличии", "astra-linux-special-edition", "astra", 1},
+		{"Сканер-ВС для проверки уязвимостей на 256 IP", "scanner-vs", "scanner", 1},
 	} {
 		r, err := app.Search(ctx, c, domain.Request{Query: tc.query, Limit: 4})
 		if err != nil || len(r.Hits) != tc.count || r.FourFamiliesConfirmed {

@@ -39,6 +39,9 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 		return map[string]any{"term": map[string]any{field: value}}
 	}
 	filters := []any{term("HasPrice", priced), term("RoleConflict", false)}
+	if r.FamilyID != "" {
+		filters = append(filters, term("FamilyID", r.FamilyID), term("FamilyConfirmed", true))
+	}
 	if r.Policy == "available_only" {
 		filters = append(filters, term("Available", true))
 	}

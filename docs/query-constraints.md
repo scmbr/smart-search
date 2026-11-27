@@ -1,5 +1,8 @@
 # Условия запроса: query-v3 / characteristics-v4 / lexical-v4
 
+Ниже — правила и исторические прогоны query-v3. Текущее расширение query-v4 /
+characteristics-v5 / lexical-v5 описано в [именованных задачах](freeform-queries.md).
+
 ## Приёмка расширения ёмкости
 
 DevicesLimit, IPAddressesLimit и ParticipantsLimit — независимые верхние границы

@@ -15,6 +15,36 @@ func TestUnsupportedConstraintDoesNotIssueAnUnverifiedSearch(t *testing.T) {
 	}
 }
 
+func TestNamedTaskRequiresConfirmedFamilyAndSKUConstraints(t *testing.T) {
+	for _, scenario := range []string{"valid", "other family", "unconfirmed", "unknown capacity", "wrong type"} {
+		n, price := 2, int64(100)
+		d := domain.Document{OfferID: "sku", FamilyID: "anydesk", FamilyConfirmed: true, CatalogID: "c", ProductType: "software", DevicesLimit: &n, PriceMinor: &price}
+		switch scenario {
+		case "other family":
+			d.FamilyID = "other"
+		case "unconfirmed":
+			d.FamilyConfirmed = false
+		case "unknown capacity":
+			d.DevicesLimit = nil
+		case "wrong type":
+			d.ProductType = "hardware"
+		}
+		b := &behaviorBackend{result: domain.Result{CatalogID: "c", IndexVersion: "i", Hits: []domain.Hit{{Document: d}}}}
+		r, err := Search(context.Background(), b, domain.Request{Query: "AnyDesk удаленка на 2 ПК", Limit: 4})
+		if (err == nil) != (scenario == "valid") {
+			t.Fatalf("%s: %v", scenario, err)
+		}
+		if err == nil && (len(r.ProductIntents) != 1 || r.Query != "AnyDesk удаленка на 2 ПК") {
+			t.Fatal("task evidence/input lost")
+		}
+	}
+	b := &behaviorBackend{}
+	r, err := Search(context.Background(), b, domain.Request{Query: "AnyDesk не для удаленного доступа", Limit: 4})
+	if err != nil || b.calls != 0 || r.ShortfallReason != "unsupported_query_constraints" {
+		t.Fatal("negated task sent to backend")
+	}
+}
+
 func TestApplicationRechecksEachCapacityUnit(t *testing.T) {
 	for _, unit := range []string{"ПК", "IP", "участников"} {
 		for _, scenario := range []string{"known", "unknown", "too small", "different unit"} {

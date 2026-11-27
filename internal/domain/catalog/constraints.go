@@ -86,6 +86,7 @@ var ipCapacity = capacityPattern(`ip(?:[- ]адрес[аоыев]*)?`)
 var participantCapacity = capacityPattern(`участник[аоыев]*|participants?`)
 var ambiguousCapacity = regexp.MustCompile(`(?:от\s+[0-9]+\s+до\s+|[0-9]+\s*[-–/]\s*)[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|devices?|ip|участник|participants?)|(?:^|[^\pL])(?:не|без)\s+(?:на\s+|до\s+)?[0-9]+`)
 var officeHome2024 = regexp.MustCompile(`^microsoft\s+office\s+(?:для дома|home)\s+2024(?:$|[^\pL\pN])`)
+var microsoft365Edition = regexp.MustCompile(`^microsoft\s+365\s+(personal|персональный|family|для семьи)(?:$|[^\pL\pN])`)
 
 func capacityPattern(unit string) *regexp.Regexp {
 	return regexp.MustCompile(`(?:^|[^\pL\pN])(?:на|до)\s+(-?[0-9]+)\s+(?:` + unit + `)`)
@@ -120,6 +121,9 @@ func addTitleValue(c *collected, value, title, rule string) {
 
 func collectTitleConstraints(title string, edition, users *collected) {
 	s := normalized(title)
+	if match := microsoft365Edition.FindStringSubmatch(s); match != nil {
+		addTitleValue(edition, CanonicalEdition(match[1]), title, "edition.title.microsoft365")
+	}
 	for _, pattern := range []*regexp.Regexp{explicitEditionBefore, explicitEditionAfter} {
 		for _, match := range pattern.FindAllStringSubmatch(s, -1) {
 			addTitleValue(edition, CanonicalEdition(match[1]), title, "edition.title.explicit")

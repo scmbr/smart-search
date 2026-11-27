@@ -19,9 +19,9 @@ var quantityQuery = regexp.MustCompile(`(?:^|\s)(` + countWords + `)\s+(поль
 var termQuery = regexp.MustCompile(`(?:^|\s)(` + countWords + `)\s+(месяц(?:а|ев)?|мес\.?|год(?:а)?|лет|months?|years?)`)
 var bareYearQuery = regexp.MustCompile(`(?:^|\s)на\s+год`)
 var perpetualQuery = regexp.MustCompile(`(?:^|\s)(бессрочн(?:о|ая|ый)|без ограничения срока|без ограничений по сроку)`)
-var editionQuery = regexp.MustCompile(`(?:^|\s)(standard|enterprise|professional|advanced|solo|ultimate|family|personal|расширенн(?:ая|ый)|стандартн(?:ая|ый))`)
+var editionQuery = regexp.MustCompile(`(?:^|\s)(standard|enterprise|professional|advanced|solo|ultimate|family|personal|персональный|расширенн(?:ая|ый)|стандартн(?:ая|ый))`)
 var explicitEditionQuery = regexp.MustCompile(`(?:^|\s)редакци[яи]\s+([\pL]+)`)
-var homeBusinessQuery = regexp.MustCompile(`(?:^|\s)(для дома и бизнеса|home and business)`)
+var homeBusinessQuery = regexp.MustCompile(`(?:^|\s)(для дома и бизнеса|home(?: and)? business)`)
 var homeStudentQuery = regexp.MustCompile(`(?:^|\s)(для дома и учебы|home and student)`)
 var officeHomeQuery = regexp.MustCompile(`(?:^|\s)(для дома|home)\s+2024`)
 var serverQuery = regexp.MustCompile(`(?:^|\s)для\s+(?:(?:физического|файлового|виртуального)\s+)?сервера`)
@@ -30,7 +30,7 @@ var availabilityQuery = regexp.MustCompile(`(?:^|\s)в\s+наличии`)
 var daysQuery = regexp.MustCompile(`(?:^|\s)(` + countWords + `)\s+(день|дня|дней|days?)`)
 var quantityRange = regexp.MustCompile(`(?:от\s+[0-9]+\s+до\s+|[0-9]+\s*[-–/]\s*)[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|участник|ip|месяц|год)`)
 var negativeQuantity = regexp.MustCompile(`(?:^|\s)(?:(?:на|для|до)\s*)?-[0-9]+\s+(?:пользовател|users?|пк|устройств|участник|ip|месяц|мес|год|лет)`)
-var negatedConstraint = regexp.MustCompile(`(?:^|\s)(?:не|без)\s+(?:на\s+)?(?:standard|enterprise|professional|advanced|family|personal|продлени[ея]|обновлени[ея]|поддержк[аи]|[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|участник|ip|месяц|год|лет)|год)`)
+var negatedConstraint = regexp.MustCompile(`(?:^|\s)(?:не|без)\s+(?:(?:на|для)\s+)?(?:сервера|рабочей\s+станции|новая\s+лицензия|standard|enterprise|professional|advanced|family|personal|продлени[ея]|обновлени[ея]|поддержк[аи]|[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|участник|ip|месяц|год|лет)|год)`)
 var mixedCapacityQuery = regexp.MustCompile(`[0-9]+\s+(?:пк|пользовател[ьяей]+|users?|ip|участник[аоыев]*)\s*/`)
 
 func parseCount(s string) (int, error) {
@@ -48,6 +48,7 @@ func parseCount(s string) (int, error) {
 func parseConstraints(r *Request) error {
 	r.Constraints = nil
 	r.UnsupportedConstraints = nil
+	r.ProductIntents = nil
 	for _, n := range []int{r.MinDevices, r.MinIPAddresses, r.MinParticipants} {
 		if n < 0 || n > 1000000 {
 			return ErrInvalidQuery
@@ -76,7 +77,7 @@ func parseConstraints(r *Request) error {
 	}
 	text := strings.ToLower(strings.ReplaceAll(r.Query, "ё", "е"))
 	context := canonicalQuery(text)
-	knownProduct := strings.Contains(context, "anydesk") || strings.Contains(context, "office") || strings.Contains(context, "кибер") || strings.Contains(context, "сканер")
+	knownProduct := strings.Contains(context, "anydesk") || strings.Contains(context, "office") || strings.Contains(context, "кибер") || strings.Contains(context, "сканер") || strings.Contains(" "+context+" ", " microsoft 365 ")
 	if quantityRange.MatchString(text) || negativeQuantity.MatchString(text) {
 		return fmt.Errorf("%w: ambiguous quantity range", ErrInvalidQuery)
 	}
@@ -92,6 +93,10 @@ func parseConstraints(r *Request) error {
 	}
 	if mixedCapacityQuery.MatchString(text) {
 		unsupported("mixed_capacity_units", text)
+		return nil
+	}
+	if negatedTask.MatchString(text) {
+		unsupported("negated_product_task", text)
 		return nil
 	}
 	set := func(field, value, fragment string, destination *string) error {
@@ -135,6 +140,23 @@ func parseConstraints(r *Request) error {
 			text = out.String()
 		}
 		return nil
+	}
+	for _, rule := range productTasks {
+		if !strings.Contains(" "+context+" ", " "+rule.anchor+" ") {
+			continue
+		}
+		if err := apply(rule.pattern, func(m []string) error {
+			if (r.FamilyID != "" && r.FamilyID != rule.family) || (r.ProductType != "" && r.ProductType != "software") {
+				return ErrInvalidQuery
+			}
+			r.FamilyID = rule.family
+			r.ProductType = "software"
+			r.ProductIntents = append(r.ProductIntents, ProductIntent{FamilyID: rule.family, Task: rule.task, Text: strings.TrimSpace(m[0]), RuleID: "product_task." + rule.task, SourceURL: rule.source})
+			add("family_id", rule.family, m[0])
+			return nil
+		}); err != nil {
+			return err
+		}
 	}
 	if strings.Contains(text, "не в наличии") || strings.Contains(text, "необязательно в наличии") || strings.Contains(text, "не обязательно в наличии") {
 		unsupported("availability_negation", text)

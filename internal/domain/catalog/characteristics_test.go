@@ -59,7 +59,7 @@ func TestVersionAndEditionAreDifferent(t *testing.T) {
 		{"upgrade source version", "", "Обновление с КриптоПро CSP 4.0 на 5.0", "", "", Unknown},
 		{"upgrade target not proven", "", "Upgrade КриптоПро CSP 5.0", "", "", Unknown},
 		{"explicit upgrade version", "5.0", "Обновление с КриптоПро CSP 4.0 на 5.0", "5.0", "", Known},
-		{"no version from 365", "", "Microsoft 365 Family 12 месяцев", "", "", Unknown},
+		{"no version from 365", "", "Microsoft 365 Family 12 месяцев", "", "family", Unknown},
 		{"unsupported version", "beta release", "Product", "", "", Unknown},
 	} {
 		t.Run(tc.name, func(t *testing.T) {

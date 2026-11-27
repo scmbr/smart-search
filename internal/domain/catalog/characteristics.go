@@ -10,7 +10,7 @@ import (
 )
 
 // NormalizationVersion must change when rules, evidence, or result semantics change.
-const NormalizationVersion = "characteristics-v4"
+const NormalizationVersion = "characteristics-v5"
 
 type Knowledge string
 
@@ -51,6 +51,7 @@ type IntegerAttribute struct {
 }
 
 type Characteristics struct {
+	DeliveryMethod                                    TextAttribute
 	PolicyVersion                                     string
 	ProductType                                       TextAttribute
 	OfferKind                                         TextAttribute
@@ -185,7 +186,7 @@ var titleVersions = []struct {
 
 // Normalize never mutates the offer and never reads another SKU or description.
 func Normalize(o Offer) Characteristics {
-	var product, license, version, edition, platform, architecture, users, nodes collected
+	var product, license, delivery, version, edition, platform, architecture, users, nodes collected
 	for index, p := range o.Parameters {
 		switch normalized(p.Name) {
 		case "тип продукта":
@@ -200,6 +201,11 @@ func Normalize(o Offer) Characteristics {
 				}
 			}
 		case "тип лицензии":
+			if p.Known && licenseTypes[normalized(p.Value)] == "esd" {
+				delivery.observe(p, index, "delivery.parameter.esd")
+				delivery.add("esd")
+				continue
+			}
 			if license.observe(p, index, "license_type.parameter") {
 				if value, ok := licenseTypes[normalized(p.Value)]; ok {
 					license.add(value)
@@ -260,7 +266,7 @@ func Normalize(o Offer) Characteristics {
 			}
 		}
 	}
-	result := Characteristics{PolicyVersion: NormalizationVersion, ProductType: productType, OfferKind: role, LicenseType: licenseType,
+	result := Characteristics{PolicyVersion: NormalizationVersion, ProductType: productType, OfferKind: role, LicenseType: licenseType, DeliveryMethod: delivery.scalar(),
 		Version: version.scalar(), Edition: edition.scalar(), Platforms: platform.set(), Architectures: architecture.set(),
 		UsersLimit: asInteger(users, "users"), Nodes: asInteger(nodes, "nodes")}
 	if productType.Value != "hardware" && productType.Status != Conflict && role.Value != "upgrade" && licenseType.Value != "migration" && !titleTransition.MatchString(normalized(o.Name)) {

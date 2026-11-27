@@ -13,7 +13,8 @@ PostgreSQL со staging-снимками и Docker Compose. Сервер и fron
 [лексический baseline](docs/lexical-baseline.md). Это следующий шаг к публичному API.
 Добавлена [обработка запросов query-v1](docs/query-normalization.md): алиасы,
 транслитерация, раскладка и ограниченный fuzzy fallback.
-[Query-v3](docs/query-constraints.md) добавляет строгие условия SKU поверх lexical-v4.
+[Query-v4](docs/freeform-queries.md) разбирает задачи при явном названии продукта,
+сохраняя строгие условия SKU поверх lexical-v5.
 [Маппинг families-v3](docs/family-mapping.md) объединяет редакции и версии 50 семейств;
 остальной каталог сохраняет неподтверждённую группировку.
 Независимое качество
