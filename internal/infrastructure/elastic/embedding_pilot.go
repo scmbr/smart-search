@@ -16,6 +16,28 @@ import (
 // PilotRank uses the same text as embeddings in an isolated, owner-checked index.
 type PilotRank struct{ Client *Client }
 
+type pilotMetadata struct{ Owner, DatasetSHA string }
+
+func (c *Client) pilotMetadata(ctx context.Context, name string) (pilotMetadata, bool, error) {
+	raw, code, err := c.request(ctx, "GET", "/"+name+"/_mapping", nil)
+	if err != nil || code == 404 {
+		return pilotMetadata{}, false, err
+	}
+	var reply map[string]struct {
+		Mappings struct {
+			Meta pilotMetadata `json:"_meta"`
+		}
+	}
+	if err = json.Unmarshal(raw, &reply); err != nil {
+		return pilotMetadata{}, false, err
+	}
+	entry, ok := reply[name]
+	if !ok {
+		return pilotMetadata{}, false, errors.New("missing pilot index metadata")
+	}
+	return entry.Mappings.Meta, true, nil
+}
+
 func (p PilotRank) Rank(ctx context.Context, x d.Dataset) (result [][]d.Rank, err error) {
 	if err = d.Validate(x); err != nil {
 		return nil, err
@@ -26,28 +48,20 @@ func (p PilotRank) Rank(ctx context.Context, x d.Dataset) (result [][]d.Rank, er
 	}
 	owner := hex.EncodeToString(nonce[:])
 	name := "smart-search-pilot-" + owner
+	expected := pilotMetadata{Owner: owner, DatasetSHA: d.Fingerprint(x)}
 	c := p.Client
 	defer func() {
 		clean, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		raw, code, e := c.request(clean, "GET", "/"+name+"/_mapping", nil)
+		meta, exists, e := c.pilotMetadata(clean, name)
 		if e != nil {
 			err = errors.Join(err, e)
 			return
 		}
-		if code == 404 {
+		if !exists {
 			return
 		}
-		var mapping map[string]struct {
-			Mappings struct {
-				Meta struct{ Owner string } `json:"_meta"`
-			}
-		}
-		if e = json.Unmarshal(raw, &mapping); e != nil {
-			err = errors.Join(err, e)
-			return
-		}
-		if mapping[name].Mappings.Meta.Owner != owner {
+		if meta != expected {
 			err = errors.Join(err, errors.New("refusing to delete foreign pilot index"))
 			return
 		}
@@ -57,7 +71,12 @@ func (p PilotRank) Rank(ctx context.Context, x d.Dataset) (result [][]d.Rank, er
 	settings := mapping(a.Spec{})["settings"]
 	body := map[string]any{"settings": settings, "mappings": map[string]any{"dynamic": "strict", "_meta": map[string]string{"Owner": owner, "DatasetSHA": d.Fingerprint(x)}, "properties": map[string]any{"Text": map[string]string{"type": "text", "analyzer": "lexical"}}}}
 	if _, _, err = c.request(ctx, "PUT", "/"+name, body); err != nil {
-		return nil, err
+		// A timed-out PUT may have succeeded before transport retried it.
+		meta, exists, readErr := c.pilotMetadata(ctx, name)
+		if readErr != nil || !exists || meta != expected {
+			return nil, errors.Join(err, readErr)
+		}
+		err = nil
 	}
 	var bulk bytes.Buffer
 	encoder := json.NewEncoder(&bulk)

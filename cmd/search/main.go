@@ -24,6 +24,9 @@ func main() {
 func run(ctx context.Context) error {
 	r := domain.Request{}
 	corpus := flag.String("hybrid-corpus", "", "experimental cached development corpus; no paid API calls")
+	fullCorpus := flag.String("vector-corpus", "", "complete versioned vector corpus")
+	liveQuery := flag.Bool("live-query", false, "explicitly enable embeddings of new queries with the shared budget")
+	batch := flag.Bool("batch", false, "read JSON query strings from stdin, one per line, reusing the loaded corpus")
 	flag.StringVar(&r.Query, "query", "", "search text")
 	flag.StringVar(&r.FamilyID, "family", "", "explicit confirmed family ID")
 	flag.IntVar(&r.Limit, "limit", 4, "maximum families (4..20)")
@@ -44,7 +47,17 @@ func run(ctx context.Context) error {
 	if flag.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
 	}
-	if _, err := domain.Prepare(r); err != nil {
+	if (*corpus != "" && *fullCorpus != "") || (*liveQuery && *fullCorpus == "") {
+		return fmt.Errorf("choose one corpus; live-query requires vector-corpus")
+	}
+	if *batch && r.Query != "" {
+		return fmt.Errorf("batch and query are mutually exclusive")
+	}
+	validationInput := r
+	if *batch {
+		validationInput.Query = "query"
+	}
+	if _, err := domain.Prepare(validationInput); err != nil {
 		return err
 	}
 	s, err := localconfig.Load()
@@ -63,6 +76,17 @@ func run(ctx context.Context) error {
 		}
 		defer closePool()
 		searchBackend = combined
+	}
+	if *fullCorpus != "" {
+		combined, closePool, err := fullHybrid(ctx, s, backend, *fullCorpus, *liveQuery)
+		if err != nil {
+			return err
+		}
+		defer closePool()
+		searchBackend = combined
+	}
+	if *batch {
+		return searchBatch(ctx, searchBackend, r, os.Stdin, os.Stdout)
 	}
 	result, err := app.Search(ctx, searchBackend, r)
 	if err != nil {

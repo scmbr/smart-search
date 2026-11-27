@@ -19,6 +19,9 @@
 | Диагностика только tuning | `python scripts/evaluate-tuning.py` после сборки bin/search.exe |
 | Корпус пилота | `python scripts/prepare-embedding-pilot.py --feed <путь>` |
 | План расходов / повтор из кэша | `go run ./cmd/embedding-pilot -mode plan` / `-mode replay` |
+| Полный корпус только из feed | `python scripts/prepare-vector-corpus.py --feed <путь>` |
+| Полный план / проверка кэша | `go run ./cmd/vector-index -mode plan` / `-mode replay` |
+| Поиск по полному корпусу | `go run ./cmd/search -query "сервер" -vector-corpus artifacts/vector-corpus.json` |
 | Интеграционные тесты всех адаптеров | задать `TEST_POSTGRES_DSN` и `TEST_ELASTICSEARCH_URL`, затем `go test -count=1 -v ./internal/infrastructure/...` |
 | Интеграционные тесты | задать `TEST_POSTGRES_DSN`, затем `go test -count=1 -v ./internal/infrastructure/postgres` |
 | Сборка CLI | `go build -o bin/catalog-check.exe ./cmd/catalog-check` |
@@ -59,6 +62,14 @@ CLI-сборка выше рассчитана на Windows; на другой �
 покрытие. RRF выполняется по FamilyID после фильтрации SKU; не обходи общий
 application/lexical.Search при выдаче результата. Новые API-тексты требуют отдельного
 live-подключения и общего ledger, отсутствие кэша сейчас даёт явный BM25 fallback.
+Полный manifest — docs/vector-corpus.md; разрешение пользователя — D-034.
+Для corpus-index live обязательны approved-sha и OPENAI_LIVE_ENABLED=true;
+предел запуска $0.15 поверх прежнего Runtime cap $0.05 на вызов, общий ledger $5.
+Новый запрос оплачивается только с -live-query, максимум $0.001 на запрос.
+Без group_id ищи точный OfferID с vendor-path; не придумывай группу.
+Полный корпус не загружается частично; prefix-512 сохраняется в памяти процесса.
+Для development evaluation используй --vector-corpus <путь> --batch: это cache-only,
+не добавляй live-флаг и не используй holdout для настройки.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.
 

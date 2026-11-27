@@ -30,7 +30,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--exe", default="bin/search.exe")
     parser.add_argument("--output", default="artifacts/tuning-diagnostics.json")
-    parser.add_argument("--hybrid-corpus", help="enable cached experimental hybrid; no OpenAI calls")
+    corpora = parser.add_mutually_exclusive_group()
+    corpora.add_argument("--hybrid-corpus", help="enable cached experimental hybrid; no OpenAI calls")
+    corpora.add_argument("--vector-corpus", help="complete corpus, cache-only evaluation")
+    parser.add_argument("--batch", action="store_true", help="reuse one CLI process and its in-memory corpus")
     parser.add_argument("--probes", action="store_true", help="use only frozen development embedding probes")
     args = parser.parse_args()
     source = json.loads(Path("testdata/evaluation/scenarios.json").read_text(encoding="utf-8"))
@@ -46,29 +49,44 @@ def main():
             raise SystemExit("Refusing non-development probes")
         source["cases"] = [dict(c, target_scope="family", constraints=[]) for c in source["cases"]]
     executable = str(Path(args.exe).resolve())
+    corpus_flags = (["-hybrid-corpus", args.hybrid_corpus] if args.hybrid_corpus else
+                    ["-vector-corpus", args.vector_corpus] if args.vector_corpus else [])
+    batch_results, batch_elapsed_ms = None, None
+    if args.batch:
+        started = time.perf_counter()
+        run = subprocess.run([executable, "-batch"]+corpus_flags,
+                             input="".join(json.dumps(c["query"], ensure_ascii=False)+"\n" for c in source["cases"]),
+                             capture_output=True, text=True, encoding="utf-8", timeout=600)
+        if run.returncode:
+            raise SystemExit(run.stderr.strip() or f"batch exit {run.returncode}")
+        batch_results = [json.loads(line) for line in run.stdout.splitlines()]
+        if len(batch_results) != len(source["cases"]):
+            raise SystemExit("Batch result count differs from requested cases")
+        batch_elapsed_ms = round((time.perf_counter()-started)*1000)
     rows = []
-    for case in source["cases"]:
+    for index, case in enumerate(source["cases"]):
         started = time.perf_counter()
         row = {"id":case["id"], "query":case["query"], "target_scope":case["target_scope"]}
         try:
-            command = [executable, "-query", case["query"]]
-            if args.hybrid_corpus:
-                command += ["-hybrid-corpus", args.hybrid_corpus]
-            run = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=40)
-            if run.returncode:
-                raise RuntimeError(run.stderr.strip() or f"exit {run.returncode}")
-            result = json.loads(run.stdout)
+            if batch_results is not None:
+                result = batch_results[index]
+            else:
+                run = subprocess.run([executable, "-query", case["query"]]+corpus_flags, capture_output=True, text=True, encoding="utf-8", timeout=40)
+                if run.returncode:
+                    raise RuntimeError(run.stderr.strip() or f"exit {run.returncode}")
+                result = json.loads(run.stdout)
             row.update(diagnose(case, result))
             row.update({"catalog_id":result["CatalogID"], "index_version":result["IndexVersion"],
                         "query_policy_version":result.get("QueryPlan",{}).get("Version","legacy_exact"),
                         "search_mode":result.get("SearchMode","legacy_exact"),
-                        "elapsed_ms":round((time.perf_counter()-started)*1000), "result":result,
+                        "elapsed_ms":None if args.batch else round((time.perf_counter()-started)*1000), "result":result,
                         "ungraded_constraints":case["constraints"]})
         except (OSError, ValueError, KeyError, RuntimeError, subprocess.TimeoutExpired) as error:
             row["error"] = str(error)
         rows.append(row)
     report = {"dataset_role":source["dataset_role"], "label_status":source["label_status"], "dataset_cases_sha256":source["cases_sha256"],
-              "retrieval":"hybrid_cached_experiment" if args.hybrid_corpus else "lexical",
+              "retrieval":"hybrid_full_corpus_cache_only" if args.vector_corpus else "hybrid_cached_experiment" if args.hybrid_corpus else "lexical",
+              "batch_elapsed_ms":batch_elapsed_ms,
               "cases":len(rows), "execution_errors":sum("error" in r for r in rows),
               "family_scope_cases":sum(c["target_scope"] == "family" for c in source["cases"]),
               "draft_group_target_hits_at_4":sum(bool(r.get("draft_group_target_hit_at_4")) for r in rows),

@@ -93,6 +93,13 @@ Elasticsearch включается отдельно профилем search: 2 �
 Кэш покрывает 512 групп; новые тексты без эмбеддинга используют BM25 fallback.
 Команды измерений и ограничения — [гибридный поиск](docs/hybrid-search.md).
 
+Полный корпус всех групп/SKU: `python scripts/prepare-vector-corpus.py --feed <путь>`,
+план — `go run ./cmd/vector-index -mode plan`. После разрешённой индексации:
+`go run ./cmd/search -query "сервер" -vector-corpus artifacts/vector-corpus.json`.
+Новые запросы оплачиваются только при `-live-query` и OPENAI_LIVE_ENABLED=true;
+общий ledger сохраняет лимит $5. Для серии запросов доступен `-batch` (JSON-строка
+на строку stdin), корпус загружается один раз. См. [полный корпус](docs/vector-corpus.md).
+
 Импорт копирует источник во временный файл data/import-cache, пишет порциями
 в staging и активирует снимок только после полного успешного чтения.
 Повтор той же команды продолжает запись с checkpoint, заново валидируя весь XML.
