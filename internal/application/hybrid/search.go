@@ -1,0 +1,107 @@
+// Package hybrid combines ranked families through ports; it never calls an SDK.
+package hybrid
+
+import (
+	"context"
+	"fmt"
+
+	d "github.com/scmbr/smart-search/internal/domain/search"
+)
+
+type Catalog interface {
+	Search(context.Context, d.Request) (d.Result, error)
+	Resolve(context.Context, d.Request, []d.GroupCandidate, bool, string, string) ([]d.Hit, error)
+}
+type Vectors interface {
+	Candidates(context.Context, d.Request) ([]d.GroupCandidate, error)
+}
+type Backend struct {
+	Lexical                    Catalog
+	Vectors                    Vectors
+	CorpusSHA, ExpectedCatalog string
+	CorpusDocuments            int
+}
+
+// Search accepts a prepared request. Wrap it with lexical.Search to validate output.
+func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
+	if err := ctx.Err(); err != nil {
+		return d.Result{}, err
+	}
+	limit := r.Limit
+	if limit < 4 || limit > d.CandidateLimit {
+		return d.Result{}, d.ErrInvalidQuery
+	}
+	if b.Lexical == nil {
+		return d.Result{}, d.ErrUnavailable
+	}
+	r.Limit = d.CandidateLimit
+	result, err := b.Lexical.Search(ctx, r)
+	if err != nil {
+		return result, err
+	}
+	trace := &d.HybridTrace{Version: d.HybridVersion, CorpusSHA: b.CorpusSHA, CorpusDocuments: b.CorpusDocuments, LexicalFamilies: len(result.Hits), VectorStatus: "fallback"}
+	result.Hybrid = trace
+	finish := func() (d.Result, error) {
+		if err := ctx.Err(); err != nil {
+			return d.Result{}, err
+		}
+		if len(result.Hits) > limit {
+			result.Hits = result.Hits[:limit]
+		}
+		d.Describe(&result)
+		return result, nil
+	}
+	if r.Plan.ExactOnly || r.Plan.LimitReason != "" {
+		trace.VectorStatus = "skipped_exact"
+		return finish()
+	}
+	if b.ExpectedCatalog != "" && b.ExpectedCatalog != result.CatalogID {
+		trace.VectorStatus = "catalog_mismatch"
+		return finish()
+	}
+	if b.Vectors == nil {
+		return finish()
+	}
+	groups, err := b.Vectors.Candidates(ctx, r)
+	if err != nil {
+		return finish()
+	}
+	if len(groups) == 0 {
+		trace.VectorStatus = "no_candidates"
+		return finish()
+	}
+	if len(groups) > d.VectorWindow {
+		return d.Result{}, fmt.Errorf("%w: vector window exceeded", d.ErrUnavailable)
+	}
+	hits, err := b.Lexical.Resolve(ctx, r, groups, true, result.CatalogID, result.IndexVersion)
+	if err != nil {
+		return finish()
+	}
+	lexical := result.Hits
+	if len(hits) > 0 && result.UnpricedFallbackUsed {
+		lexical = nil
+		result.UnpricedFallbackUsed = false
+	}
+	if len(hits) == 0 && (len(lexical) == 0 || result.UnpricedFallbackUsed) {
+		hits, err = b.Lexical.Resolve(ctx, r, groups, false, result.CatalogID, result.IndexVersion)
+		if err != nil {
+			return finish()
+		}
+		if len(hits) > 0 {
+			result.UnpricedFallbackUsed = true
+		}
+	}
+	for _, h := range hits {
+		if h.Document.CatalogID != result.CatalogID {
+			return d.Result{}, fmt.Errorf("%w: vector catalog mismatch", d.ErrUnavailable)
+		}
+	}
+	result.Hits, err = d.Fuse(lexical, hits, limit)
+	if err != nil {
+		return d.Result{}, err
+	}
+	trace.VectorFamilies = len(hits)
+	trace.VectorStatus = "used"
+	result.SearchMode = "hybrid"
+	return finish()
+}

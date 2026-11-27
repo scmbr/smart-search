@@ -1,5 +1,6 @@
 """Reviewed tuning diagnostics only: no holdout, no OpenAI, no eligibility claims."""
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -29,17 +30,31 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--exe", default="bin/search.exe")
     parser.add_argument("--output", default="artifacts/tuning-diagnostics.json")
+    parser.add_argument("--hybrid-corpus", help="enable cached experimental hybrid; no OpenAI calls")
+    parser.add_argument("--probes", action="store_true", help="use only frozen development embedding probes")
     args = parser.parse_args()
     source = json.loads(Path("testdata/evaluation/scenarios.json").read_text(encoding="utf-8"))
     if source["dataset_role"] != "development_tuning" or any(c["split"] != "tuning" for c in source["cases"]):
         raise SystemExit("Refusing to run a non-tuning dataset")
+    if args.probes:
+        raw = Path("testdata/evaluation/embedding-probes-v1.json").read_bytes()
+        source = json.loads(raw)
+        digest = hashlib.sha256(json.dumps(source["cases"], ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        if digest != "af7a01d9bf904948afc338accfc70a6003a8931680b1b77c10f5b3daf538dc84" or digest != source.get("cases_sha256"):
+            raise SystemExit("Frozen development probes changed")
+        if source["dataset_role"] != "development_pilot_probes":
+            raise SystemExit("Refusing non-development probes")
+        source["cases"] = [dict(c, target_scope="family", constraints=[]) for c in source["cases"]]
     executable = str(Path(args.exe).resolve())
     rows = []
     for case in source["cases"]:
         started = time.perf_counter()
         row = {"id":case["id"], "query":case["query"], "target_scope":case["target_scope"]}
         try:
-            run = subprocess.run([executable, "-query", case["query"]], capture_output=True, text=True, encoding="utf-8", timeout=40)
+            command = [executable, "-query", case["query"]]
+            if args.hybrid_corpus:
+                command += ["-hybrid-corpus", args.hybrid_corpus]
+            run = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", timeout=40)
             if run.returncode:
                 raise RuntimeError(run.stderr.strip() or f"exit {run.returncode}")
             result = json.loads(run.stdout)
@@ -53,6 +68,7 @@ def main():
             row["error"] = str(error)
         rows.append(row)
     report = {"dataset_role":source["dataset_role"], "label_status":source["label_status"], "dataset_cases_sha256":source["cases_sha256"],
+              "retrieval":"hybrid_cached_experiment" if args.hybrid_corpus else "lexical",
               "cases":len(rows), "execution_errors":sum("error" in r for r in rows),
               "family_scope_cases":sum(c["target_scope"] == "family" for c in source["cases"]),
               "draft_group_target_hits_at_4":sum(bool(r.get("draft_group_target_hit_at_4")) for r in rows),

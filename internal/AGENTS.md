@@ -15,6 +15,7 @@
 | Elasticsearch + PostgreSQL | `docker compose --profile search up -d --wait postgres elasticsearch` |
 | Индексация активного снимка | `go run ./cmd/catalog-index` |
 | Поиск CLI | `go run ./cmd/search -query "сервер"` |
+| Экспериментальный гибрид без API | `go run ./cmd/search -query "хочу находить уязвимости в сети компании" -hybrid-corpus artifacts/embedding-pilot-dataset.json` |
 | Диагностика только tuning | `python scripts/evaluate-tuning.py` после сборки bin/search.exe |
 | Корпус пилота | `python scripts/prepare-embedding-pilot.py --feed <путь>` |
 | План расходов / повтор из кэша | `go run ./cmd/embedding-pilot -mode plan` / `-mode replay` |
@@ -54,6 +55,10 @@ Query policy — docs/query-normalization.md и docs/query-constraints.md, ве�
 Не обходи Runtime прямым вызовом Provider/SDK. Не освобождай unresolved claims
 по TTL и не повторяй тайм-ауты/5xx автоматически. HTTP fallback пока не подключён.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
+Гибрид — docs/hybrid-search.md; кэшированный development-корпус не означает полное
+покрытие. RRF выполняется по FamilyID после фильтрации SKU; не обходи общий
+application/lexical.Search при выдаче результата. Новые API-тексты требуют отдельного
+live-подключения и общего ledger, отсутствие кэша сейчас даёт явный BM25 fallback.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.
 

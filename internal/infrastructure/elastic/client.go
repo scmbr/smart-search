@@ -325,7 +325,11 @@ func (c *Client) Search(ctx context.Context, r domain.Request) (domain.Result, e
 }
 
 func (c *Client) hits(ctx context.Context, index string, r domain.Request, priced, expanded bool) ([]domain.Hit, error) {
-	raw, code, err := c.request(ctx, "POST", "/"+index+"/_search", searchBody(r, priced, expanded))
+	return c.searchHits(ctx, index, searchBody(r, priced, expanded))
+}
+
+func (c *Client) searchHits(ctx context.Context, index string, body map[string]any) ([]domain.Hit, error) {
+	raw, code, err := c.request(ctx, "POST", "/"+index+"/_search", body)
 	if err != nil {
 		return nil, err
 	}

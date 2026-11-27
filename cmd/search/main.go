@@ -23,6 +23,7 @@ func main() {
 }
 func run(ctx context.Context) error {
 	r := domain.Request{}
+	corpus := flag.String("hybrid-corpus", "", "experimental cached development corpus; no paid API calls")
 	flag.StringVar(&r.Query, "query", "", "search text")
 	flag.StringVar(&r.FamilyID, "family", "", "explicit confirmed family ID")
 	flag.IntVar(&r.Limit, "limit", 4, "maximum families (4..20)")
@@ -54,7 +55,16 @@ func run(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	result, err := app.Search(ctx, backend, r)
+	var searchBackend app.Backend = backend
+	if *corpus != "" {
+		combined, closePool, err := cachedHybrid(ctx, s, backend, *corpus)
+		if err != nil {
+			return err
+		}
+		defer closePool()
+		searchBackend = combined
+	}
+	result, err := app.Search(ctx, searchBackend, r)
 	if err != nil {
 		return err
 	}
