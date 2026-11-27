@@ -34,8 +34,11 @@ def main():
     corpora.add_argument("--hybrid-corpus", help="enable cached experimental hybrid; no OpenAI calls")
     corpora.add_argument("--vector-corpus", help="complete corpus, cache-only evaluation")
     parser.add_argument("--batch", action="store_true", help="reuse one CLI process and its in-memory corpus")
+    parser.add_argument("--parser-replay", action="store_true", help="use cached interpretations only; requires vector-corpus")
     parser.add_argument("--probes", action="store_true", help="use only frozen development embedding probes")
     args = parser.parse_args()
+    if args.parser_replay and not args.vector_corpus:
+        parser.error("parser-replay requires vector-corpus")
     source = json.loads(Path("testdata/evaluation/scenarios.json").read_text(encoding="utf-8"))
     if source["dataset_role"] != "development_tuning" or any(c["split"] != "tuning" for c in source["cases"]):
         raise SystemExit("Refusing to run a non-tuning dataset")
@@ -51,6 +54,8 @@ def main():
     executable = str(Path(args.exe).resolve())
     corpus_flags = (["-hybrid-corpus", args.hybrid_corpus] if args.hybrid_corpus else
                     ["-vector-corpus", args.vector_corpus] if args.vector_corpus else [])
+    if args.parser_replay:
+        corpus_flags += ["-parser-mode", "replay"]
     batch_results, batch_elapsed_ms = None, None
     if args.batch:
         started = time.perf_counter()
@@ -86,6 +91,7 @@ def main():
         rows.append(row)
     report = {"dataset_role":source["dataset_role"], "label_status":source["label_status"], "dataset_cases_sha256":source["cases_sha256"],
               "retrieval":"hybrid_full_corpus_cache_only" if args.vector_corpus else "hybrid_cached_experiment" if args.hybrid_corpus else "lexical",
+              "parser_mode":"replay" if args.parser_replay else "off",
               "batch_elapsed_ms":batch_elapsed_ms,
               "cases":len(rows), "execution_errors":sum("error" in r for r in rows),
               "family_scope_cases":sum(c["target_scope"] == "family" for c in source["cases"]),
