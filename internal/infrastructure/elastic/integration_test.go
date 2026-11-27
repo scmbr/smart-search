@@ -33,7 +33,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 9}, version)
+	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 10}, version)
 	t.Cleanup(func() {
 		m, exists, err := c.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -65,6 +65,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		{"cyber", "173614", "Кибер Бэкап Стандартная редакция для сервера"},
 		{"astra", "121231", "Astra Linux Special Edition для рабочей станции"},
 		{"scanner", "46421", "СКАНЕР-ВС 7, Основная лицензия Enterprise на 256 IP"},
+		{"ungrouped", "", "Продукт без группы"},
 	} {
 		price := int64(100)
 		vendor := "microsoft"
@@ -77,6 +78,8 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			vendor = "astralinux"
 		case "scanner":
 			vendor = "npo-echelon"
+		case "ungrouped":
+			vendor = "softlab_nsk"
 		}
 		description := "Mapped"
 		if vendor != "microsoft" {
@@ -114,6 +117,9 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			{domain.Request{Query: "задача без названия", Limit: 4, MinDevices: 3}, []domain.GroupCandidate{{GroupID: "306539", Vendor: "anydesk", Score: 0.9}}, 0},
 			{domain.Request{Query: "задача без названия", Limit: 4, MinDevices: 2}, []domain.GroupCandidate{{GroupID: "306539", Vendor: "anydesk", Score: 0.9}}, 1},
 			{domain.Request{Query: "задача без названия", Limit: 4, MinUsers: 2}, []domain.GroupCandidate{{GroupID: "306539", Vendor: "anydesk", Score: 0.9}}, 0},
+			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{OfferID: "ungrouped", Vendor: "softlab_nsk", Score: 0.9}}, 1},
+			{domain.Request{Query: "задача без названия", Limit: 4, MinUsers: 2}, []domain.GroupCandidate{{OfferID: "ungrouped", Vendor: "softlab_nsk", Score: 0.9}}, 0},
+			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{OfferID: "ungrouped", Vendor: "other", Score: 0.9}}, 0},
 		} {
 			r, err := domain.Prepare(tc.request)
 			if err != nil {

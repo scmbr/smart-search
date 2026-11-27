@@ -13,7 +13,7 @@ import (
 	d "github.com/scmbr/smart-search/internal/domain/search"
 )
 
-var vendorPathPattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,127}$`)
+var vendorPathPattern = regexp.MustCompile(`^[a-z0-9][a-z0-9_-]{0,127}$`)
 
 // Resolve pins the physical BM25 index, filters individual SKUs, then collapses.
 func (c *Client) Resolve(ctx context.Context, r d.Request, groups []d.GroupCandidate, priced bool, catalogID, fingerprint string) ([]d.Hit, error) {
@@ -33,8 +33,13 @@ func (c *Client) Resolve(ctx context.Context, r d.Request, groups []d.GroupCandi
 	clauses := make([]any, 0, len(groups))
 	ranks := map[string]int{}
 	for i, g := range groups {
-		key := g.Vendor + "/" + g.GroupID
-		if !vendorPathPattern.MatchString(g.Vendor) || g.GroupID == "" || len(g.GroupID) > 512 || math.IsNaN(g.Score) || math.IsInf(g.Score, 0) || g.Score < d.MinimumCosine || (i > 0 && g.Score > groups[i-1].Score) {
+		key := g.Vendor + "/group/" + g.GroupID
+		field, value := "GroupID", g.GroupID
+		if g.OfferID != "" {
+			key = g.Vendor + "/offer/" + g.OfferID
+			field, value = "OfferID", g.OfferID
+		}
+		if !vendorPathPattern.MatchString(g.Vendor) || (g.GroupID == "") == (g.OfferID == "") || len(g.GroupID) > 512 || len(g.OfferID) > 512 || math.IsNaN(g.Score) || math.IsInf(g.Score, 0) || g.Score < d.MinimumCosine || (i > 0 && g.Score > groups[i-1].Score) {
 			return nil, d.ErrInvalidQuery
 		}
 		if _, ok := ranks[key]; ok {
@@ -42,7 +47,7 @@ func (c *Client) Resolve(ctx context.Context, r d.Request, groups []d.GroupCandi
 		}
 		ranks[key] = i
 		filter := map[string]any{"bool": map[string]any{"filter": []any{
-			map[string]any{"term": map[string]any{"GroupID": g.GroupID}},
+			map[string]any{"term": map[string]any{field: value}},
 			map[string]any{"prefix": map[string]any{"URL": "https://store.softline.ru/" + g.Vendor + "/"}},
 		}}}
 		clauses = append(clauses, map[string]any{"constant_score": map[string]any{"filter": filter, "boost": 1000.0 / float64(i+1)}})
@@ -63,7 +68,10 @@ func (c *Client) Resolve(ctx context.Context, r d.Request, groups []d.GroupCandi
 		if len(parts) < 2 {
 			return 0, false
 		}
-		rank, ok := ranks[parts[0]+"/"+h.Document.GroupID]
+		rank, ok := ranks[parts[0]+"/group/"+h.Document.GroupID]
+		if !ok {
+			rank, ok = ranks[parts[0]+"/offer/"+h.Document.OfferID]
+		}
 		return rank, ok
 	}
 	for _, h := range hits {

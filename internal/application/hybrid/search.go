@@ -73,6 +73,7 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 	if len(groups) > d.VectorWindow {
 		return d.Result{}, fmt.Errorf("%w: vector window exceeded", d.ErrUnavailable)
 	}
+	trace.VectorCandidates = groups
 	hits, err := b.Lexical.Resolve(ctx, r, groups, true, result.CatalogID, result.IndexVersion)
 	if err != nil {
 		return finish()
@@ -101,6 +102,9 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 		return d.Result{}, err
 	}
 	trace.VectorFamilies = len(hits)
+	for _, hit := range hits {
+		trace.VectorFamilyIDs = append(trace.VectorFamilyIDs, hit.Document.FamilyID)
+	}
 	trace.VectorStatus = "used"
 	result.SearchMode = "hybrid"
 	return finish()

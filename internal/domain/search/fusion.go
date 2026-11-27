@@ -6,19 +6,21 @@ import (
 	"sort"
 )
 
-const HybridVersion = "hybrid-v1"
+const HybridVersion = "hybrid-v2"
 const RankConstant = 60
 const CandidateLimit = 20
 const VectorWindow = 50
-const MinimumCosine = 0.35
+const MinimumCosine = 0.45
 
 type GroupCandidate struct {
-	GroupID, Vendor string
-	Score           float64
+	GroupID, OfferID, Vendor string
+	Score                    float64
 }
 type HybridTrace struct {
 	Version, CorpusSHA, VectorStatus                 string
 	CorpusDocuments, LexicalFamilies, VectorFamilies int
+	VectorCandidates                                 []GroupCandidate
+	VectorFamilyIDs                                  []string
 }
 
 // Fuse gives at most one vote per family in each source. Lexical SKU wins ties.

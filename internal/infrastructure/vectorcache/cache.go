@@ -13,7 +13,7 @@ import (
 	d "github.com/scmbr/smart-search/internal/domain/search"
 )
 
-var vendorPattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,127}$`)
+var vendorPattern = regexp.MustCompile(`^[a-z0-9][a-z0-9_-]{0,127}$`)
 
 type Corpus struct {
 	dataset embedding.Dataset

@@ -39,15 +39,8 @@ def bounded(text):
     return text.encode("utf-8")[:2048].decode("utf-8", errors="ignore")
 
 
-def prepare(path, tuning, probes, limit=512, scopes=SCOPES):
-    if tuning["dataset_role"] != "development_tuning" or any(c["split"] != "tuning" for c in tuning["cases"]):
-        raise ValueError("Only development tuning is permitted")
-    if probes["dataset_role"] != "development_pilot_probes":
-        raise ValueError("Only development probes are permitted")
-    if "cases_sha256" in probes:
-        digest = hashlib.sha256(json.dumps(probes["cases"], ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-        if digest != probes["cases_sha256"]:
-            raise ValueError("Frozen probe judgments changed")
+def read_catalog(path):
+    """Label-free streaming preparation shared by pilot and complete corpus."""
     with path.open("rb") as raw:
         sha = hashlib.file_digest(raw, "sha256").hexdigest()
         raw.seek(0)
@@ -70,7 +63,13 @@ def prepare(path, tuning, probes, limit=512, scopes=SCOPES):
                 categories[e.get("id")] = (e.text or "", e.get("parentId") or "")
             if e.tag == "offer":
                 count += 1
-                group = e.get("group_id") or "offer-"+(e.get("id") or "")
+                attribute_group, element_group = e.get("group_id") or "", e.findtext("group_id") or ""
+                if attribute_group and element_group and attribute_group != element_group:
+                    raise ValueError("Conflicting group IDs")
+                source_group = attribute_group or element_group
+                if not e.get("id"):
+                    raise ValueError("Missing offer ID")
+                group = source_group or "offer-"+e.get("id")
                 uri = urlsplit(e.findtext("url") or "")
                 vendor = uri.path.strip("/").split("/")[0]
                 content = text(e, group)
@@ -78,21 +77,40 @@ def prepare(path, tuning, probes, limit=512, scopes=SCOPES):
                 if uri.hostname != "store.softline.ru" or not vendor or not content:
                     raise ValueError("Invalid source scope/text")
                 key = vendor+"/"+group
+                is_fallback = not source_group
+                if key in groups and bool(groups[key][1]["OfferID"]) != is_fallback:
+                    raise ValueError("Group collides with fallback SKU identity")
                 roles = [p.text for p in e.findall("param") if p.get("name") == "Тип лицензии"]
                 score = (int("Полная версия" in roles or "Full" in roles), int(e.get("available") == "true"))
                 if key not in groups or score > groups[key][0]:
-                    groups[key] = (score, {"ID": key, "GroupID": group, "Vendor": vendor, "Text": content, "SourceURL": e.findtext("url")})
+                    groups[key] = (score, {"ID": key, "GroupID": group, "Vendor": vendor, "Text": content, "SourceURL": e.findtext("url"), "OfferID": "" if source_group else e.get("id")})
             if e.tag in {"offer", "category"}:
                 if len(stack) > 1:
                     stack[-2].remove(e)
                 e.clear()
             stack.pop()
+    with path.open("rb") as raw:
+        if hashlib.file_digest(raw, "sha256").hexdigest() != sha:
+            raise ValueError("Feed changed during corpus preparation")
+    return sha, groups, count, offer_tokens
+
+
+def prepare(path, tuning, probes, limit=512, scopes=SCOPES):
+    if tuning["dataset_role"] != "development_tuning" or any(c["split"] != "tuning" for c in tuning["cases"]):
+        raise ValueError("Only development tuning is permitted")
+    if probes["dataset_role"] != "development_pilot_probes":
+        raise ValueError("Only development probes are permitted")
+    if "cases_sha256" in probes:
+        digest = hashlib.sha256(json.dumps(probes["cases"], ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        if digest != probes["cases_sha256"]:
+            raise ValueError("Frozen probe judgments changed")
+    sha, groups, count, offer_tokens = read_catalog(path)
     core = sorted(k for k, (_, d) in groups.items() if d["Vendor"] in scopes)
     if len(core) > limit:
         raise ValueError("Core scope exceeds corpus limit")
     rest = sorted((k for k in groups if k not in set(core)), key=lambda k: hashlib.sha256(k.encode()).hexdigest())
     selected = sorted(core+rest[:limit-len(core)])
-    documents = [groups[k][1] for k in selected]
+    documents = [{key:value for key,value in groups[k][1].items() if key != "OfferID"} for k in selected]
     present = {d["GroupID"] for d in documents}
     queries = []
     for c in tuning["cases"]:
