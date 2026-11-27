@@ -1,5 +1,5 @@
 {
-  "Version": "families-v3",
+  "Version": "families-v4",
   "Rules": [
     {
       "ID": "astra-linux-special-edition",
@@ -495,6 +495,73 @@
       ],
       "VendorPath": "/npo-echelon/",
       "SourceURL": "https://store.softline.ru/npo-echelon/rubikon-mo-osh-1-519563/"
+    },
+    {
+      "ID": "mobisystems-officesuite",
+      "Name": "MobiSystems OfficeSuite",
+      "Groups": [
+        "300944",
+        "326066",
+        "326067",
+        "326068",
+        "341691"
+      ],
+      "VendorPath": "/mobilesystems/",
+      "SourceURL": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/"
+    },
+    {
+      "ID": "rudesktop",
+      "Name": "RuDesktop",
+      "Groups": [
+        "360667"
+      ],
+      "VendorPath": "/peredovietechnologii/",
+      "SourceURL": "https://store.softline.ru/peredovietechnologii/lrd2501-487234/"
+    },
+    {
+      "ID": "assistent",
+      "Name": "АССИСТЕНТ",
+      "Groups": [
+        "120894"
+      ],
+      "VendorPath": "/safib/",
+      "SourceURL": "https://store.softline.ru/safib/-535437/"
+    },
+    {
+      "ID": "litemanager",
+      "Name": "LiteManager",
+      "Groups": [
+        "46113"
+      ],
+      "VendorPath": "/litemanagerteam/",
+      "SourceURL": "https://store.softline.ru/litemanagerteam/-368182/"
+    },
+    {
+      "ID": "edraw-max",
+      "Name": "Wondershare EdrawMax",
+      "Groups": [
+        "301708"
+      ],
+      "VendorPath": "/wondershare/",
+      "SourceURL": "https://store.softline.ru/wondershare/-376435/"
+    },
+    {
+      "ID": "edraw-mind",
+      "Name": "Wondershare EdrawMind",
+      "Groups": [
+        "301736"
+      ],
+      "VendorPath": "/wondershare/",
+      "SourceURL": "https://store.softline.ru/wondershare/-376504/"
+    },
+    {
+      "ID": "edraw-proj",
+      "Name": "Wondershare EdrawProj",
+      "Groups": [
+        "301233"
+      ],
+      "VendorPath": "/wondershare/",
+      "SourceURL": "https://store.softline.ru/wondershare/-368209/"
     }
   ]
 }

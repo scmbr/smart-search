@@ -33,7 +33,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 10}, version)
+	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 13}, version)
 	t.Cleanup(func() {
 		m, exists, err := c.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -66,6 +66,9 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		{"astra", "121231", "Astra Linux Special Edition для рабочей станции"},
 		{"scanner", "46421", "СКАНЕР-ВС 7, Основная лицензия Enterprise на 256 IP"},
 		{"ungrouped", "", "Продукт без группы"},
+		{"suite-home", "326068", "OfficeSuite Home and Business"},
+		{"suite-family", "326066", "OfficeSuite Family"},
+		{"suite-personal", "326067", "OfficeSuite Personal"},
 	} {
 		price := int64(100)
 		vendor := "microsoft"
@@ -80,6 +83,8 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			vendor = "npo-echelon"
 		case "ungrouped":
 			vendor = "softlab_nsk"
+		case "suite-home", "suite-family", "suite-personal":
+			vendor = "mobilesystems"
 		}
 		description := "Mapped"
 		if vendor != "microsoft" {
@@ -110,6 +115,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			groups  []domain.GroupCandidate
 			count   int
 		}{
+			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "326066", Vendor: "mobilesystems", Score: 0.8}, {GroupID: "326067", Vendor: "mobilesystems", Score: 0.7}}, 1},
 			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}, {GroupID: "391338", Vendor: "microsoft", Score: 0.8}, {GroupID: "391347", Vendor: "microsoft", Score: 0.7}}, 2},
 			{domain.Request{Query: "задача без названия", Limit: 4, Version: "2021"}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}}, 0},
 			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "other", Score: 0.9}}, 0},
@@ -140,6 +146,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		count                int
 	}{
 		{"Microsoft Office", "microsoft-office", "", 1},
+		{"OfficeSuite", "mobisystems-officesuite", "", 1},
 		{"Microsoft Visio", "microsoft-visio", "", 1},
 		{"Microsoft Office для дома и бизнеса 2024", "microsoft-office", "office-business", 1},
 		{"Mapped", "", "", 3},

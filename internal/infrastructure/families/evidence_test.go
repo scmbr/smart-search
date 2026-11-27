@@ -110,6 +110,13 @@ func TestReviewedEditionsShareFamilyAndDistinctProductsStaySeparate(t *testing.T
 		{"mts-link", "webinar", []string{"414326", "447242", "447243"}},
 		{"xspider", "positive-technologies", []string{"28574", "428013"}},
 		{"cryptopro-ca", "kripto-pro", []string{"385311", "385387", "385356"}},
+		{"mobisystems-officesuite", "mobilesystems", []string{"300944", "326066", "326067", "326068", "341691"}},
+		{"rudesktop", "peredovietechnologii", []string{"360667"}},
+		{"assistent", "safib", []string{"120894"}},
+		{"litemanager", "litemanagerteam", []string{"46113"}},
+		{"edraw-max", "wondershare", []string{"301708"}},
+		{"edraw-mind", "wondershare", []string{"301736"}},
+		{"edraw-proj", "wondershare", []string{"301233"}},
 	} {
 		if seen[tc.id] {
 			t.Fatal("duplicate family fixture")
@@ -125,6 +132,11 @@ func TestReviewedEditionsShareFamilyAndDistinctProductsStaySeparate(t *testing.T
 					t.Fatal("vendor scope bypassed")
 				}
 			}
+		}
+	}
+	for _, vendor := range []string{"mobilesystems", "peredovietechnologii", "safib", "litemanagerteam", "wondershare"} {
+		if f := r.Resolve(catalog.Offer{ID: "unreviewed", GroupID: "unreviewed", Name: "OfficeSuite EdrawMax", URL: "https://store.softline.ru/" + vendor + "/fixture/"}); f.Confirmed {
+			t.Fatalf("vendor/name guessed a family: %s", vendor)
 		}
 	}
 	for _, tc := range []struct{ group, vendor string }{{"442025", "cyberprotect"}, {"444870", "cyberprotect"}, {"393657", "astralinux"}, {"446661", "astralinux"}, {"401458", "astralinux"}, {"385280", "kripto-pro"}, {"65743", "microsoft"}, {"unseen", "microsoft"}} {
