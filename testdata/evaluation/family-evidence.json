@@ -2,7 +2,7 @@
   "evidence_role": "catalog_structure_not_independent_relevance_review",
   "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
   "catalog_offers": 136040,
-  "mapping_version": "families-v4",
+  "mapping_version": "families-v5",
   "groups": {
     "121231": {
       "family_id": "astra-linux-special-edition",
@@ -2978,6 +2978,38 @@
       ],
       "group_name": "OfficeSuite Business Extra"
     },
+    "397581": {
+      "family_id": "mobisystems-officesuite",
+      "vendor_path": "/mobilesystems/",
+      "source_url": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/",
+      "offers": 5,
+      "scope_mismatches": 0,
+      "priced": 5,
+      "available": 5,
+      "license_parameters": {
+        "Подписка": 4,
+        "Полная версия": 1
+      },
+      "examples": [
+        {
+          "offer_id": "481907",
+          "name": "MobiSystems MobiOffice (лицензия Lifetime, Windows or MacOS),",
+          "url": "https://store.softline.ru/mobilesystems/mol-481907/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "481908",
+          "name": "MobiSystems MobiOffice (подписка на 1 год), Multi-User (6 users) Crossplatform",
+          "url": "https://store.softline.ru/mobilesystems/momu1-481908/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "MobiOffice"
+    },
     "360667": {
       "family_id": "rudesktop",
       "vendor_path": "/peredovietechnologii/",
@@ -3167,6 +3199,38 @@
         }
       ],
       "group_name": "Wondershare EdrawProj"
+    },
+    "393014": {
+      "family_id": "mobisystems-mobipdf",
+      "vendor_path": "/mobilesystems/",
+      "source_url": "https://store.softline.ru/mobilesystems/-475569/",
+      "offers": 9,
+      "scope_mismatches": 0,
+      "priced": 9,
+      "available": 9,
+      "license_parameters": {
+        "Подписка": 7,
+        "Полная версия": 2
+      },
+      "examples": [
+        {
+          "offer_id": "475569",
+          "name": "MobiSystems MobiPDF (лицензия Lifetime), Для Windows",
+          "url": "https://store.softline.ru/mobilesystems/-475569/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "481449",
+          "name": "MobiSystems MobiPDF (лицензия Lifetime), Для Windows",
+          "url": "https://store.softline.ru/mobilesystems/mpl-481449/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "MobiPDF"
     }
   }
 }

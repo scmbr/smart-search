@@ -1,5 +1,5 @@
 {
-  "Version": "families-v4",
+  "Version": "families-v5",
   "Rules": [
     {
       "ID": "astra-linux-special-edition",
@@ -498,13 +498,14 @@
     },
     {
       "ID": "mobisystems-officesuite",
-      "Name": "MobiSystems OfficeSuite",
+      "Name": "MobiOffice (OfficeSuite)",
       "Groups": [
         "300944",
         "326066",
         "326067",
         "326068",
-        "341691"
+        "341691",
+        "397581"
       ],
       "VendorPath": "/mobilesystems/",
       "SourceURL": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/"
@@ -562,6 +563,15 @@
       ],
       "VendorPath": "/wondershare/",
       "SourceURL": "https://store.softline.ru/wondershare/-368209/"
+    },
+    {
+      "ID": "mobisystems-mobipdf",
+      "Name": "MobiPDF",
+      "Groups": [
+        "393014"
+      ],
+      "VendorPath": "/mobilesystems/",
+      "SourceURL": "https://store.softline.ru/mobilesystems/-475569/"
     }
   ]
 }
