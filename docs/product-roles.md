@@ -3,6 +3,9 @@
 SDD, product-role-v1 / lexical-v6 / query-v5. Роль лицензии new/renewal/support
 недостаточна: full может означать лицензию компонента, а не основного продукта.
 
+Исходная версия описана ниже. Текущее дополнение product-role-v2 / lexical-v7 /
+query-v7: [зависимые расширения ёмкости](capacity-extensions.md).
+
 ## Политика
 
 Индекс сохраняет ProductRole, ProductRoleRule, ProductRoleSource и ProductRoleText.

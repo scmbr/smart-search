@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const ProductRolePolicyVersion = "product-role-v1"
+const ProductRolePolicyVersion = "product-role-v2"
 
 type ProductRoleEvidence struct{ Role, RuleID, Source, Text string }
 
@@ -20,6 +20,8 @@ var roleLibrary = regexp.MustCompile(`(?:^|[^\p{L}\p{N}])(?:sdk|библиоте
 var roleDeveloperContext = regexp.MustCompile(`(?:^|[^\p{L}])(?:sdk|api|java|javascript)(?:$|[^\p{L}])|\.net|разработ`)
 var bundledRole = regexp.MustCompile(`\+|включает|включая|в комплекте`)
 var roleSummary = regexp.MustCompile(`тип лицензии:\s*(дистрибутив|расширение лицензии)\s*(?:•|$)`)
+var capacityExtension = regexp.MustCompile(`(?:^|[^\p{L}\p{N}])дополнительн[\p{L}]*\s+(?:[0-9]+\s+)?(?:ip(?:[- ]адрес[\p{L}]*)?|уз(?:ел|л[\p{L}]*)|устройств[\p{L}]*)(?:$|[^\p{L}\p{N}])`)
+var baseCapacityBundle = regexp.MustCompile(`(?:основная|базовая) лицензия[^;]*\+`)
 
 func roleText(s string) string { return strings.ReplaceAll(strings.ToLower(s), "ё", "е") }
 
@@ -39,6 +41,14 @@ func ClassifyProductRole(d Document) ProductRoleEvidence {
 	for _, identity := range identities {
 		if roleMedia.MatchString(roleText(identity.text)) && !bundledRole.MatchString(roleText(identity.text)) {
 			return makeEvidence("media", "identity-media-v1", identity.source, identity.text)
+		}
+	}
+	if !baseCapacityBundle.MatchString(roleText(d.Name)) {
+		for _, identity := range identities {
+			text := roleText(identity.text)
+			if capacityExtension.MatchString(text) && !baseCapacityBundle.MatchString(text) {
+				return makeEvidence("addon", "identity-capacity-extension-v1", identity.source, identity.text)
+			}
 		}
 	}
 	for _, rule := range []struct {
@@ -87,6 +97,7 @@ var requestedRolePatterns = []struct {
 	role    string
 	pattern *regexp.Regexp
 }{
+	{"addon", capacityExtension},
 	{"library", regexp.MustCompile(`(?:^|[^\p{L}\p{N}])(?:sdk|библиотека|библиотеку|библиотеки)(?:$|[^\p{L}\p{N}])`)},
 	{"addon", regexp.MustCompile(`дополнительн[\p{L}]* компонент|(?:^|\s)(?:дополнени[\p{L}]*|плагин[\p{L}]*|расширение|add-on|plugin)(?:$|[^\p{L}])|поставщик для интеграции`)},
 	{"media", roleMedia},

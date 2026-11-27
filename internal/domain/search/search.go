@@ -163,6 +163,9 @@ func Prepare(r Request) (Request, error) {
 	if err := prepareProductRole(&r); err != nil {
 		return r, err
 	}
+	if r.RequestedProductRole == "addon" && (r.MinUsers > 0 || r.MinDevices > 0 || r.MinIPAddresses > 0 || r.MinParticipants > 0) {
+		r.UnsupportedConstraints = append(r.UnsupportedConstraints, QueryConstraint{Field: "additional_capacity_quantity", Text: r.OriginalQuery, Source: "query"})
+	}
 	r.Plan.ProductRoleVersion = ProductRolePolicyVersion
 	r.Plan.RequestedProductRole = r.RequestedProductRole
 	r.Plan.ExcludedProductRoles = ExcludedProductRoles(r)
