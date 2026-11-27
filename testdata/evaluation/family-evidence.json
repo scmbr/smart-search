@@ -2,7 +2,7 @@
   "evidence_role": "catalog_structure_not_independent_relevance_review",
   "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
   "catalog_offers": 136040,
-  "mapping_version": "families-v2",
+  "mapping_version": "families-v3",
   "groups": {
     "121231": {
       "family_id": "astra-linux-special-edition",
@@ -59,6 +59,205 @@
       ],
       "group_name": "Microsoft Office 2024 для дома и бизнеса"
     },
+    "391335": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Full": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473568",
+          "name": "Microsoft Office для дома 2024, Электронная лицензия на 1 ПК, бессрочная",
+          "url": "https://store.softline.ru/microsoft/ep2-06797-473568/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office 2024 для дома и учёбы"
+    },
+    "161788": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 49,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 20,
+        "Продление": 10
+      },
+      "examples": [
+        {
+          "offer_id": "3040",
+          "name": "Microsoft Office Standard 2019 (лицензия Open License + Software Assurance, LicSAPk), Single Language Level C",
+          "url": "https://store.softline.ru/microsoft/021-05426-3040/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "3041",
+          "name": "Microsoft Office Standard 2019 (лицензия Open License + Software Assurance, LicSAPk), Single Language No Level",
+          "url": "https://store.softline.ru/microsoft/021-05429-3041/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Standard 2019"
+    },
+    "161807": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 55,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 1,
+        "Полная версия": 27,
+        "Продление": 10
+      },
+      "examples": [
+        {
+          "offer_id": "2962",
+          "name": "Microsoft Office Professional Plus 2019 (лицензия Open License + Software Assurance, LicSAPk), Single Level C",
+          "url": "https://store.softline.ru/microsoft/269-05499-2962/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "2963",
+          "name": "Microsoft Office Professional Plus 2019 (лицензия Open License + Software Assurance, LicSAPk), Single No Level",
+          "url": "https://store.softline.ru/microsoft/269-05577-2963/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Professional Plus 2021"
+    },
+    "162056": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 83,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 43,
+        "Продление": 25
+      },
+      "examples": [
+        {
+          "offer_id": "1894",
+          "name": "Microsoft Office Standard for Mac (для академических организаций: Продление Software Assurance), Single No Level",
+          "url": "https://store.softline.ru/microsoft/3yf-00264-1894/",
+          "license_parameters": [
+            "Продление"
+          ]
+        },
+        {
+          "offer_id": "1895",
+          "name": "Microsoft Office Standard for Mac (продление Software Assurance), Single Level C",
+          "url": "https://store.softline.ru/microsoft/3yf-00091-1895/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Standard for Mac 2021"
+    },
+    "24300": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 22,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "28234",
+          "name": "Microsoft Office Professional Plus, Open Value (лицензия OLV + Software Assurance, LicSAPk на 1 год), Single No Level",
+          "url": "https://store.softline.ru/microsoft/269-09046-28234/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "225357",
+          "name": "Microsoft Office Professional Plus (Software assurance ), level D 1 Year Acquired Year 2",
+          "url": "https://store.softline.ru/microsoft/79p-01699-anniv-225357/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Office Professional Plus (Open Value)"
+    },
+    "284105": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 8,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 8
+      },
+      "examples": [
+        {
+          "offer_id": "348457",
+          "name": "Microsoft Office Standard 2021 (лицензия), Single OLV NL Additional Product LTSC",
+          "url": "https://store.softline.ru/microsoft/021-10692-348457/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "350932",
+          "name": "Microsoft Office Standard 2021 (лицензия), OLV D Additional Product LTSC",
+          "url": "https://store.softline.ru/microsoft/021-10693-350932/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Standard 2021"
+    },
+    "3170": {
+      "family_id": "microsoft-office",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "ESD": 1
+      },
+      "examples": [
+        {
+          "offer_id": "350759",
+          "name": "Microsoft Office Профессиональный 2021 (лицензия All Lng PK Online Only DwnLd C2R NR), цена за 1 лицензию",
+          "url": "https://store.softline.ru/microsoft/269-17192-350759/",
+          "license_parameters": [
+            "ESD"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Профессиональный 2021"
+    },
     "3761": {
       "family_id": "kaspersky-small-office-security",
       "vendor_path": "/kaspersky/",
@@ -91,6 +290,37 @@
         }
       ],
       "group_name": "Kaspersky Small Office Security"
+    },
+    "379232": {
+      "family_id": "kaspersky-small-office-security",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kaspersky-small-office-security/",
+      "offers": 12,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка": 12
+      },
+      "examples": [
+        {
+          "offer_id": "311065",
+          "name": "Kaspersky Small Office Security for Desktops, Mobiles and File Servers, fixed-date Russian Edition подписка Successive",
+          "url": "https://store.softline.ru/kaspersky/kl4542raefg-311065/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        },
+        {
+          "offer_id": "311066",
+          "name": "Kaspersky Small Office Security for Desktops, Mobiles and File Servers, fixed-date Russian Edition подписка Successive",
+          "url": "https://store.softline.ru/kaspersky/kl4542rakfg-311066/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Small Office Security по подписке"
     },
     "22268": {
       "family_id": "cryptopro-csp",
@@ -283,6 +513,52 @@
       ],
       "group_name": "МТС Линк Optimum 30"
     },
+    "447242": {
+      "family_id": "mts-link",
+      "vendor_path": "/webinar/",
+      "source_url": "https://store.softline.ru/webinar/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Полная версия": 1
+      },
+      "examples": [
+        {
+          "offer_id": "541589",
+          "name": "МТС Линк (Webinar Group) МТС Линк Стандарт (лицензия), на 1 год",
+          "url": "https://store.softline.ru/webinar/-541589/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "МТС Линк Стандарт"
+    },
+    "447243": {
+      "family_id": "mts-link",
+      "vendor_path": "/webinar/",
+      "source_url": "https://store.softline.ru/webinar/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Полная версия": 1
+      },
+      "examples": [
+        {
+          "offer_id": "541591",
+          "name": "МТС Линк (Webinar Group) МТС Линк Про (лицензия), на 1 год",
+          "url": "https://store.softline.ru/webinar/-541591/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "МТС Линк Про"
+    },
     "437421": {
       "family_id": "maxpatrol-endpoint",
       "vendor_path": "/positive-technologies/",
@@ -336,6 +612,2256 @@
         }
       ],
       "group_name": "Microsoft 365 Family (для семьи)"
+    },
+    "283494": {
+      "family_id": "microsoft-365",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/microsoft-365-for-family/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "ESD": 1,
+        "Полная версия": 1
+      },
+      "examples": [
+        {
+          "offer_id": "195982",
+          "name": "Microsoft 365 Персональный, Электронная подписка для 1 пользователя, на 1 год",
+          "url": "https://store.softline.ru/microsoft/qq2-00004-195982/",
+          "license_parameters": [
+            "Полная версия",
+            "ESD"
+          ]
+        }
+      ],
+      "group_name": "Microsoft 365 Personal (Персональный)"
+    },
+    "391347": {
+      "family_id": "microsoft-visio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/ep2-07111-473585/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Full": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473585",
+          "name": "Microsoft Visio Professional 2024, электронная лицензия на 1 ПК, бессрочная",
+          "url": "https://store.softline.ru/microsoft/ep2-07111-473585/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Visio Professional 2024"
+    },
+    "391350": {
+      "family_id": "microsoft-visio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/ep2-07111-473585/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Full": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473586",
+          "name": "Microsoft Visio Standard 2024, электронная лицензия на 1 ПК, бессрочная",
+          "url": "https://store.softline.ru/microsoft/ep2-07167-473586/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Visio Standard 2024"
+    },
+    "102094": {
+      "family_id": "microsoft-visio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/ep2-07111-473585/",
+      "offers": 8,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "108839",
+          "name": "Microsoft Visio Professional (License &amp; software assurance), 1 PC - Open Value - additional product, 3 Year",
+          "url": "https://store.softline.ru/microsoft/d87-02398-108839/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "108858",
+          "name": "Microsoft Visio Professional (Step-up license &amp; software assurance), 1 PC - Open Value - additional product, 1 Year",
+          "url": "https://store.softline.ru/microsoft/d87-02399-108858/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Visio Professional"
+    },
+    "24317": {
+      "family_id": "microsoft-visio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/ep2-07111-473585/",
+      "offers": 27,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "28240",
+          "name": "Microsoft Visio Standard (лицензия OLV + Software Assurance, LicSAPk на 1 год), Single No Level",
+          "url": "https://store.softline.ru/microsoft/d86-02423-28240/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "28241",
+          "name": "Microsoft Visio Standard (лицензия OLV + Software Assurance, LicSAPk на 1 год), Single Level C",
+          "url": "https://store.softline.ru/microsoft/d86-04055-28241/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Visio Standard (Open Value)"
+    },
+    "24321": {
+      "family_id": "microsoft-visio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/ep2-07111-473585/",
+      "offers": 38,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "28242",
+          "name": "Microsoft Visio Professional (лицензия OLV + Software Assurance, LicSAPk на 1 год), Single No Level",
+          "url": "https://store.softline.ru/microsoft/d87-02394-28242/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "28243",
+          "name": "Microsoft Visio Professional (лицензия OLV + Software Assurance, LicSAPk на 1 год), Single Level C",
+          "url": "https://store.softline.ru/microsoft/d87-04229-28243/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Visio Professional (Open Value)"
+    },
+    "391341": {
+      "family_id": "microsoft-project",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/ep2-07001-473583/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Full": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473583",
+          "name": "Microsoft Project Professional 2024, электронная лицензия на 1 ПК, бессрочная",
+          "url": "https://store.softline.ru/microsoft/ep2-07001-473583/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Project Professional 2024"
+    },
+    "391344": {
+      "family_id": "microsoft-project",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/ep2-07001-473583/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Full": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473584",
+          "name": "Microsoft Project Standard 2024, электронная лицензия на 1 ПК, бессрочная",
+          "url": "https://store.softline.ru/microsoft/ep2-07057-473584/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Project Standard 2024"
+    },
+    "162037": {
+      "family_id": "microsoft-word",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/059-03742-1520/",
+      "offers": 85,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 46,
+        "Продление": 25
+      },
+      "examples": [
+        {
+          "offer_id": "1520",
+          "name": "Microsoft Office Word 2019 (лицензия Open License + Software Assurance, LicSAPk), Single Level C",
+          "url": "https://store.softline.ru/microsoft/059-03742-1520/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "1521",
+          "name": "Microsoft Office Word 2019 (лицензия Open License + Software Assurance, LicSAPk), Single No Level",
+          "url": "https://store.softline.ru/microsoft/059-03750-1521/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Word 2021"
+    },
+    "162743": {
+      "family_id": "microsoft-word",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/059-03742-1520/",
+      "offers": 82,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 43,
+        "Продление": 26
+      },
+      "examples": [
+        {
+          "offer_id": "193177",
+          "name": "Microsoft Office Word for Mac 2019 (лицензия ),  Single OLP NL",
+          "url": "https://store.softline.ru/microsoft/d48-01257-193177/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "193187",
+          "name": "Microsoft Office Word for Mac 2019 (для государственных организаций: Лицензия Open License), English OLP A",
+          "url": "https://store.softline.ru/microsoft/d48-01263-193187/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Word for Mac 2021"
+    },
+    "162090": {
+      "family_id": "microsoft-excel",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/065-03367-1550/",
+      "offers": 46,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 32
+      },
+      "examples": [
+        {
+          "offer_id": "1550",
+          "name": "Microsoft Office Excel 2019 (лицензия Open License + Software Assurance, LicSAPk), Single Level C",
+          "url": "https://store.softline.ru/microsoft/065-03367-1550/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "1551",
+          "name": "Microsoft Office Excel 2019 (лицензия Open License + Software Assurance, LicSAPk), Single No Level",
+          "url": "https://store.softline.ru/microsoft/065-03345-1551/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Excel 2021"
+    },
+    "162725": {
+      "family_id": "microsoft-excel",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/065-03367-1550/",
+      "offers": 45,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 31
+      },
+      "examples": [
+        {
+          "offer_id": "193155",
+          "name": "Microsoft Office Excel for Mac 2019 (для государственных организаций: Лицензия Open License), English OLP B",
+          "url": "https://store.softline.ru/microsoft/d46-01104-193155/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "193156",
+          "name": "Microsoft Office Excel for Mac 2019 (для государственных организаций: Лицензия Open License), English OLP A",
+          "url": "https://store.softline.ru/microsoft/d46-01103-193156/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Excel for Mac 2021"
+    },
+    "162110": {
+      "family_id": "microsoft-outlook",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/543-01427-1580/",
+      "offers": 49,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 26,
+        "Продление": 10
+      },
+      "examples": [
+        {
+          "offer_id": "1580",
+          "name": "Microsoft Office Outlook 2019 (лицензия Open License + Software Assurance, LicSAPk), Single No Level",
+          "url": "https://store.softline.ru/microsoft/543-01427-1580/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "1581",
+          "name": "Microsoft Office Outlook 2019 (лицензия Open License + Software Assurance, LicSAPk), Single level C",
+          "url": "https://store.softline.ru/microsoft/543-01420-1581/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Outlook 2021"
+    },
+    "162269": {
+      "family_id": "microsoft-outlook",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/543-01427-1580/",
+      "offers": 51,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 28,
+        "Продление": 10
+      },
+      "examples": [
+        {
+          "offer_id": "2764",
+          "name": "Microsoft Outlook for Mac (для академических организаций: Продление Software Assurance), Russian No Level",
+          "url": "https://store.softline.ru/microsoft/36f-00151-2764/",
+          "license_parameters": [
+            "Продление"
+          ]
+        },
+        {
+          "offer_id": "2765",
+          "name": "Microsoft Outlook for Mac (для академических организаций: Продление Software Assurance), SNGL No Level",
+          "url": "https://store.softline.ru/microsoft/36f-00157-2765/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Outlook for Mac 2021"
+    },
+    "162222": {
+      "family_id": "microsoft-powerpoint",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/079-01650-1610/",
+      "offers": 83,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 45,
+        "Продление": 25
+      },
+      "examples": [
+        {
+          "offer_id": "1610",
+          "name": "Microsoft Office PowerPoint 2019 (для академических организаций: Продление Software Assurance), Single NoLevel",
+          "url": "https://store.softline.ru/microsoft/079-01650-1610/",
+          "license_parameters": [
+            "Продление"
+          ]
+        },
+        {
+          "offer_id": "1611",
+          "name": "Microsoft Office PowerPoint 2019 (для академических организаций: Продление Software Assurance), Russian NoLevel",
+          "url": "https://store.softline.ru/microsoft/079-03409-1611/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office PowerPoint 2021"
+    },
+    "162199": {
+      "family_id": "microsoft-access",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/077-02443-1640/",
+      "offers": 118,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 45,
+        "Продление": 25
+      },
+      "examples": [
+        {
+          "offer_id": "1640",
+          "name": "Microsoft Office Access 2019 (для академических организаций: Лицензия Open License + Software Assurance, LicSAPk),",
+          "url": "https://store.softline.ru/microsoft/077-02443-1640/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "1641",
+          "name": "Microsoft Office Access 2019 (для академических организаций: Лицензия Open License + Software Assurance, LicSAPk),",
+          "url": "https://store.softline.ru/microsoft/077-02477-1641/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Access 2021"
+    },
+    "162160": {
+      "family_id": "microsoft-publisher",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/164-02300-1490/",
+      "offers": 100,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 45,
+        "Продление": 25
+      },
+      "examples": [
+        {
+          "offer_id": "1490",
+          "name": "Microsoft Office Publisher 2019 (лицензия Open License + Software Assurance, LicSAPk), Single No Level",
+          "url": "https://store.softline.ru/microsoft/164-02300-1490/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "1491",
+          "name": "Microsoft Office Publisher 2019 (лицензия Open License + Software Assurance, LicSAPk), Single Level C",
+          "url": "https://store.softline.ru/microsoft/164-02328-1491/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Office Publisher 2021"
+    },
+    "100160": {
+      "family_id": "microsoft-visual-studio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/mx3-00097-100659/",
+      "offers": 18,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "100659",
+          "name": "Microsoft Visual Studio Enterprise Sub MSDN, VSEntSubMSDN ALNG LicSAPk OLP C",
+          "url": "https://store.softline.ru/microsoft/mx3-00097-100659/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "100660",
+          "name": "Microsoft Visual Studio Enterprise Sub MSDN, VSEntSubMSDN ALNG SA OLP C",
+          "url": "https://store.softline.ru/microsoft/mx3-00099-100660/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Visual Studio Enterprise"
+    },
+    "186906": {
+      "family_id": "microsoft-visual-studio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/mx3-00097-100659/",
+      "offers": 18,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 18
+      },
+      "examples": [
+        {
+          "offer_id": "222756",
+          "name": "Microsoft Visual Studio Professional 2019 (для государственных организаций: Лицензия Open License), English Level A",
+          "url": "https://store.softline.ru/microsoft/c5e-01385-222756/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "222757",
+          "name": "Microsoft Visual Studio Professional 2019 (для государственных организаций: Лицензия Open License), English Level B",
+          "url": "https://store.softline.ru/microsoft/c5e-01386-222757/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Visual Studio Professional"
+    },
+    "102110": {
+      "family_id": "microsoft-visual-studio",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/mx3-00097-100659/",
+      "offers": 313,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Обновление": 73
+      },
+      "examples": [
+        {
+          "offer_id": "101710",
+          "name": "Microsoft Visual Studio Enterprise with MSDN (License &amp; software assurance), 1 user - Open Value - level C -",
+          "url": "https://store.softline.ru/microsoft/mx3-00087-101710/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "104183",
+          "name": "Microsoft Visual Studio Team Foundation Server (License &amp; software assurance), 1 server - Open Value - level C -",
+          "url": "https://store.softline.ru/microsoft/125-00846-104183/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Visual Studio"
+    },
+    "1820": {
+      "family_id": "microsoft-sql-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/7jq-01262-2007/",
+      "offers": 61,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 59,
+        "Полная версия": 2,
+        "Продление": 20
+      },
+      "examples": [
+        {
+          "offer_id": "2007",
+          "name": "Microsoft SQL Server Enterprise Edition 2017 (для академических организаций: Лицензия Open License), Single 2License No",
+          "url": "https://store.softline.ru/microsoft/7jq-01262-2007/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "2008",
+          "name": "Microsoft SQL Server Enterprise Edition 2017 (для академических организаций: Лицензия Open License), Russian 2License",
+          "url": "https://store.softline.ru/microsoft/7jq-01269-2008/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        }
+      ],
+      "group_name": "Microsoft SQL Server Enterprise Edition"
+    },
+    "1870": {
+      "family_id": "microsoft-sql-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/7jq-01262-2007/",
+      "offers": 96,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Обновление": 1,
+        "Полная версия": 50,
+        "Продление": 20
+      },
+      "examples": [
+        {
+          "offer_id": "2047",
+          "name": "Microsoft SQL Server Standard Edition 2017 (для академических организаций: Лицензия Open License), Single No Level",
+          "url": "https://store.softline.ru/microsoft/228-11126-2047/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "2048",
+          "name": "Microsoft SQL Server Standard Edition 2017 (для академических организаций: Лицензия Open License), Russian No Level",
+          "url": "https://store.softline.ru/microsoft/228-11131-2048/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft SQL Server Standard Edition"
+    },
+    "1940": {
+      "family_id": "microsoft-sql-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/7jq-01262-2007/",
+      "offers": 93,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 23,
+        "Полная версия": 50,
+        "Продление": 20
+      },
+      "examples": [
+        {
+          "offer_id": "2107",
+          "name": "Microsoft SQL Server CAL 2017 (продление Software Assurance), Single No Level Device",
+          "url": "https://store.softline.ru/microsoft/359-00810-2107/",
+          "license_parameters": [
+            "Продление"
+          ]
+        },
+        {
+          "offer_id": "2108",
+          "name": "Microsoft SQL Server CAL 2017 (продление Software Assurance), Single Level C Device",
+          "url": "https://store.softline.ru/microsoft/359-00820-2108/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Microsoft SQL Server CAL"
+    },
+    "24289": {
+      "family_id": "microsoft-sql-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/7jq-01262-2007/",
+      "offers": 14,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "28228",
+          "name": "Microsoft SQL Server Standard Edition 2014, Open Value (лицензия OLV + Software Assurance, LicSAPk на 1 год), Single",
+          "url": "https://store.softline.ru/microsoft/7nq-00068-28228/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "28229",
+          "name": "Microsoft SQL Server Standard Edition 2014, Open Value (лицензия OLV + Software Assurance, LicSAPk на 1 год), Single No",
+          "url": "https://store.softline.ru/microsoft/7nq-00069-28229/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft SQL Server Standard Edition (Open Value)"
+    },
+    "24294": {
+      "family_id": "microsoft-sql-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/7jq-01262-2007/",
+      "offers": 11,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "28230",
+          "name": "Microsoft Лицензия OLV + Software Assurance (LicSAPk) на 1 год, Single No Level Device",
+          "url": "https://store.softline.ru/microsoft/359-01466-28230/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "28231",
+          "name": "Microsoft Лицензия OLV + Software Assurance (LicSAPk) на 1 год, Single No Level User",
+          "url": "https://store.softline.ru/microsoft/359-01471-28231/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft SQL Server CAL (Open Value)"
+    },
+    "103140": {
+      "family_id": "microsoft-sql-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/7jq-01262-2007/",
+      "offers": 12,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 12
+      },
+      "examples": [
+        {
+          "offer_id": "109352",
+          "name": "Microsoft SQL Server Workgroup Edition (License &amp; software assurance), 1 user CAL - Open Value - additional",
+          "url": "https://store.softline.ru/microsoft/a5m-00734-109352/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "109373",
+          "name": "Microsoft SQL Server Workgroup Edition (Software assurance), 1 user CAL - Open Value - additional product, 3 Year",
+          "url": "https://store.softline.ru/microsoft/a5m-00707-109373/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        }
+      ],
+      "group_name": "Microsoft SQL Server"
+    },
+    "3564": {
+      "family_id": "microsoft-windows-desktop",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/kv3-00284-3360/",
+      "offers": 24,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Обновление": 2,
+        "Подписка CSP": 24,
+        "Продление": 2
+      },
+      "examples": [
+        {
+          "offer_id": "3360",
+          "name": "Microsoft Windows E3, Для государственных организаций (обновление), Device English Level A",
+          "url": "https://store.softline.ru/microsoft/kv3-00284-3360/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "3361",
+          "name": "Microsoft Windows E3, Для государственных организаций (обновление), Device English Level B",
+          "url": "https://store.softline.ru/microsoft/kv3-00285-3361/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Windows 10 Enterprise"
+    },
+    "65851": {
+      "family_id": "microsoft-windows-desktop",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/kv3-00284-3360/",
+      "offers": 7,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Обновление": 1,
+        "Подписка": 6
+      },
+      "examples": [
+        {
+          "offer_id": "64039",
+          "name": "Microsoft Windows 10 Enterprise (подписка на 1 месяц), E5",
+          "url": "https://store.softline.ru/microsoft/aaa-68731-64039/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        },
+        {
+          "offer_id": "64041",
+          "name": "Microsoft Windows 10 Enterprise (подписка на 1 месяц), E3",
+          "url": "https://store.softline.ru/microsoft/aaa-13866-64041/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "Операционная система Microsoft Windows 10 Enterprise (CSP)"
+    },
+    "286676": {
+      "family_id": "microsoft-windows-desktop",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/kv3-00284-3360/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "ESD": 1
+      },
+      "examples": [
+        {
+          "offer_id": "380385",
+          "name": "Microsoft Windows 11 Pro FQC-10572, электронный ключ",
+          "url": "https://store.softline.ru/microsoft/fqc-10572-380385/",
+          "license_parameters": [
+            "ESD"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Windows 11 Pro (Профессиональная)"
+    },
+    "310176": {
+      "family_id": "microsoft-windows-desktop",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/kv3-00284-3360/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "ESD": 1
+      },
+      "examples": [
+        {
+          "offer_id": "380389",
+          "name": "Microsoft Windows 11 Home (Домашняя) KW9-00664, электронный ключ",
+          "url": "https://store.softline.ru/microsoft/kw9-00664-380389/",
+          "license_parameters": [
+            "ESD"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Windows 11 Home (Домашняя)"
+    },
+    "295882": {
+      "family_id": "microsoft-windows-desktop",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/kv3-00284-3360/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 1
+      },
+      "examples": [
+        {
+          "offer_id": "353874",
+          "name": "Windows 10 Pro (бессрочная лицензия GGWA для легализации нелицензионных копий Microsoft), цена за 1 лицензию",
+          "url": "https://store.softline.ru/microsoft/dg7gmgf0cgsh-0005-353874/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Windows 10 Pro (GGWA)"
+    },
+    "24361": {
+      "family_id": "microsoft-windows-desktop",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/kv3-00284-3360/",
+      "offers": 16,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "28274",
+          "name": "Microsoft Windows E3, Open Value (Software Assurance), Device Level D 2Y AqY2 Additional Product",
+          "url": "https://store.softline.ru/microsoft/kv3-00294-28274/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "28275",
+          "name": "Microsoft Windows E3, Open Value (Software Assurance), Device Single No Level 3Y AqY1 Additional Product",
+          "url": "https://store.softline.ru/microsoft/kv3-00298-28275/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Windows E3 (Open Value)"
+    },
+    "161826": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 45,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 22,
+        "Продление": 11
+      },
+      "examples": [
+        {
+          "offer_id": "2804",
+          "name": "Microsoft Windows Server Essentials 2019 (лицензия Open License + Software Assurance, LicSAPk), Single Level C",
+          "url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "2805",
+          "name": "Microsoft Windows Server Essentials 2019 (лицензия Open License + Software Assurance, LicSAPk), Single No Level",
+          "url": "https://store.softline.ru/microsoft/g3s-00544-2805/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Операционная система Microsoft Windows Server Essentials 2019"
+    },
+    "161664": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 2,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 2
+      },
+      "examples": [
+        {
+          "offer_id": "235429",
+          "name": "Microsoft Windows Server Standard 2019 (бессрочная лицензия для государственных организаций), ALNG 16License D Each",
+          "url": "https://store.softline.ru/microsoft/9em-00628-235429/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "235430",
+          "name": "Microsoft Windows Server Standard 2019 (бессрочная лицензия для государственных организаций), ALNG 2License D Each",
+          "url": "https://store.softline.ru/microsoft/9em-00629-235430/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        }
+      ],
+      "group_name": "Операционная система Microsoft Windows Server Standard"
+    },
+    "281974": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 6,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 6
+      },
+      "examples": [
+        {
+          "offer_id": "345105",
+          "name": "Microsoft Windows Server Datacenter 2022 (лицензия Single OLV 2 License NL Additional Product Core для коммерческих",
+          "url": "https://store.softline.ru/microsoft/9ea-01285-345105/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "345106",
+          "name": "Microsoft Windows Server Datacenter 2022 (лицензия Russian OLV 2 License D Additional Product Core для государственных",
+          "url": "https://store.softline.ru/microsoft/9ea-01289-345106/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Windows Server Datacenter 2022"
+    },
+    "294539": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 11,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "360283",
+          "name": "Microsoft Windows Server Essentials 2022 (лицензия LicSAPk для коммерческих организаций), Russian OLV D 1Y AqY1",
+          "url": "https://store.softline.ru/microsoft/g3s-01361-360283/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "360284",
+          "name": "Microsoft Windows Server Essentials 2022 (лицензия LicSAPk для коммерческих организаций), Russian OLV D 1Y AqY2",
+          "url": "https://store.softline.ru/microsoft/g3s-01363-360284/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Windows Server Essentials 2022"
+    },
+    "161851": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 100,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 42,
+        "Продление": 22
+      },
+      "examples": [
+        {
+          "offer_id": "2255",
+          "name": "Microsoft Windows Server CAL 2019 (продление Software Assurance), English No Level Device",
+          "url": "https://store.softline.ru/microsoft/r18-00146-2255/",
+          "license_parameters": [
+            "Продление"
+          ]
+        },
+        {
+          "offer_id": "2256",
+          "name": "Microsoft Windows Server CAL 2019 (продление Software Assurance), English No Level User",
+          "url": "https://store.softline.ru/microsoft/r18-00145-2256/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Операционная система Microsoft Windows Server CAL 2019"
+    },
+    "24309": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 2,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {},
+      "examples": [
+        {
+          "offer_id": "28237",
+          "name": "Microsoft Windows Server CAL (лицензия OLV + Software Assurance, LicSAPk на 1 год), No Level Device",
+          "url": "https://store.softline.ru/microsoft/r18-01850-28237/",
+          "license_parameters": []
+        },
+        {
+          "offer_id": "28238",
+          "name": "Microsoft Windows Server CAL (лицензия OLV + Software Assurance, LicSAPk на 1 год), No Level User",
+          "url": "https://store.softline.ru/microsoft/r18-01855-28238/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Microsoft Windows Server CAL (Open Value)"
+    },
+    "228208": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 4,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 4
+      },
+      "examples": [
+        {
+          "offer_id": "274923",
+          "name": "Microsoft Windows Server CAL (лицензия), 1 User 3 year",
+          "url": "https://store.softline.ru/microsoft/1-subscription-274923/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "274924",
+          "name": "Microsoft Windows Server CAL (лицензия), 1 Device 3 year",
+          "url": "https://store.softline.ru/microsoft/1-subscription-274924/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Windows Server CAL"
+    },
+    "281954": {
+      "family_id": "microsoft-windows-server",
+      "vendor_path": "/microsoft/",
+      "source_url": "https://store.softline.ru/microsoft/g3s-00543-2804/",
+      "offers": 10,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка CSP": 10
+      },
+      "examples": [
+        {
+          "offer_id": "345093",
+          "name": "Microsoft Windows Server CAL 2022 (лицензия Single OLV NL Additional Product для коммерческих организаций), Device",
+          "url": "https://store.softline.ru/microsoft/r18-06488-345093/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "345094",
+          "name": "Microsoft Windows Server CAL 2022 (лицензия Single OLV NL Additional Product для коммерческих организаций), User",
+          "url": "https://store.softline.ru/microsoft/r18-06489-345094/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        }
+      ],
+      "group_name": "Microsoft Windows Server CAL 2022"
+    },
+    "3935": {
+      "family_id": "kaspersky-endpoint-security-business",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kl8069rmzzz-4844/",
+      "offers": 81,
+      "scope_mismatches": 0,
+      "priced": 81,
+      "available": 81,
+      "license_parameters": {
+        "Миграция": 16,
+        "Полная версия": 33,
+        "Продление": 32
+      },
+      "examples": [
+        {
+          "offer_id": "4844",
+          "name": "Kaspersky Certified media Pack Customized Russian Edition Media Pack - Установочный комплект Дистрибутив. Русская",
+          "url": "https://store.softline.ru/kaspersky/kl8069rmzzz-4844/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "4845",
+          "name": "Kaspersky Endpoint Security для бизнеса Расширенный лицензия Base на 2 года по количеству узлов",
+          "url": "https://store.softline.ru/kaspersky/kl4867lakds-4845/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Endpoint Security для бизнеса Расширенный"
+    },
+    "3953": {
+      "family_id": "kaspersky-endpoint-security-business",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kl8069rmzzz-4844/",
+      "offers": 82,
+      "scope_mismatches": 0,
+      "priced": 81,
+      "available": 81,
+      "license_parameters": {
+        "Миграция": 16,
+        "Полная версия": 34,
+        "Продление": 32
+      },
+      "examples": [
+        {
+          "offer_id": "4925",
+          "name": "Kaspersky Стандартный Certified media Pack Russian Edition Media Pack - Установочный комплект Дистрибутив. Русская",
+          "url": "https://store.softline.ru/kaspersky/kl8067rmzzz-4925/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "4926",
+          "name": "Kaspersky Endpoint Security для бизнеса Стандартный продление лицензии для академических учреждений Версия на 2 года.",
+          "url": "https://store.softline.ru/kaspersky/kl4863rakdq-4926/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Endpoint Security для бизнеса Стандартный"
+    },
+    "419620": {
+      "family_id": "kaspersky-endpoint-security-business",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kl8069rmzzz-4844/",
+      "offers": 80,
+      "scope_mismatches": 0,
+      "priced": 80,
+      "available": 80,
+      "license_parameters": {
+        "Миграция": 16,
+        "Полная версия": 32,
+        "Продление": 32
+      },
+      "examples": [
+        {
+          "offer_id": "503504",
+          "name": "Kaspersky Endpoint Security для бизнеса Расширенный Плюс лицензия Base на 2 года по количеству узлов",
+          "url": "https://store.softline.ru/kaspersky/kl4210rakds-503504/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "503505",
+          "name": "Kaspersky Endpoint Security для бизнеса Расширенный Плюс лицензия Base на 2 года по количеству узлов",
+          "url": "https://store.softline.ru/kaspersky/kl4210ramds-503505/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Endpoint Security для бизнеса Расширенный Плюс"
+    },
+    "3707": {
+      "family_id": "kaspersky-mail-security",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kl4313rakde-3798/",
+      "offers": 80,
+      "scope_mismatches": 0,
+      "priced": 80,
+      "available": 80,
+      "license_parameters": {
+        "Миграция": 16,
+        "Полная версия": 32,
+        "Продление": 32
+      },
+      "examples": [
+        {
+          "offer_id": "3798",
+          "name": "Kaspersky Security для почтовых серверов лицензия для академических учреждений на 2 года по количеству почтовых адресов",
+          "url": "https://store.softline.ru/kaspersky/kl4313rakde-3798/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "3799",
+          "name": "Kaspersky Security для почтовых серверов лицензия для академических учреждений на 2 года по количеству почтовых адресов",
+          "url": "https://store.softline.ru/kaspersky/kl4313ramde-3799/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Security для почтовых серверов"
+    },
+    "378860": {
+      "family_id": "kaspersky-mail-security",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kl4313rakde-3798/",
+      "offers": 48,
+      "scope_mismatches": 0,
+      "priced": 0,
+      "available": 0,
+      "license_parameters": {
+        "Подписка": 48
+      },
+      "examples": [
+        {
+          "offer_id": "458933",
+          "name": "Kaspersky Security для почтовых серверов Russian Edition подписка Successive License на 1 месяц. Количество почтовых",
+          "url": "https://store.softline.ru/kaspersky/kl4313raqmg-458933/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        },
+        {
+          "offer_id": "458934",
+          "name": "Kaspersky Security для почтовых серверов Russian Edition подписка Successive License на 1 месяц. Количество почтовых",
+          "url": "https://store.softline.ru/kaspersky/kl4313rapmg-458934/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Security для почтовых серверов по подписке"
+    },
+    "3804": {
+      "family_id": "kaspersky-storage-security",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kl4221rakde-4072/",
+      "offers": 210,
+      "scope_mismatches": 0,
+      "priced": 210,
+      "available": 210,
+      "license_parameters": {
+        "Миграция": 42,
+        "Полная версия": 84,
+        "Продление": 84
+      },
+      "examples": [
+        {
+          "offer_id": "4072",
+          "name": "Kaspersky Security для систем хранения данных академическая лицензия на 2 года. Количество пользователей",
+          "url": "https://store.softline.ru/kaspersky/kl4221rakde-4072/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "4073",
+          "name": "Kaspersky Security для систем хранения данных академическая лицензия на 2 года. Количество пользователей",
+          "url": "https://store.softline.ru/kaspersky/kl4221ramde-4073/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Security для систем хранения данных"
+    },
+    "3872": {
+      "family_id": "kaspersky-virtualization-security",
+      "vendor_path": "/kaspersky/",
+      "source_url": "https://store.softline.ru/kaspersky/kl8072rmzzz-99693/",
+      "offers": 680,
+      "scope_mismatches": 0,
+      "priced": 680,
+      "available": 680,
+      "license_parameters": {
+        "Дистрибутив": 1,
+        "Перекрестное обновление": 136,
+        "Полная версия": 271,
+        "Продление": 272
+      },
+      "examples": [
+        {
+          "offer_id": "99693",
+          "name": "Kaspersky Security для виртуальных  и облачных сред, сертифицированный дистрибутив лицензии русской версии,",
+          "url": "https://store.softline.ru/kaspersky/kl8072rmzzz-99693/",
+          "license_parameters": [
+            "Дистрибутив"
+          ]
+        },
+        {
+          "offer_id": "160794",
+          "name": "Kaspersky Security для виртуальных  и облачных сред, базовая лицензия Desktop на 1 год по количеству виртуальных",
+          "url": "https://store.softline.ru/kaspersky/kl4155rasfs-160794/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Kaspersky Security для виртуальных и облачных сред"
+    },
+    "287015": {
+      "family_id": "astra-ald-pro",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/ad2100x8610dig1d8sr02-po12-445080/",
+      "offers": 88,
+      "scope_mismatches": 0,
+      "priced": 88,
+      "available": 88,
+      "license_parameters": {
+        "Полная версия": 56,
+        "Техподдержка": 32
+      },
+      "examples": [
+        {
+          "offer_id": "445080",
+          "name": "Группа Астра Программный комплекс ALD Pro, серверные лицензии, срочные, Лицензия на ПК ALD Pro РДЦП.10101-01 на 1",
+          "url": "https://store.softline.ru/astralinux/ad2100x8610dig1d8sr02-po12-445080/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "445081",
+          "name": "Группа Астра Программный комплекс ALD Pro, серверные лицензии, срочные, Лицензия на ПК ALD Pro РДЦП.10101-01 на 1",
+          "url": "https://store.softline.ru/astralinux/ad2100x8610dig1d8sr02-po24-445081/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "ALD Pro"
+    },
+    "397827": {
+      "family_id": "astra-automation",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/acaa0000000digpk10002-po12-482325/",
+      "offers": 23,
+      "scope_mismatches": 0,
+      "priced": 23,
+      "available": 23,
+      "license_parameters": {
+        "Полная версия": 19,
+        "Техподдержка": 4
+      },
+      "examples": [
+        {
+          "offer_id": "482325",
+          "name": "Группа Астра Astra Automation (несертифицированные срочные лицензии), Лицензия на Astra Automation, РДЦП.10201-01, до",
+          "url": "https://store.softline.ru/astralinux/acaa0000000digpk10002-po12-482325/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "482326",
+          "name": "Группа Астра Astra Automation (несертифицированные срочные лицензии), Лицензия на Astra Automation, РДЦП.10201-01, до",
+          "url": "https://store.softline.ru/astralinux/acaa0000000digpk10002-po24-482326/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Astra Automation"
+    },
+    "377090": {
+      "family_id": "astra-configuration-manager",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/accm00000stdig000md02-so12-456042/",
+      "offers": 18,
+      "scope_mismatches": 0,
+      "priced": 18,
+      "available": 18,
+      "license_parameters": {
+        "Обновление": 12,
+        "Полная версия": 12,
+        "Техподдержка": 6
+      },
+      "examples": [
+        {
+          "offer_id": "456042",
+          "name": "Группа Астра ПК ACM (клиентские лицензии, несертифицированные, срочные), Лицензия на ПК ACM РДЦП.10301-01 редакция",
+          "url": "https://store.softline.ru/astralinux/accm00000stdig000md02-so12-456042/",
+          "license_parameters": [
+            "Полная версия",
+            "Обновление"
+          ]
+        },
+        {
+          "offer_id": "456043",
+          "name": "Группа Астра ПК ACM (клиентские лицензии, несертифицированные, срочные), Лицензия на ПК ACM РДЦП.10301-01 редакция",
+          "url": "https://store.softline.ru/astralinux/accm00000stdig000md02-so24-456043/",
+          "license_parameters": [
+            "Полная версия",
+            "Обновление"
+          ]
+        }
+      ],
+      "group_name": "Astra Configuration Manager"
+    },
+    "384577": {
+      "family_id": "astra-monitoring",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/acam0000000dig000od01-po12-539853/",
+      "offers": 26,
+      "scope_mismatches": 0,
+      "priced": 26,
+      "available": 26,
+      "license_parameters": {
+        "Full": 6,
+        "Полная версия": 20
+      },
+      "examples": [
+        {
+          "offer_id": "539853",
+          "name": "Астра Мониторинг РДЦП.10601-01, на 1 единицу прочего оборудования, электронный, на срок действия исключительного права,",
+          "url": "https://store.softline.ru/astralinux/acam0000000dig000od01-po12-539853/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "539854",
+          "name": "Астра Мониторинг РДЦП.10601-01, на 1 единицу прочего оборудования, электронный, на срок действия исключительного права,",
+          "url": "https://store.softline.ru/astralinux/acam0000000dig000od01-po24-539854/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Astra Monitoring"
+    },
+    "397818": {
+      "family_id": "astra-disk",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/acad0000000dig000us01-so12-482319/",
+      "offers": 6,
+      "scope_mismatches": 0,
+      "priced": 6,
+      "available": 6,
+      "license_parameters": {
+        "Полная версия": 3,
+        "Техподдержка": 3
+      },
+      "examples": [
+        {
+          "offer_id": "482319",
+          "name": "Группа Астра Astra.Disk (несертифицированные бессрочные лицензии), Лицензия на Astra.Disk, РДЦП.10401-01, на 1",
+          "url": "https://store.softline.ru/astralinux/acad0000000dig000us01-so12-482319/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "482320",
+          "name": "Группа Астра Astra.Disk (несертифицированные бессрочные лицензии), Лицензия на Astra.Disk, РДЦП.10401-01, на 1",
+          "url": "https://store.softline.ru/astralinux/acad0000000dig000us01-so36-482320/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Astra.Disk"
+    },
+    "300796": {
+      "family_id": "workspad",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/rp-wp-calp-xs-0000-455798/",
+      "offers": 190,
+      "scope_mismatches": 0,
+      "priced": 190,
+      "available": 190,
+      "license_parameters": {
+        "Полная версия": 136,
+        "Техподдержка": 54
+      },
+      "examples": [
+        {
+          "offer_id": "455798",
+          "name": "Группа Астра WorksPad (клиентские лицензии, бессрочные), WorksPad клиентская лицензия на 1 пользователя, на срок",
+          "url": "https://store.softline.ru/astralinux/rp-wp-calp-xs-0000-455798/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "455810",
+          "name": "Группа Астра WorksPad Assistant (клиентские лицензии, бессрочные), WorksPad Assistant клиентская лицензия на 1",
+          "url": "https://store.softline.ru/astralinux/rp-wpa-calp-xs-0000-455810/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Workspad"
+    },
+    "342351": {
+      "family_id": "tantor",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/tlbd00x8600digspesr01-po12-433514/",
+      "offers": 72,
+      "scope_mismatches": 0,
+      "priced": 72,
+      "available": 72,
+      "license_parameters": {
+        "Полная версия": 54,
+        "Техподдержка": 18
+      },
+      "examples": [
+        {
+          "offer_id": "433514",
+          "name": "Группа Астра Программные продукты СУБД Tantor Special Edition х86-64, бессрочные лицензии, Лицензия на СУБД Tantor SE,",
+          "url": "https://store.softline.ru/astralinux/tlbd00x8600digspesr01-po12-433514/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "433515",
+          "name": "Группа Астра Программные продукты СУБД Tantor Special Edition х86-64, бессрочные лицензии, Лицензия на СУБД Tantor SE,",
+          "url": "https://store.softline.ru/astralinux/tlbd00x8600digspesr01-po24-433515/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Tantor"
+    },
+    "304890": {
+      "family_id": "vmmanager",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/exv10000006digcpusr02-po12-503263/",
+      "offers": 18,
+      "scope_mismatches": 0,
+      "priced": 18,
+      "available": 18,
+      "license_parameters": {
+        "Обновление": 6,
+        "Полная версия": 12,
+        "Техподдержка": 6
+      },
+      "examples": [
+        {
+          "offer_id": "503263",
+          "name": "Лицензия на программное обеспечение VMmanager 6 редакции Infrastructure на 1 физический сервер не более 2 CPU, способ",
+          "url": "https://store.softline.ru/astralinux/exv10000006digcpusr02-po12-503263/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "503264",
+          "name": "Лицензия на программное обеспечение VMmanager 6 редакции Infrastructure на 1 физический сервер не более 2 CPU, способ",
+          "url": "https://store.softline.ru/astralinux/exv10000006digcpusr02-po24-503264/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "VMmanager"
+    },
+    "304907": {
+      "family_id": "dcimanager",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/exd10000006digeqpsr02-pd12-503143/",
+      "offers": 51,
+      "scope_mismatches": 0,
+      "priced": 51,
+      "available": 51,
+      "license_parameters": {
+        "Обновление": 3,
+        "Полная версия": 36,
+        "Расширение лицензии": 12,
+        "Техподдержка": 3
+      },
+      "examples": [
+        {
+          "offer_id": "503143",
+          "name": "Группа Астра Программные продукты DCImanager Infrastructure, срочные лицензии (расширение лицензии), Расширение",
+          "url": "https://store.softline.ru/astralinux/exd10000006digeqpsr02-pd12-503143/",
+          "license_parameters": [
+            "Расширение лицензии"
+          ]
+        },
+        {
+          "offer_id": "503144",
+          "name": "Группа Астра Программные продукты DCImanager Infrastructure, срочные лицензии (расширение лицензии), Расширение",
+          "url": "https://store.softline.ru/astralinux/exd10000006digeqpsr02-pd24-503144/",
+          "license_parameters": [
+            "Расширение лицензии"
+          ]
+        }
+      ],
+      "group_name": "DCImanager 6 Infrastructure"
+    },
+    "376671": {
+      "family_id": "gitflic",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/rsgf00locendig001us02-so24-455695/",
+      "offers": 8,
+      "scope_mismatches": 0,
+      "priced": 8,
+      "available": 8,
+      "license_parameters": {
+        "Полная версия": 8
+      },
+      "examples": [
+        {
+          "offer_id": "455695",
+          "name": "Группа Астра GitFlic (вариант лицензирования Локальный, в редакции Корпоративная стандартная, на 1 пользователя, способ",
+          "url": "https://store.softline.ru/astralinux/rsgf00locendig001us02-so24-455695/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "455696",
+          "name": "Группа Астра GitFlic (вариант лицензирования Локальный, в редакции Корпоративная стандартная, на 1 пользователя, способ",
+          "url": "https://store.softline.ru/astralinux/rsgf00locendig001us02-so12-455696/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "GitFlic"
+    },
+    "426491": {
+      "family_id": "botsman",
+      "vendor_path": "/astralinux/",
+      "source_url": "https://store.softline.ru/astralinux/pb0000npdendig000fs01-so36-540103/",
+      "offers": 60,
+      "scope_mismatches": 0,
+      "priced": 60,
+      "available": 60,
+      "license_parameters": {
+        "Full": 3,
+        "Полная версия": 51,
+        "Техподдержка": 6
+      },
+      "examples": [
+        {
+          "offer_id": "540103",
+          "name": "Группа Астра Программные продукты платформа Боцман, для среды NonProd, бессрочные лицензии, Платформа Боцман, в",
+          "url": "https://store.softline.ru/astralinux/pb0000npdendig000fs01-so36-540103/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "540104",
+          "name": "Группа Астра Программные продукты платформа Боцман, для среды NonProd, бессрочные лицензии, Платформа Боцман, в",
+          "url": "https://store.softline.ru/astralinux/pb0000npdendig000fs01-so24-540104/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Платформа контейнеризации «Боцман»"
+    },
+    "301674": {
+      "family_id": "cyber-infrastructure",
+      "vendor_path": "/cyberprotect/",
+      "source_url": "https://store.softline.ru/cyberprotect/ciper1cpu-369079/",
+      "offers": 88,
+      "scope_mismatches": 0,
+      "priced": 88,
+      "available": 0,
+      "license_parameters": {
+        "Перекрестное обновление": 22,
+        "Полная версия": 11,
+        "Продление": 44,
+        "Техподдержка": 66
+      },
+      "examples": [
+        {
+          "offer_id": "369079",
+          "name": "Киберпротект Кибер Инфраструктура (лицензия Виртуализация), 1 CPU",
+          "url": "https://store.softline.ru/cyberprotect/ciper1cpu-369079/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "369081",
+          "name": "Киберпротект Кибер Инфраструктура (лицензия Виртуализация), 5 CPUs",
+          "url": "https://store.softline.ru/cyberprotect/ciper5cpu-369081/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Кибер Инфраструктура"
+    },
+    "394620": {
+      "family_id": "cyber-files",
+      "vendor_path": "/cyberprotect/",
+      "source_url": "https://store.softline.ru/cyberprotect/cfp2nl-477550/",
+      "offers": 96,
+      "scope_mismatches": 0,
+      "priced": 96,
+      "available": 96,
+      "license_parameters": {
+        "Обновление": 24,
+        "Полная версия": 12,
+        "Продление": 48,
+        "Техподдержка": 72
+      },
+      "examples": [
+        {
+          "offer_id": "477550",
+          "name": "Киберпротект Кибер Файлы (лицензия), Количество пользователей",
+          "url": "https://store.softline.ru/cyberprotect/cfp2nl-477550/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "477551",
+          "name": "Киберпротект Кибер Файлы (лицензия), Количество пользователей",
+          "url": "https://store.softline.ru/cyberprotect/cfp3nl-477551/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Кибер Файлы"
+    },
+    "412674": {
+      "family_id": "cyber-storage",
+      "vendor_path": "/cyberprotect/",
+      "source_url": "https://store.softline.ru/cyberprotect/cst1tbnl-500230/",
+      "offers": 150,
+      "scope_mismatches": 0,
+      "priced": 150,
+      "available": 150,
+      "license_parameters": {
+        "Full": 8,
+        "Обновление": 36,
+        "Перекрестное обновление": 6,
+        "Полная версия": 18,
+        "Продление": 55,
+        "Техподдержка": 85
+      },
+      "examples": [
+        {
+          "offer_id": "500230",
+          "name": "Киберпротект Кибер Хранилище (лицензия), лицензия на 1 ТБ",
+          "url": "https://store.softline.ru/cyberprotect/cst1tbnl-500230/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "500231",
+          "name": "Киберпротект Кибер Хранилище (лицензия), лицензия на 10 ТБ",
+          "url": "https://store.softline.ru/cyberprotect/cst10tbnl-500231/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Кибер Хранилище"
+    },
+    "22181": {
+      "family_id": "cryptopro-tsp",
+      "vendor_path": "/kripto-pro/",
+      "source_url": "https://store.softline.ru/kripto-pro/-25218/",
+      "offers": 11,
+      "scope_mismatches": 0,
+      "priced": 11,
+      "available": 11,
+      "license_parameters": {
+        "Дистрибутив": 1,
+        "Обновление": 2,
+        "Полная версия": 3,
+        "Техподдержка": 5
+      },
+      "examples": [
+        {
+          "offer_id": "25218",
+          "name": "КриптоПро Дистрибутив на одном CD, включая комплект документации (формуляр), дистрибутив",
+          "url": "https://store.softline.ru/kripto-pro/-25218/",
+          "license_parameters": [
+            "Дистрибутив"
+          ]
+        },
+        {
+          "offer_id": "449970",
+          "name": "КриптоПро TSP Server (лицензия на право использования из состава ПАК Службы УЦ версии 2.0), Исполнение 5 класс КС2 на",
+          "url": "https://store.softline.ru/kripto-pro/-449970/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Программа КриптоПро TSP"
+    },
+    "167189": {
+      "family_id": "cryptopro-ngate",
+      "vendor_path": "/kripto-pro/",
+      "source_url": "https://store.softline.ru/kripto-pro/-197758/",
+      "offers": 134,
+      "scope_mismatches": 0,
+      "priced": 134,
+      "available": 134,
+      "license_parameters": {
+        "Дистрибутив": 1,
+        "Модуль": 8,
+        "Полная версия": 55,
+        "Расширение лицензии": 8,
+        "Техподдержка": 78
+      },
+      "examples": [
+        {
+          "offer_id": "197758",
+          "name": "КриптоПро NGate (аппаратная платформа), 600",
+          "url": "https://store.softline.ru/kripto-pro/-197758/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "197759",
+          "name": "КриптоПро NGate (аппаратная платформа), 1000",
+          "url": "https://store.softline.ru/kripto-pro/-197759/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Программа КриптоПро NGate"
+    },
+    "385311": {
+      "family_id": "cryptopro-ca",
+      "vendor_path": "/kripto-pro/",
+      "source_url": "https://store.softline.ru/kripto-pro/-450281/",
+      "offers": 42,
+      "scope_mismatches": 0,
+      "priced": 42,
+      "available": 42,
+      "license_parameters": {
+        "Full": 6,
+        "Обновление": 3,
+        "Полная версия": 11,
+        "Техподдержка": 22
+      },
+      "examples": [
+        {
+          "offer_id": "450281",
+          "name": "ПАК КриптоПро УЦ 2.0 КС2, Лицензия на право использования ПАК Удостоверяющий центр КриптоПро УЦ версии 2.0 класс КС2 на",
+          "url": "https://store.softline.ru/kripto-pro/-450281/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "450282",
+          "name": "ПАК КриптоПро УЦ 2.0 КС2, Лицензия на право использования ПАК Удостоверяющий центр КриптоПро УЦ версии 2.0 класс КС2 на",
+          "url": "https://store.softline.ru/kripto-pro/-450282/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "ПАК КриптоПро УЦ 2.0 КС2"
+    },
+    "385387": {
+      "family_id": "cryptopro-ca",
+      "vendor_path": "/kripto-pro/",
+      "source_url": "https://store.softline.ru/kripto-pro/-450281/",
+      "offers": 9,
+      "scope_mismatches": 0,
+      "priced": 9,
+      "available": 9,
+      "license_parameters": {
+        "Подписка CSP": 1,
+        "Полная версия": 8
+      },
+      "examples": [
+        {
+          "offer_id": "450247",
+          "name": "Базовые лицензии ПАК КриптоПро УЦ 2.0 КС2 (Номер ЕРРП: 1020), Лицензия на право использования ПАК Удостоверяющий центр",
+          "url": "https://store.softline.ru/kripto-pro/-450247/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "450254",
+          "name": "Базовые лицензии ПАК КриптоПро УЦ 2.0 КС2 (Номер ЕРРП: 1020), Лицензия на право использования ПАК Удостоверяющий центр",
+          "url": "https://store.softline.ru/kripto-pro/-450254/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Базовые лицензии ПАК КриптоПро УЦ 2.0 КС2"
+    },
+    "385356": {
+      "family_id": "cryptopro-ca",
+      "vendor_path": "/kripto-pro/",
+      "source_url": "https://store.softline.ru/kripto-pro/-450281/",
+      "offers": 20,
+      "scope_mismatches": 0,
+      "priced": 20,
+      "available": 20,
+      "license_parameters": {
+        "Полная версия": 3,
+        "Техподдержка": 17
+      },
+      "examples": [
+        {
+          "offer_id": "450297",
+          "name": "Дополнительные компоненты ПАК КриптоПро УЦ 2.0 КС2 (Номер ЕРРП: 1020, 4326), Лицензия на право использования одной",
+          "url": "https://store.softline.ru/kripto-pro/-450297/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "458449",
+          "name": "Дополнительные компоненты ПАК КриптоПро УЦ 2.0 КС2 (Номер ЕРРП: 1020, 4326), Лицензия на право использования одной",
+          "url": "https://store.softline.ru/kripto-pro/-458449/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Дополнительные компоненты ПАК КриптоПро УЦ 2.0 КС2"
+    },
+    "28574": {
+      "family_id": "xspider",
+      "vendor_path": "/positive-technologies/",
+      "source_url": "https://store.softline.ru/positive-technologies/xs7-8-ip10240-add-356468/",
+      "offers": 83,
+      "scope_mismatches": 0,
+      "priced": 83,
+      "available": 83,
+      "license_parameters": {
+        "Обновление": 13,
+        "Полная версия": 32,
+        "Продление": 38,
+        "Расширение лицензии": 5,
+        "Техподдержка": 1
+      },
+      "examples": [
+        {
+          "offer_id": "356468",
+          "name": "Positive Technologies XSpider (дополнительный хост к лицензии, гарантийные обязательства в течение 1 года), количество",
+          "url": "https://store.softline.ru/positive-technologies/xs7-8-ip10240-add-356468/",
+          "license_parameters": [
+            "Полная версия",
+            "Техподдержка"
+          ]
+        },
+        {
+          "offer_id": "356481",
+          "name": "Positive Technologies XSpider (дополнительный хост к лицензии), количество хостов. версия 8.0",
+          "url": "https://store.softline.ru/positive-technologies/xs7-8-ip4-add-356481/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Positive Technologies XSpider"
+    },
+    "428013": {
+      "family_id": "xspider",
+      "vendor_path": "/positive-technologies/",
+      "source_url": "https://store.softline.ru/positive-technologies/xs7-8-ip10240-add-356468/",
+      "offers": 45,
+      "scope_mismatches": 0,
+      "priced": 45,
+      "available": 45,
+      "license_parameters": {
+        "Full": 8,
+        "Перекрестное обновление": 11,
+        "Полная версия": 11
+      },
+      "examples": [
+        {
+          "offer_id": "540194",
+          "name": "Positive Technologies XSpider Pro (лицензия Pentest + Audit на дополнительный IP), к лицензии на 4 IP",
+          "url": "https://store.softline.ru/positive-technologies/pt-xsp-pa4-add-540194/",
+          "license_parameters": [
+            "Full"
+          ]
+        },
+        {
+          "offer_id": "540195",
+          "name": "Positive Technologies XSpider Pro (лицензия Pentest + Audit на дополнительный IP), к лицензии на 8 IP",
+          "url": "https://store.softline.ru/positive-technologies/pt-xsp-pa8-add-540195/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Positive Technologies XSpider PRO"
+    },
+    "438682": {
+      "family_id": "positive-email-gateway",
+      "vendor_path": "/positive-technologies/",
+      "source_url": "https://store.softline.ru/positive-technologies/pt-emg-100-532583/",
+      "offers": 4,
+      "scope_mismatches": 0,
+      "priced": 4,
+      "available": 4,
+      "license_parameters": {
+        "Full": 4
+      },
+      "examples": [
+        {
+          "offer_id": "532583",
+          "name": "Positive Technologies Email Gateway (конфигурация на проверку, обновления в течение 1, одного года), до 100 почтовых",
+          "url": "https://store.softline.ru/positive-technologies/pt-emg-100-532583/",
+          "license_parameters": [
+            "Full"
+          ]
+        },
+        {
+          "offer_id": "532584",
+          "name": "Positive Technologies Email Gateway (конфигурация на проверку, обновления в течение 1, одного года), до 250 почтовых",
+          "url": "https://store.softline.ru/positive-technologies/pt-emg-250-532584/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Positive Technologies Email Gateway"
+    },
+    "411204": {
+      "family_id": "echelon-generator",
+      "vendor_path": "/npo-echelon/",
+      "source_url": "https://store.softline.ru/npo-echelon/gn-l-3-498364/",
+      "offers": 3,
+      "scope_mismatches": 0,
+      "priced": 3,
+      "available": 3,
+      "license_parameters": {
+        "Дистрибутив": 1,
+        "Полная версия": 1,
+        "Продление": 1
+      },
+      "examples": [
+        {
+          "offer_id": "498364",
+          "name": "НПО «Эшелон» Программный генератор паролей «Генератор», Лицензия на 3 года, рег (№ 1680),",
+          "url": "https://store.softline.ru/npo-echelon/gn-l-3-498364/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "498365",
+          "name": "НПО «Эшелон» Программный генератор паролей «Генератор», Продление лицензии на 1 год, рег (№ 1680),",
+          "url": "https://store.softline.ru/npo-echelon/gn-upp-l-1-498365/",
+          "license_parameters": [
+            "Продление"
+          ]
+        }
+      ],
+      "group_name": "Эшелон «Генератор»"
+    },
+    "411213": {
+      "family_id": "echelon-pulsar",
+      "vendor_path": "/npo-echelon/",
+      "source_url": "https://store.softline.ru/npo-echelon/pulsar-498367/",
+      "offers": 2,
+      "scope_mismatches": 0,
+      "priced": 2,
+      "available": 2,
+      "license_parameters": {
+        "Full": 2
+      },
+      "examples": [
+        {
+          "offer_id": "498367",
+          "name": "НПО «Эшелон» Генератор шума «Пульсар» НПЕШ.464116.001, PULSAR",
+          "url": "https://store.softline.ru/npo-echelon/pulsar-498367/",
+          "license_parameters": [
+            "Full"
+          ]
+        },
+        {
+          "offer_id": "498368",
+          "name": "НПО «Эшелон» Генератор шума «Пульсар» НПЕШ.464116.001, PULSAR-s",
+          "url": "https://store.softline.ru/npo-echelon/pulsar-s-498368/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Эшелон «Пульсар»"
+    },
+    "411242": {
+      "family_id": "pik-echelon",
+      "vendor_path": "/npo-echelon/",
+      "source_url": "https://store.softline.ru/npo-echelon/pic-l3-498386/",
+      "offers": 6,
+      "scope_mismatches": 0,
+      "priced": 6,
+      "available": 6,
+      "license_parameters": {
+        "Дистрибутив": 2,
+        "Полная версия": 2,
+        "Продление": 2
+      },
+      "examples": [
+        {
+          "offer_id": "498386",
+          "name": "НПО «Эшелон» Программа инспекционного контроля «ПИК-Эшелон», Лицензия на 3 года, рег (№ 1895),",
+          "url": "https://store.softline.ru/npo-echelon/pic-l3-498386/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "498387",
+          "name": "НПО «Эшелон» Программа инспекционного контроля «ПИК-Эшелон», Лицензия версии lite на 1 год, рег (№ 1895),",
+          "url": "https://store.softline.ru/npo-echelon/pic-lite-498387/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "«ПИК-Эшелон»"
+    },
+    "411254": {
+      "family_id": "echelon-ak-vs",
+      "vendor_path": "/npo-echelon/",
+      "source_url": "https://store.softline.ru/npo-echelon/ak-vs3-lic-1-498392/",
+      "offers": 40,
+      "scope_mismatches": 0,
+      "priced": 40,
+      "available": 40,
+      "license_parameters": {
+        "Полная версия": 21,
+        "Продление": 15,
+        "Техподдержка": 4
+      },
+      "examples": [
+        {
+          "offer_id": "498392",
+          "name": "НПО «Эшелон» Анализатор исходных текстов программ «АК-ВС 3», Лицензия, рег (№ 14300), Лицензия на 1 проект сроком на 1",
+          "url": "https://store.softline.ru/npo-echelon/ak-vs3-lic-1-498392/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "498393",
+          "name": "НПО «Эшелон» Анализатор исходных текстов программ «АК-ВС 3», Лицензия, рег (№ 14300), Лицензия на неограниченное",
+          "url": "https://store.softline.ru/npo-echelon/ak-vs3-lic-unl-498393/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "ПК «АК-ВС 3»"
+    },
+    "46451": {
+      "family_id": "echelon-rubicon",
+      "vendor_path": "/npo-echelon/",
+      "source_url": "https://store.softline.ru/npo-echelon/rubikon-mo-osh-1-519563/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Full": 1
+      },
+      "examples": [
+        {
+          "offer_id": "519563",
+          "name": "НПО «Эшелон» Эшелон «Рубикон» (комплекс противодействия программно-аппаратным воздействиям с функцией однонаправленного",
+          "url": "https://store.softline.ru/npo-echelon/rubikon-mo-osh-1-519563/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Эшелон «Рубикон»"
     }
   }
 }

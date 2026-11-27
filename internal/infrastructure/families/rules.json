@@ -1,15 +1,500 @@
 {
-  "Version": "families-v2",
+  "Version": "families-v3",
   "Rules": [
-    {"ID":"astra-linux-special-edition","Name":"Astra Linux Special Edition","Groups":["121231"],"VendorPath":"/astralinux/","SourceURL":"https://store.softline.ru/astralinux/astra-linux-special-edition/"},
-    {"ID":"microsoft-office","Name":"Microsoft Office","Groups":["391338"],"VendorPath":"/microsoft/","SourceURL":"https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/"},
-    {"ID":"kaspersky-small-office-security","Name":"Kaspersky Small Office Security","Groups":["3761"],"VendorPath":"/kaspersky/","SourceURL":"https://store.softline.ru/kaspersky/kaspersky-small-office-security/"},
-    {"ID":"cryptopro-csp","Name":"КриптоПро CSP","Groups":["22268"],"VendorPath":"/kripto-pro/","SourceURL":"https://store.softline.ru/kripto-pro/cryptopro-csp/"},
-    {"ID":"anydesk","Name":"AnyDesk","Groups":["306539"],"VendorPath":"/anydesk/","SourceURL":"https://store.softline.ru/anydesk/anydesk/"},
-    {"ID":"cyber-backup","Name":"Кибер Бэкап","Groups":["173614","173615"],"VendorPath":"/cyberprotect/","SourceURL":"https://store.softline.ru/cyberprotect/?filter%5Bcategory%5D%5B%5D=1033"},
-    {"ID":"scanner-vs","Name":"Сканер-ВС","Groups":["46421"],"VendorPath":"/npo-echelon/","SourceURL":"https://store.softline.ru/npo-echelon/eshelon-skaner-vs/"},
-    {"ID":"mts-link","Name":"МТС Линк","Groups":["414326"],"VendorPath":"/webinar/","SourceURL":"https://store.softline.ru/webinar/"},
-    {"ID":"maxpatrol-endpoint","Name":"MaxPatrol Endpoint Protection Platform","Groups":["437421"],"VendorPath":"/positive-technologies/","SourceURL":"https://store.softline.ru/positive-technologies/maxpatrol-endpoint-protection-platform/"},
-    {"ID":"microsoft-365","Name":"Microsoft 365","Groups":["165034"],"VendorPath":"/microsoft/","SourceURL":"https://store.softline.ru/microsoft/microsoft-365-for-family/"}
+    {
+      "ID": "astra-linux-special-edition",
+      "Name": "Astra Linux Special Edition",
+      "Groups": [
+        "121231"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/astra-linux-special-edition/"
+    },
+    {
+      "ID": "microsoft-office",
+      "Name": "Microsoft Office",
+      "Groups": [
+        "391338",
+        "391335",
+        "161788",
+        "161807",
+        "162056",
+        "24300",
+        "284105",
+        "3170"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/microsoft-office-dlya-doma-i-biznesa-2024/"
+    },
+    {
+      "ID": "kaspersky-small-office-security",
+      "Name": "Kaspersky Small Office Security",
+      "Groups": [
+        "3761",
+        "379232"
+      ],
+      "VendorPath": "/kaspersky/",
+      "SourceURL": "https://store.softline.ru/kaspersky/kaspersky-small-office-security/"
+    },
+    {
+      "ID": "cryptopro-csp",
+      "Name": "КриптоПро CSP",
+      "Groups": [
+        "22268"
+      ],
+      "VendorPath": "/kripto-pro/",
+      "SourceURL": "https://store.softline.ru/kripto-pro/cryptopro-csp/"
+    },
+    {
+      "ID": "anydesk",
+      "Name": "AnyDesk",
+      "Groups": [
+        "306539"
+      ],
+      "VendorPath": "/anydesk/",
+      "SourceURL": "https://store.softline.ru/anydesk/anydesk/"
+    },
+    {
+      "ID": "cyber-backup",
+      "Name": "Кибер Бэкап",
+      "Groups": [
+        "173614",
+        "173615"
+      ],
+      "VendorPath": "/cyberprotect/",
+      "SourceURL": "https://store.softline.ru/cyberprotect/?filter%5Bcategory%5D%5B%5D=1033"
+    },
+    {
+      "ID": "scanner-vs",
+      "Name": "Сканер-ВС",
+      "Groups": [
+        "46421"
+      ],
+      "VendorPath": "/npo-echelon/",
+      "SourceURL": "https://store.softline.ru/npo-echelon/eshelon-skaner-vs/"
+    },
+    {
+      "ID": "mts-link",
+      "Name": "МТС Линк",
+      "Groups": [
+        "414326",
+        "447242",
+        "447243"
+      ],
+      "VendorPath": "/webinar/",
+      "SourceURL": "https://store.softline.ru/webinar/"
+    },
+    {
+      "ID": "maxpatrol-endpoint",
+      "Name": "MaxPatrol Endpoint Protection Platform",
+      "Groups": [
+        "437421"
+      ],
+      "VendorPath": "/positive-technologies/",
+      "SourceURL": "https://store.softline.ru/positive-technologies/maxpatrol-endpoint-protection-platform/"
+    },
+    {
+      "ID": "microsoft-365",
+      "Name": "Microsoft 365",
+      "Groups": [
+        "165034",
+        "283494"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/microsoft-365-for-family/"
+    },
+    {
+      "ID": "microsoft-visio",
+      "Name": "Microsoft Visio",
+      "Groups": [
+        "391347",
+        "391350",
+        "102094",
+        "24317",
+        "24321"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/ep2-07111-473585/"
+    },
+    {
+      "ID": "microsoft-project",
+      "Name": "Microsoft Project Desktop",
+      "Groups": [
+        "391341",
+        "391344"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/ep2-07001-473583/"
+    },
+    {
+      "ID": "microsoft-word",
+      "Name": "Microsoft Word",
+      "Groups": [
+        "162037",
+        "162743"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/059-03742-1520/"
+    },
+    {
+      "ID": "microsoft-excel",
+      "Name": "Microsoft Excel",
+      "Groups": [
+        "162090",
+        "162725"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/065-03367-1550/"
+    },
+    {
+      "ID": "microsoft-outlook",
+      "Name": "Microsoft Outlook",
+      "Groups": [
+        "162110",
+        "162269"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/543-01427-1580/"
+    },
+    {
+      "ID": "microsoft-powerpoint",
+      "Name": "Microsoft PowerPoint",
+      "Groups": [
+        "162222"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/079-01650-1610/"
+    },
+    {
+      "ID": "microsoft-access",
+      "Name": "Microsoft Access",
+      "Groups": [
+        "162199"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/077-02443-1640/"
+    },
+    {
+      "ID": "microsoft-publisher",
+      "Name": "Microsoft Publisher",
+      "Groups": [
+        "162160"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/164-02300-1490/"
+    },
+    {
+      "ID": "microsoft-visual-studio",
+      "Name": "Microsoft Visual Studio",
+      "Groups": [
+        "100160",
+        "186906",
+        "102110"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/mx3-00097-100659/"
+    },
+    {
+      "ID": "microsoft-sql-server",
+      "Name": "Microsoft SQL Server",
+      "Groups": [
+        "1820",
+        "1870",
+        "1940",
+        "24289",
+        "24294",
+        "103140"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/7jq-01262-2007/"
+    },
+    {
+      "ID": "microsoft-windows-desktop",
+      "Name": "Microsoft Windows Desktop",
+      "Groups": [
+        "3564",
+        "65851",
+        "286676",
+        "310176",
+        "295882",
+        "24361"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/kv3-00284-3360/"
+    },
+    {
+      "ID": "microsoft-windows-server",
+      "Name": "Microsoft Windows Server",
+      "Groups": [
+        "161826",
+        "161664",
+        "281974",
+        "294539",
+        "161851",
+        "24309",
+        "228208",
+        "281954"
+      ],
+      "VendorPath": "/microsoft/",
+      "SourceURL": "https://store.softline.ru/microsoft/g3s-00543-2804/"
+    },
+    {
+      "ID": "kaspersky-endpoint-security-business",
+      "Name": "Kaspersky Endpoint Security для бизнеса",
+      "Groups": [
+        "3935",
+        "3953",
+        "419620"
+      ],
+      "VendorPath": "/kaspersky/",
+      "SourceURL": "https://store.softline.ru/kaspersky/kl8069rmzzz-4844/"
+    },
+    {
+      "ID": "kaspersky-mail-security",
+      "Name": "Kaspersky Security для почтовых серверов",
+      "Groups": [
+        "3707",
+        "378860"
+      ],
+      "VendorPath": "/kaspersky/",
+      "SourceURL": "https://store.softline.ru/kaspersky/kl4313rakde-3798/"
+    },
+    {
+      "ID": "kaspersky-storage-security",
+      "Name": "Kaspersky Security для систем хранения данных",
+      "Groups": [
+        "3804"
+      ],
+      "VendorPath": "/kaspersky/",
+      "SourceURL": "https://store.softline.ru/kaspersky/kl4221rakde-4072/"
+    },
+    {
+      "ID": "kaspersky-virtualization-security",
+      "Name": "Kaspersky Security для виртуальных и облачных сред",
+      "Groups": [
+        "3872"
+      ],
+      "VendorPath": "/kaspersky/",
+      "SourceURL": "https://store.softline.ru/kaspersky/kl8072rmzzz-99693/"
+    },
+    {
+      "ID": "astra-ald-pro",
+      "Name": "ALD Pro",
+      "Groups": [
+        "287015"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/ad2100x8610dig1d8sr02-po12-445080/"
+    },
+    {
+      "ID": "astra-automation",
+      "Name": "Astra Automation",
+      "Groups": [
+        "397827"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/acaa0000000digpk10002-po12-482325/"
+    },
+    {
+      "ID": "astra-configuration-manager",
+      "Name": "Astra Configuration Manager",
+      "Groups": [
+        "377090"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/accm00000stdig000md02-so12-456042/"
+    },
+    {
+      "ID": "astra-monitoring",
+      "Name": "Astra Monitoring",
+      "Groups": [
+        "384577"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/acam0000000dig000od01-po12-539853/"
+    },
+    {
+      "ID": "astra-disk",
+      "Name": "Astra.Disk",
+      "Groups": [
+        "397818"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/acad0000000dig000us01-so12-482319/"
+    },
+    {
+      "ID": "workspad",
+      "Name": "Workspad",
+      "Groups": [
+        "300796"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/rp-wp-calp-xs-0000-455798/"
+    },
+    {
+      "ID": "tantor",
+      "Name": "Tantor",
+      "Groups": [
+        "342351"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/tlbd00x8600digspesr01-po12-433514/"
+    },
+    {
+      "ID": "vmmanager",
+      "Name": "VMmanager",
+      "Groups": [
+        "304890"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/exv10000006digcpusr02-po12-503263/"
+    },
+    {
+      "ID": "dcimanager",
+      "Name": "DCImanager",
+      "Groups": [
+        "304907"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/exd10000006digeqpsr02-pd12-503143/"
+    },
+    {
+      "ID": "gitflic",
+      "Name": "GitFlic",
+      "Groups": [
+        "376671"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/rsgf00locendig001us02-so24-455695/"
+    },
+    {
+      "ID": "botsman",
+      "Name": "Платформа контейнеризации Боцман",
+      "Groups": [
+        "426491"
+      ],
+      "VendorPath": "/astralinux/",
+      "SourceURL": "https://store.softline.ru/astralinux/pb0000npdendig000fs01-so36-540103/"
+    },
+    {
+      "ID": "cyber-infrastructure",
+      "Name": "Кибер Инфраструктура",
+      "Groups": [
+        "301674"
+      ],
+      "VendorPath": "/cyberprotect/",
+      "SourceURL": "https://store.softline.ru/cyberprotect/ciper1cpu-369079/"
+    },
+    {
+      "ID": "cyber-files",
+      "Name": "Кибер Файлы",
+      "Groups": [
+        "394620"
+      ],
+      "VendorPath": "/cyberprotect/",
+      "SourceURL": "https://store.softline.ru/cyberprotect/cfp2nl-477550/"
+    },
+    {
+      "ID": "cyber-storage",
+      "Name": "Кибер Хранилище",
+      "Groups": [
+        "412674"
+      ],
+      "VendorPath": "/cyberprotect/",
+      "SourceURL": "https://store.softline.ru/cyberprotect/cst1tbnl-500230/"
+    },
+    {
+      "ID": "cryptopro-tsp",
+      "Name": "КриптоПро TSP",
+      "Groups": [
+        "22181"
+      ],
+      "VendorPath": "/kripto-pro/",
+      "SourceURL": "https://store.softline.ru/kripto-pro/-25218/"
+    },
+    {
+      "ID": "cryptopro-ngate",
+      "Name": "КриптоПро NGate",
+      "Groups": [
+        "167189"
+      ],
+      "VendorPath": "/kripto-pro/",
+      "SourceURL": "https://store.softline.ru/kripto-pro/-197758/"
+    },
+    {
+      "ID": "cryptopro-ca",
+      "Name": "ПАК КриптоПро УЦ",
+      "Groups": [
+        "385311",
+        "385387",
+        "385356"
+      ],
+      "VendorPath": "/kripto-pro/",
+      "SourceURL": "https://store.softline.ru/kripto-pro/-450281/"
+    },
+    {
+      "ID": "xspider",
+      "Name": "Positive Technologies XSpider",
+      "Groups": [
+        "28574",
+        "428013"
+      ],
+      "VendorPath": "/positive-technologies/",
+      "SourceURL": "https://store.softline.ru/positive-technologies/xs7-8-ip10240-add-356468/"
+    },
+    {
+      "ID": "positive-email-gateway",
+      "Name": "Positive Technologies Email Gateway",
+      "Groups": [
+        "438682"
+      ],
+      "VendorPath": "/positive-technologies/",
+      "SourceURL": "https://store.softline.ru/positive-technologies/pt-emg-100-532583/"
+    },
+    {
+      "ID": "echelon-generator",
+      "Name": "Эшелон Генератор",
+      "Groups": [
+        "411204"
+      ],
+      "VendorPath": "/npo-echelon/",
+      "SourceURL": "https://store.softline.ru/npo-echelon/gn-l-3-498364/"
+    },
+    {
+      "ID": "echelon-pulsar",
+      "Name": "Эшелон Пульсар",
+      "Groups": [
+        "411213"
+      ],
+      "VendorPath": "/npo-echelon/",
+      "SourceURL": "https://store.softline.ru/npo-echelon/pulsar-498367/"
+    },
+    {
+      "ID": "pik-echelon",
+      "Name": "ПИК-Эшелон",
+      "Groups": [
+        "411242"
+      ],
+      "VendorPath": "/npo-echelon/",
+      "SourceURL": "https://store.softline.ru/npo-echelon/pic-l3-498386/"
+    },
+    {
+      "ID": "echelon-ak-vs",
+      "Name": "АК-ВС",
+      "Groups": [
+        "411254"
+      ],
+      "VendorPath": "/npo-echelon/",
+      "SourceURL": "https://store.softline.ru/npo-echelon/ak-vs3-lic-1-498392/"
+    },
+    {
+      "ID": "echelon-rubicon",
+      "Name": "Эшелон Рубикон",
+      "Groups": [
+        "46451"
+      ],
+      "VendorPath": "/npo-echelon/",
+      "SourceURL": "https://store.softline.ru/npo-echelon/rubikon-mo-osh-1-519563/"
+    }
   ]
 }

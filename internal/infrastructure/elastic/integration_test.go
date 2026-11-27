@@ -11,7 +11,109 @@ import (
 	app "github.com/scmbr/smart-search/internal/application/lexical"
 	catalog "github.com/scmbr/smart-search/internal/domain/catalog"
 	domain "github.com/scmbr/smart-search/internal/domain/search"
+	"github.com/scmbr/smart-search/internal/infrastructure/families"
 )
+
+func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
+	endpoint := os.Getenv("TEST_ELASTICSEARCH_URL")
+	if endpoint == "" {
+		t.Skip("TEST_ELASTICSEARCH_URL not set: Elasticsearch integration test")
+	}
+	ctx := context.Background()
+	var nonce [12]byte
+	if _, err := rand.Read(nonce[:]); err != nil {
+		t.Fatal(err)
+	}
+	id := hex.EncodeToString(nonce[:])
+	resolver, version, err := families.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, err := New(endpoint, "", "test-mapped-"+id)
+	if err != nil {
+		t.Fatal(err)
+	}
+	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 5}, version)
+	t.Cleanup(func() {
+		m, exists, err := c.meta(context.Background(), spec.Name)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		if !exists {
+			return
+		}
+		if m.Spec != spec {
+			t.Error("refusing to delete foreign index")
+			return
+		}
+		if _, _, err := c.request(context.Background(), "DELETE", "/"+spec.Name, nil); err != nil {
+			t.Error(err)
+		}
+	})
+	if _, err := c.Prepare(ctx, spec); err != nil {
+		t.Fatal(err)
+	}
+	var docs []domain.Document
+	for _, row := range []struct{ id, group, name string }{
+		{"office-home", "391335", "Microsoft Office для дома 2024"},
+		{"office-business", "391338", "Microsoft Office для дома и бизнеса 2024"},
+		{"visio-pro", "391347", "Microsoft Visio Professional 2024"},
+		{"visio-standard", "391350", "Microsoft Visio Standard 2024"},
+		{"unknown", "not-reviewed", "Unreviewed product"},
+	} {
+		price := int64(100)
+		o := catalog.Offer{ID: row.id, GroupID: row.group, Name: row.name, Description: "Mapped", URL: "https://store.softline.ru/microsoft/" + row.id + "/", PriceMinor: &price, Available: true,
+			Parameters: []catalog.Parameter{{Name: "Тип продукта", Value: "софт", Known: true}, {Name: "Тип лицензии", Value: "Full", Known: true}}}
+		chars := catalog.Normalize(o)
+		o.Characteristics = &chars
+		d, err := domain.BuildDocument(o, nil, resolver, spec.CatalogID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		docs = append(docs, d)
+	}
+	if err := c.Write(ctx, spec.Name, docs); err != nil {
+		t.Fatal(err)
+	}
+	if err := c.Finish(ctx, spec); err != nil {
+		t.Fatal(err)
+	}
+	if err := c.Activate(ctx, spec); err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		query, family, offer string
+		count                int
+	}{
+		{"Microsoft Office", "microsoft-office", "", 1},
+		{"Microsoft Visio", "microsoft-visio", "", 1},
+		{"Microsoft Office для дома и бизнеса 2024", "microsoft-office", "office-business", 1},
+		{"Mapped", "", "", 3},
+	} {
+		r, err := app.Search(ctx, c, domain.Request{Query: tc.query, Limit: 4})
+		if err != nil || len(r.Hits) != tc.count || r.FourFamiliesConfirmed {
+			t.Fatalf("%s: %+v %v", tc.query, r, err)
+		}
+		if tc.family != "" && (r.Hits[0].Document.FamilyID != tc.family || !r.Hits[0].Document.FamilyConfirmed) {
+			t.Fatalf("wrong family: %+v", r)
+		}
+		if tc.offer != "" && r.Hits[0].Document.OfferID != tc.offer {
+			t.Fatal("constraint lost before collapse")
+		}
+		if tc.query == "Mapped" {
+			confirmed := 0
+			for _, hit := range r.Hits {
+				if hit.Document.FamilyConfirmed {
+					confirmed++
+				}
+			}
+			if confirmed != 2 {
+				t.Fatal("editions/unreviewed product inflated confirmed count")
+			}
+		}
+	}
+}
 
 func TestElasticsearchIndexAndSearch(t *testing.T) {
 	endpoint := os.Getenv("TEST_ELASTICSEARCH_URL")
