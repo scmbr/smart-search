@@ -3,8 +3,6 @@ package embeddingpilot
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"time"
@@ -64,7 +62,7 @@ type Report struct {
 	Metrics                                                                                                  []Metrics
 }
 
-func Run(ctx context.Context, x d.Dataset, o Options, s Store, p Provider, l Lexical) (r Report, err error) {
+func Run(ctx context.Context, x d.Dataset, o Options, s RuntimeStore, p Provider, l Lexical) (r Report, err error) {
 	if err = d.Validate(x); err != nil {
 		return r, err
 	}
@@ -132,48 +130,15 @@ func Run(ctx context.Context, x d.Dataset, o Options, s Store, p Provider, l Lex
 	if o.Live && (p == nil || o.ProjectCapNano < 1 || o.ProjectCapNano > d.ProjectCapNano || o.RunCapNano < 1 || o.RunCapNano > d.RunCapNano || r.CostUpperNano > o.RunCapNano) {
 		return r, ErrBudget
 	}
-	for start := 0; start < len(missing); start += 32 {
-		batch := missing[start:min(start+32, len(missing))]
-		var bound int64
-		for _, text := range batch {
-			n, _ := d.TokenBound(text)
-			bound += n
-		}
-		var nonce [16]byte
-		if _, err = rand.Read(nonce[:]); err != nil {
-			return r, err
-		}
-		reservation := Reservation{ID: hex.EncodeToString(nonce[:]), UpperNano: d.Cost(bound), CapNano: o.ProjectCapNano}
-		if err = s.Reserve(ctx, reservation); err != nil {
-			return r, err
-		}
-		r.Requests++
-		started := time.Now()
-		response, e := p.Embed(ctx, batch)
-		r.BatchLatencyMS = append(r.BatchLatencyMS, float64(time.Since(started).Microseconds())/1000)
-		if e != nil {
-			return r, e
-		}
-		if response.Model != d.Model || response.Tokens < 1 || response.Tokens > bound || len(response.Vectors) != len(batch) {
-			return r, errors.New("invalid embedding response; reservation retained")
-		}
-		var entries []Entry
-		for i, v := range response.Vectors {
-			if err = d.ValidateVector(v); err != nil {
-				return r, err
-			}
-			entries = append(entries, Entry{Key: d.CacheKey(batch[i]), Vector: v})
-		}
-		actual := d.Cost(response.Tokens)
-		if err = s.Settle(ctx, reservation, actual, response.Tokens, entries); err != nil {
-			return r, err
-		}
-		r.ActualTokens += response.Tokens
-		r.ActualNano += actual
-		for _, entry := range entries {
-			vectors[entry.Key] = entry.Vector
-		}
+	execution, executionErr := (Runtime{Store: s, Provider: p}).Ensure(ctx, texts, o)
+	r.Requests = execution.Requests
+	r.ActualTokens = execution.Tokens
+	r.ActualNano = execution.ActualNano
+	r.BatchLatencyMS = execution.LatencyMS
+	if executionErr != nil {
+		return r, executionErr
 	}
+	vectors = execution.Vectors
 	var lexical [][]d.Rank
 	if l != nil {
 		lexical, err = l.Rank(ctx, x)

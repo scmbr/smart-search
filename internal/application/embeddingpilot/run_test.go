@@ -13,6 +13,14 @@ type memoryStore struct {
 	reserved, actual int64
 	deny             bool
 }
+type noopGuard struct{}
+
+func (noopGuard) Close() error                                           { return nil }
+func (s *memoryStore) TryGuard(context.Context, []string) (Guard, error) { return noopGuard{}, nil }
+func (s *memoryStore) BeginAttempt(ctx context.Context, r Reservation, _ []string) error {
+	return s.Reserve(ctx, r)
+}
+func (s *memoryStore) Rejected(context.Context, string) error { return nil }
 
 func (s *memoryStore) Get(context.Context, []string) (map[string][]float64, error) {
 	return s.cache, nil

@@ -21,7 +21,7 @@ func TestBoundsKeysAndCosine(t *testing.T) {
 	if s, err := Cosine([]float64{1, 0}, []float64{0, 1}); err != nil || s != 0 {
 		t.Fatal(s, err)
 	}
-	for _, v := range [][]float64{{0, 0}, {math.NaN(), 1}, {math.Inf(1), 0}, {1}} {
+	for _, v := range [][]float64{{0, 0}, {math.NaN(), 1}, {math.Inf(1), 0}, {1e308, 1e308}, {1}} {
 		if _, err := Cosine(v, []float64{1, 0}); err == nil {
 			t.Fatal("invalid vector accepted")
 		}

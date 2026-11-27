@@ -4,7 +4,8 @@ package openai
 import (
 	"context"
 	"errors"
-	"fmt"
+	"net/http"
+	"strconv"
 	"time"
 
 	sdk "github.com/openai/openai-go/v3"
@@ -33,7 +34,21 @@ func (e *Embedder) Embed(ctx context.Context, texts []string) (a.Response, error
 	if err != nil {
 		var api *sdk.Error
 		if errors.As(err, &api) {
-			return a.Response{}, fmt.Errorf("embedding provider HTTP %d (details redacted)", api.StatusCode)
+			kind := "uncertain"
+			if api.StatusCode == 429 {
+				if api.Code == "insufficient_quota" || api.Type == "insufficient_quota" {
+					kind = "quota"
+				} else if api.Code == "rate_limit_exceeded" || (api.Code == "" && api.Type == "rate_limit_error") {
+					kind = "rate_limit"
+				}
+			} else if api.StatusCode >= 400 && api.StatusCode < 500 && api.StatusCode != 408 {
+				kind = "rejected"
+			}
+			var after time.Duration
+			if api.Response != nil {
+				after = retryAfter(api.Response.Header.Get("Retry-After"), time.Now())
+			}
+			return a.Response{}, &a.Failure{Kind: kind, RetryAfter: after}
 		}
 		return a.Response{}, errors.New("embedding provider unavailable (details redacted)")
 	}
@@ -53,4 +68,17 @@ func (e *Embedder) Embed(ctx context.Context, texts []string) (a.Response, error
 		out.Vectors[v.Index] = v.Embedding
 	}
 	return out, nil
+}
+
+func retryAfter(value string, now time.Time) time.Duration {
+	if seconds, err := strconv.ParseInt(value, 10, 64); err == nil && seconds >= 0 {
+		if seconds > 3600 {
+			return time.Hour
+		}
+		return time.Duration(seconds) * time.Second
+	}
+	if at, err := http.ParseTime(value); err == nil && at.After(now) {
+		return at.Sub(now)
+	}
+	return 0
 }

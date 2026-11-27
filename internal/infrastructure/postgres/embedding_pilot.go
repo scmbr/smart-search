@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	a "github.com/scmbr/smart-search/internal/application/embeddingpilot"
 	d "github.com/scmbr/smart-search/internal/domain/embeddingpilot"
@@ -48,20 +49,29 @@ func (s *EmbeddingStore) Reserve(ctx context.Context, r a.Reservation) error {
 		return err
 	}
 	defer rollback(tx)
-	var cap, used int64
-	if err = tx.QueryRow(ctx, "SELECT cap_nano FROM api_budget WHERE singleton FOR UPDATE").Scan(&cap); err != nil {
+	if err = reserveEmbedding(ctx, tx, r); err != nil {
 		return err
 	}
-	if err = tx.QueryRow(ctx, "SELECT coalesce(sum(coalesce(actual_nano,upper_nano)),0) FROM api_reservations").Scan(&used); err != nil {
+	return tx.Commit(ctx)
+}
+func reserveEmbedding(ctx context.Context, tx pgx.Tx, r a.Reservation) error {
+	if r.CapNano < 1 || r.CapNano > d.ProjectCapNano || r.UpperNano < 1 || r.ID == "" {
+		return a.ErrBudget
+	}
+	var cap, used int64
+	if err := tx.QueryRow(ctx, "SELECT cap_nano FROM api_budget WHERE singleton FOR UPDATE").Scan(&cap); err != nil {
+		return err
+	}
+	if err := tx.QueryRow(ctx, "SELECT coalesce(sum(coalesce(actual_nano,upper_nano)),0) FROM api_reservations").Scan(&used); err != nil {
 		return err
 	}
 	if cap != r.CapNano || r.UpperNano > cap-used {
 		return a.ErrBudget
 	}
-	if _, err = tx.Exec(ctx, "INSERT INTO api_reservations(id,model,dimensions,upper_nano) VALUES($1,$2,$3,$4)", r.ID, d.Model, d.Dimensions, r.UpperNano); err != nil {
+	if _, err := tx.Exec(ctx, "INSERT INTO api_reservations(id,model,dimensions,upper_nano) VALUES($1,$2,$3,$4)", r.ID, d.Model, d.Dimensions, r.UpperNano); err != nil {
 		return err
 	}
-	return tx.Commit(ctx)
+	return nil
 }
 func (s *EmbeddingStore) Settle(ctx context.Context, r a.Reservation, actual, tokens int64, entries []a.Entry) error {
 	if actual < 1 || tokens < 1 || actual != d.Cost(tokens) || actual > r.UpperNano {
@@ -72,12 +82,23 @@ func (s *EmbeddingStore) Settle(ctx context.Context, r a.Reservation, actual, to
 		return err
 	}
 	defer rollback(tx)
-	tag, err := tx.Exec(ctx, `UPDATE api_reservations SET actual_nano=$1,input_tokens=$2,settled_at=now() WHERE id=$3 AND upper_nano=$4 AND actual_nano IS NULL`, actual, tokens, r.ID, r.UpperNano)
+	tag, err := tx.Exec(ctx, `UPDATE api_reservations SET actual_nano=$1,input_tokens=$2,settled_at=now(),outcome='settled' WHERE id=$3 AND upper_nano=$4 AND actual_nano IS NULL AND outcome='unresolved'`, actual, tokens, r.ID, r.UpperNano)
 	if err != nil {
 		return err
 	}
 	if tag.RowsAffected() != 1 {
 		return errors.New("reservation missing or already settled")
+	}
+	keys := make([]string, len(entries))
+	for i, e := range entries {
+		keys[i] = e.Key
+	}
+	var uncovered int
+	if err = tx.QueryRow(ctx, "SELECT count(*) FROM embedding_pending WHERE reservation_id=$1 AND NOT(cache_key=ANY($2::text[]))", r.ID, keys).Scan(&uncovered); err != nil {
+		return err
+	}
+	if uncovered != 0 {
+		return errors.New("settlement missing claimed vectors")
 	}
 	for _, e := range entries {
 		if err = d.ValidateVector(e.Vector); err != nil {
@@ -90,6 +111,9 @@ func (s *EmbeddingStore) Settle(ctx context.Context, r a.Reservation, actual, to
 		if _, err = tx.Exec(ctx, "INSERT INTO embedding_cache(cache_key,vector) VALUES($1,$2) ON CONFLICT(cache_key) DO NOTHING", e.Key, raw); err != nil {
 			return err
 		}
+	}
+	if _, err = tx.Exec(ctx, "DELETE FROM embedding_pending WHERE reservation_id=$1", r.ID); err != nil {
+		return err
 	}
 	return tx.Commit(ctx)
 }
