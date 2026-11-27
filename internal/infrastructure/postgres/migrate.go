@@ -17,6 +17,9 @@ import (
 //go:embed migrations/001_catalog.sql
 var catalogSchema string
 
+//go:embed migrations/002_embedding_pilot.sql
+var embeddingSchema string
+
 const migrationLock int64 = 7362784101
 const importLock int64 = 7362784102
 
@@ -33,22 +36,25 @@ func Migrate(ctx context.Context, pool *pgxpool.Pool) error {
 	if _, err := tx.Exec(ctx, `CREATE TABLE IF NOT EXISTS schema_migrations (version integer PRIMARY KEY, sha256 text NOT NULL, applied_at timestamptz NOT NULL DEFAULT now())`); err != nil {
 		return err
 	}
-	h := sha256.Sum256([]byte(catalogSchema))
-	checksum := hex.EncodeToString(h[:])
-	var existing string
-	err = tx.QueryRow(ctx, "SELECT sha256 FROM schema_migrations WHERE version=1").Scan(&existing)
-	switch {
-	case errors.Is(err, pgx.ErrNoRows):
-		if _, err := tx.Exec(ctx, catalogSchema); err != nil {
-			return fmt.Errorf("migration 1: %w", err)
-		}
-		if _, err := tx.Exec(ctx, "INSERT INTO schema_migrations(version,sha256) VALUES(1,$1)", checksum); err != nil {
+	for i, schema := range []string{catalogSchema, embeddingSchema} {
+		version := i + 1
+		h := sha256.Sum256([]byte(schema))
+		checksum := hex.EncodeToString(h[:])
+		var existing string
+		err = tx.QueryRow(ctx, "SELECT sha256 FROM schema_migrations WHERE version=$1", version).Scan(&existing)
+		switch {
+		case errors.Is(err, pgx.ErrNoRows):
+			if _, err := tx.Exec(ctx, schema); err != nil {
+				return fmt.Errorf("migration %d: %w", version, err)
+			}
+			if _, err := tx.Exec(ctx, "INSERT INTO schema_migrations(version,sha256) VALUES($1,$2)", version, checksum); err != nil {
+				return err
+			}
+		case err != nil:
 			return err
+		case existing != checksum:
+			return fmt.Errorf("applied migration %d checksum differs", version)
 		}
-	case err != nil:
-		return err
-	case existing != checksum:
-		return errors.New("applied migration 1 checksum differs")
 	}
 	return tx.Commit(ctx)
 }
