@@ -1,5 +1,8 @@
 # Семейства полного каталога: families-v4
 
+Исторический отчёт. Проверка OfficeSuite/MobiOffice и следующий маппинг —
+[families-v5](family-lineage.md).
+
 ## Приёмка
 
 Редакции OfficeSuite Business, Business Extra, Family, Personal и Home & Business

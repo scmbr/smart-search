@@ -33,7 +33,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 13}, version)
+	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 15}, version)
 	t.Cleanup(func() {
 		m, exists, err := c.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -69,6 +69,8 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		{"suite-home", "326068", "OfficeSuite Home and Business"},
 		{"suite-family", "326066", "OfficeSuite Family"},
 		{"suite-personal", "326067", "OfficeSuite Personal"},
+		{"mobi-office", "397581", "MobiOffice OfficeSuite Windows 2025"},
+		{"mobi-pdf", "393014", "MobiPDF Windows 2025"},
 	} {
 		price := int64(100)
 		vendor := "microsoft"
@@ -83,7 +85,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			vendor = "npo-echelon"
 		case "ungrouped":
 			vendor = "softlab_nsk"
-		case "suite-home", "suite-family", "suite-personal":
+		case "suite-home", "suite-family", "suite-personal", "mobi-office", "mobi-pdf":
 			vendor = "mobilesystems"
 		}
 		description := "Mapped"
@@ -92,6 +94,9 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		}
 		o := catalog.Offer{ID: row.id, GroupID: row.group, Name: row.name, Description: description, URL: "https://store.softline.ru/" + vendor + "/" + row.id + "/", PriceMinor: &price, Available: true,
 			Parameters: []catalog.Parameter{{Name: "Тип продукта", Value: "софт", Known: true}, {Name: "Тип лицензии", Value: "Full", Known: true}, {Name: "Тип лицензии", Value: "ESD", Known: true}}}
+		if row.id == "mobi-office" || row.id == "mobi-pdf" {
+			o.Parameters = append(o.Parameters, catalog.Parameter{Name: "Версия", Value: "2025", Known: true})
+		}
 		chars := catalog.Normalize(o)
 		o.Characteristics = &chars
 		d, err := domain.BuildDocument(o, nil, resolver, spec.CatalogID)
@@ -115,6 +120,9 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			groups  []domain.GroupCandidate
 			count   int
 		}{
+			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "397581", Vendor: "mobilesystems", Score: 0.8}}, 1},
+			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "397581", Vendor: "mobilesystems", Score: 0.8}, {GroupID: "393014", Vendor: "mobilesystems", Score: 0.7}}, 2},
+			{domain.Request{Query: "задача без названия", Limit: 4, Version: "2025"}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "397581", Vendor: "mobilesystems", Score: 0.8}}, 1},
 			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "326066", Vendor: "mobilesystems", Score: 0.8}, {GroupID: "326067", Vendor: "mobilesystems", Score: 0.7}}, 1},
 			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}, {GroupID: "391338", Vendor: "microsoft", Score: 0.8}, {GroupID: "391347", Vendor: "microsoft", Score: 0.7}}, 2},
 			{domain.Request{Query: "задача без названия", Limit: 4, Version: "2021"}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}}, 0},
@@ -147,6 +155,10 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 	}{
 		{"Microsoft Office", "microsoft-office", "", 1},
 		{"OfficeSuite", "mobisystems-officesuite", "", 1},
+		{"MobiOffice", "mobisystems-officesuite", "mobi-office", 1},
+		{"OfficeSuite 2025", "mobisystems-officesuite", "mobi-office", 1},
+		{"mobi-office", "mobisystems-officesuite", "mobi-office", 1},
+		{"MobiPDF", "mobisystems-mobipdf", "mobi-pdf", 1},
 		{"Microsoft Visio", "microsoft-visio", "", 1},
 		{"Microsoft Office для дома и бизнеса 2024", "microsoft-office", "office-business", 1},
 		{"Mapped", "", "", 3},
