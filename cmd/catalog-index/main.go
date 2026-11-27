@@ -12,6 +12,7 @@ import (
 	"github.com/scmbr/smart-search/internal/infrastructure/postgres"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"time"
 )
 
@@ -25,6 +26,7 @@ func main() {
 }
 func run(ctx context.Context) error {
 	batch := flag.Int("batch-size", 500, "offers per index batch (1..1000)")
+	localFeed := flag.String("local-feed", "", "optional original feed; must match active snapshot SHA and normalization")
 	flag.Parse()
 	if flag.NArg() != 0 || *batch < 1 || *batch > 1000 {
 		return fmt.Errorf("invalid batch-size or positional arguments")
@@ -47,12 +49,19 @@ func run(ctx context.Context) error {
 		return err
 	}
 	start := time.Now()
-	result, err := app.Build(ctx, postgres.NewCatalogSource(pool), target, f, mappingVersion, *batch)
+	var source app.Source = postgres.NewCatalogSource(pool)
+	sourceMode := "postgres"
+	if *localFeed != "" {
+		source = postgres.NewCatalogFileSource(pool, *localFeed, filepath.Join(".cache", "index-source"))
+		sourceMode = "verified_feed"
+	}
+	result, err := app.Build(ctx, source, target, f, mappingVersion, *batch)
 	if err != nil {
 		return err
 	}
 	return json.NewEncoder(os.Stdout).Encode(struct {
 		Result    app.BuildResult `json:"result"`
 		ElapsedMS int64           `json:"elapsed_ms"`
-	}{result, time.Since(start).Milliseconds()})
+		Source    string          `json:"source"`
+	}{Result: result, ElapsedMS: time.Since(start).Milliseconds(), Source: sourceMode})
 }

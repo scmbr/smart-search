@@ -2,6 +2,7 @@
 package feed
 
 import (
+	"bufio"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -97,7 +98,8 @@ func (s *Source) Read(ctx context.Context, emit func(context.Context, domain.Rec
 	if _, err := s.file.Seek(0, io.SeekStart); err != nil {
 		return domain.Validation{}, err
 	}
-	r, err := reader.Read(ctx, s.file, sink{emit}, s.options)
+	// Keep sequential file reads large even when the XML decoder requests small chunks.
+	r, err := reader.Read(ctx, bufio.NewReaderSize(s.file, 128<<10), sink{emit}, s.options)
 	v := domain.Validation{Complete: r.Complete, CatalogDate: r.CatalogDate,
 		Categories: r.CategoriesSeen, Offers: r.OffersSeen, Accepted: r.Accepted, Rejected: r.Rejected, Issues: r.IssueCount}
 	for _, issue := range r.Issues {

@@ -73,6 +73,8 @@ func (r *Families) Resolve(o catalog.Offer) Family {
 }
 
 type Request struct {
+	NamedLibrary                                                       bool
+	RequestedProductRole                                               string
 	SemanticQuery                                                      string
 	FamilyID                                                           string
 	ProductIntents                                                     []ProductIntent
@@ -158,24 +160,31 @@ func Prepare(r Request) (Request, error) {
 		r.Plan.Variants = nil
 		r.Plan.LimitReason = "unparsed_numeric_constraint"
 	}
+	if err := prepareProductRole(&r); err != nil {
+		return r, err
+	}
+	r.Plan.ProductRoleVersion = ProductRolePolicyVersion
+	r.Plan.RequestedProductRole = r.RequestedProductRole
+	r.Plan.ExcludedProductRoles = ExcludedProductRoles(r)
 	return r, nil
 }
 
 type Document struct {
-	OfferID, GroupID, FamilyID, FamilyName, FamilySource string
-	FamilyConfirmed                                      bool
-	Name, Vendor, VendorCode, URL, CategoryID, CatalogID string
-	ProductName                                          string
-	CategoryNames                                        []string
-	Description, ProductType, OfferKind, Version         string
-	RoleConflict                                         bool
-	Platforms                                            []string
-	UsersLimit                                           *int
-	DevicesLimit, IPAddressesLimit, ParticipantsLimit    *int
-	PriceMinor                                           *int64
-	HasPrice, Available                                  bool
-	Edition, TermKind, Deployment                        string
-	TermMonths                                           *int
+	ProductRole, ProductRoleRule, ProductRoleSource, ProductRoleText string
+	OfferID, GroupID, FamilyID, FamilyName, FamilySource             string
+	FamilyConfirmed                                                  bool
+	Name, Vendor, VendorCode, URL, CategoryID, CatalogID             string
+	ProductName                                                      string
+	CategoryNames                                                    []string
+	Description, ProductType, OfferKind, Version                     string
+	RoleConflict                                                     bool
+	Platforms                                                        []string
+	UsersLimit                                                       *int
+	DevicesLimit, IPAddressesLimit, ParticipantsLimit                *int
+	PriceMinor                                                       *int64
+	HasPrice, Available                                              bool
+	Edition, TermKind, Deployment                                    string
+	TermMonths                                                       *int
 }
 
 func prefix(s string, n int) string {
@@ -253,6 +262,7 @@ func BuildDocument(o catalog.Offer, categories map[string]catalog.Category, fami
 		d.CategoryNames = append(d.CategoryNames, category.Name)
 		id = category.ParentID
 	}
+	SetProductRole(&d)
 	return d, nil
 }
 
