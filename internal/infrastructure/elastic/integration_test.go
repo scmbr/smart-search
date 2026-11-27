@@ -28,6 +28,23 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 		t.Fatal(err)
 	}
 	spec := app.NewSpec(app.CatalogInfo{ID: "test-" + id, Offers: 10}, "fixture-v2")
+	t.Cleanup(func() {
+		m, exists, err := c.meta(context.Background(), spec.Name)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		if !exists {
+			return
+		}
+		if m.Spec != spec {
+			t.Error("refusing to delete index with foreign metadata")
+			return
+		}
+		if _, _, err := c.request(context.Background(), "DELETE", "/"+spec.Name, nil); err != nil {
+			t.Error(err)
+		}
+	})
 	ready, err := c.Prepare(ctx, spec)
 	if err != nil {
 		t.Fatal(err)
@@ -35,11 +52,6 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 	if ready {
 		t.Fatal("unexpected existing random test index")
 	}
-	t.Cleanup(func() {
-		if _, _, err := c.request(context.Background(), "DELETE", "/"+spec.Name, nil); err != nil {
-			t.Error(err)
-		}
-	})
 	var rules []domain.FamilyRule
 	for _, group := range []string{"hardware", "software", "csp", "backup", "legacy", "astra", "viewer"} {
 		groups := []string{group}
@@ -111,6 +123,13 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 	}{
 		{"сервер", "", "hardware", false}, {"ПО для сервера", "", "software", false},
 		{"astra linux", "", "astra", false},
+		{"asrta linux", "", "astra", false},
+		{"астра линукс", "", "astra", false},
+		{"bakcup", "", "backup", false},
+		{"legcay", "", "legacy", true},
+		{"крипто про цсп 5.0", "", "csp-5", false},
+		{"КриптоПро CSP 5.1", "", "", false},
+		{"csp-6", "", "", false},
 		{"КриптоПро CSP 5.0", "", "csp-5", false}, {"csp-5", "", "csp-5", false},
 		{"Legacy", "", "legacy", true}, {"Legacy", "available_only", "", false},
 	} {

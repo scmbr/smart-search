@@ -40,6 +40,7 @@ func Search(ctx context.Context, backend Backend, input domain.Request) (domain.
 		offers[d.OfferID] = true
 	}
 	result.Query = r.OriginalQuery
+	result.QueryPlan = r.Plan
 	domain.Describe(&result)
 	return result, nil
 }

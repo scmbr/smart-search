@@ -31,6 +31,10 @@ func mapping(spec app.Spec) map[string]any {
 }
 
 func queryBody(r domain.Request, priced bool) map[string]any {
+	return searchBody(r, priced, false)
+}
+
+func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 	term := func(field string, value any) map[string]any {
 		return map[string]any{"term": map[string]any{field: value}}
 	}
@@ -53,11 +57,30 @@ func queryBody(r domain.Request, priced bool) map[string]any {
 	if r.MinUsers > 0 {
 		filters = append(filters, map[string]any{"range": map[string]any{"UsersLimit": map[string]int{"gte": r.MinUsers}}})
 	}
-	text := map[string]any{"bool": map[string]any{"minimum_should_match": 1, "should": []any{
+	clauses := []any{
 		map[string]any{"term": map[string]any{"OfferID": map[string]any{"value": r.Query, "boost": 50}}},
 		map[string]any{"term": map[string]any{"VendorCode.exact": map[string]any{"value": strings.ToLower(r.Query), "boost": 30}}},
 		map[string]any{"multi_match": map[string]any{"query": r.Query, "fields": []string{"ProductName^24", "Name^8", "FamilyName^4", "VendorCode^12", "Vendor^2", "CategoryNames^3", "Description"}, "operator": "and"}},
-	}}}
+	}
+	if expanded {
+		for _, variant := range r.Plan.Variants {
+			var required []any
+			for _, word := range variant.Terms {
+				match := map[string]any{"query": word.Text, "fields": []string{"ProductName^24", "Name^8", "FamilyName^4"}, "operator": "and"}
+				if word.Fuzziness > 0 {
+					match["fuzziness"] = word.Fuzziness
+					match["prefix_length"] = 1
+					match["max_expansions"] = 3
+					match["fuzzy_transpositions"] = true
+				}
+				required = append(required, map[string]any{"multi_match": match})
+			}
+			if len(required) > 0 {
+				clauses = append(clauses, map[string]any{"bool": map[string]any{"must": required, "boost": 0.5}})
+			}
+		}
+	}
+	text := map[string]any{"bool": map[string]any{"minimum_should_match": 1, "should": clauses}}
 	boolQuery := map[string]any{"must": []any{text}, "filter": filters, "should": []any{map[string]any{"term": map[string]any{"OfferKind": map[string]any{"value": "new_license", "boost": 0.15}}}}}
 	if r.Kind == "" {
 		boolQuery["must_not"] = []any{map[string]any{"terms": map[string]any{"OfferKind": []string{"renewal", "upgrade", "support"}}}}
