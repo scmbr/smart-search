@@ -16,6 +16,8 @@
 | Индексация активного снимка | `go run ./cmd/catalog-index` |
 | Поиск CLI | `go run ./cmd/search -query "сервер"` |
 | Диагностика только tuning | `python scripts/evaluate-tuning.py` после сборки bin/search.exe |
+| Корпус пилота | `python scripts/prepare-embedding-pilot.py --feed <путь>` |
+| План расходов / повтор из кэша | `go run ./cmd/embedding-pilot -mode plan` / `-mode replay` |
 | Интеграционные тесты всех адаптеров | задать `TEST_POSTGRES_DSN` и `TEST_ELASTICSEARCH_URL`, затем `go test -count=1 -v ./internal/infrastructure/...` |
 | Интеграционные тесты | задать `TEST_POSTGRES_DSN`, затем `go test -count=1 -v ./internal/infrastructure/postgres` |
 | Сборка CLI | `go build -o bin/catalog-check.exe ./cmd/catalog-check` |
@@ -42,6 +44,12 @@ Query policy — docs/query-normalization.md и docs/query-constraints.md, ве�
 от индекса. Не расширяй цифры/артикулы fuzzy; фильтры сохраняются во всех попытках.
 Разметка 100 кейсов принята пользователем; не запрашивай это одобрение повторно.
 Не запускай holdout для подбора правил; evaluate-tuning.py читает только tuning.
+Пилот OpenAI — docs/embedding-pilot.md. Его live-режим требует явного разрешения
+на отправку корпуса и OPENAI_LIVE_ENABLED=true; текущее разрешение записано D-031.
+Ключ не выводить. Вызовы проходят через api_budget/api_reservations и embedding_cache
+(миграция 002); не обнулять расходы/неизвестные резервы при рестарте или ошибке.
+Новые платные компоненты должны учитывать этот же общий бюджет, а не создавать
+отдельный лимит 5 USD. Кэш/лимиты пилота не означают готовый production worker pool.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.
