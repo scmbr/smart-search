@@ -2,7 +2,7 @@
   "evidence_role": "catalog_structure_not_independent_relevance_review",
   "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
   "catalog_offers": 136040,
-  "mapping_version": "families-v3",
+  "mapping_version": "families-v4",
   "groups": {
     "121231": {
       "family_id": "astra-linux-special-edition",
@@ -2862,6 +2862,311 @@
         }
       ],
       "group_name": "Эшелон «Рубикон»"
+    },
+    "300944": {
+      "family_id": "mobisystems-officesuite",
+      "vendor_path": "/mobilesystems/",
+      "source_url": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 0,
+      "license_parameters": {
+        "Подписка": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473751",
+          "name": "MobiSystems OfficeSuite Business (подписка на 1 год),",
+          "url": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "OfficeSuite Business"
+    },
+    "326066": {
+      "family_id": "mobisystems-officesuite",
+      "vendor_path": "/mobilesystems/",
+      "source_url": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Подписка": 1
+      },
+      "examples": [
+        {
+          "offer_id": "532575",
+          "name": "MobiSystems OfficeSuite Family (подписка на 1 год, до 6 пользователей),",
+          "url": "https://store.softline.ru/mobilesystems/ofs-fam-1-532575/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "OfficeSuite для семьи"
+    },
+    "326067": {
+      "family_id": "mobisystems-officesuite",
+      "vendor_path": "/mobilesystems/",
+      "source_url": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 1,
+      "license_parameters": {
+        "Подписка": 1
+      },
+      "examples": [
+        {
+          "offer_id": "532545",
+          "name": "MobiSystems OfficeSuite Personal (подписка на 1 год),",
+          "url": "https://store.softline.ru/mobilesystems/ofs-pers-1-532545/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "OfficeSuite Персональный"
+    },
+    "326068": {
+      "family_id": "mobisystems-officesuite",
+      "vendor_path": "/mobilesystems/",
+      "source_url": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 0,
+      "license_parameters": {
+        "Полная версия": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473750",
+          "name": "MobiSystems OfficeSuite Home and Business 2023, Windows (лицензия Lifetime),",
+          "url": "https://store.softline.ru/mobilesystems/oshb23-lt-473750/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "OfficeSuite для дома и бизнеса"
+    },
+    "341691": {
+      "family_id": "mobisystems-officesuite",
+      "vendor_path": "/mobilesystems/",
+      "source_url": "https://store.softline.ru/mobilesystems/ofs-bus-1-473751/",
+      "offers": 1,
+      "scope_mismatches": 0,
+      "priced": 1,
+      "available": 0,
+      "license_parameters": {
+        "Подписка": 1
+      },
+      "examples": [
+        {
+          "offer_id": "473752",
+          "name": "MobiSystems OfficeSuite Business Extra (подписка на 1 год),",
+          "url": "https://store.softline.ru/mobilesystems/ofs-bsn-1-473752/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "OfficeSuite Business Extra"
+    },
+    "360667": {
+      "family_id": "rudesktop",
+      "vendor_path": "/peredovietechnologii/",
+      "source_url": "https://store.softline.ru/peredovietechnologii/lrd2501-487234/",
+      "offers": 3,
+      "scope_mismatches": 0,
+      "priced": 3,
+      "available": 3,
+      "license_parameters": {
+        "Подписка": 3
+      },
+      "examples": [
+        {
+          "offer_id": "487234",
+          "name": "RuDesktop, Удаленный доступ (облачная версия, подписка 1 год), Конкурентное подключение",
+          "url": "https://store.softline.ru/peredovietechnologii/lrd2501-487234/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        },
+        {
+          "offer_id": "518158",
+          "name": "RuDesktop, Удаленный доступ (локальная версия на 1 год), Управляющий сервер",
+          "url": "https://store.softline.ru/peredovietechnologii/lrd02-518158/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        }
+      ],
+      "group_name": "RuDesktop"
+    },
+    "120894": {
+      "family_id": "assistent",
+      "vendor_path": "/safib/",
+      "source_url": "https://store.softline.ru/safib/-535437/",
+      "offers": 12,
+      "scope_mismatches": 0,
+      "priced": 12,
+      "available": 12,
+      "license_parameters": {
+        "Полная версия": 6,
+        "Расширение лицензии": 3
+      },
+      "examples": [
+        {
+          "offer_id": "535437",
+          "name": "САФИБ АССИСТЕНТ (право использования программы для ЭВМ Система удаленного мониторинга и управления версия 7), в",
+          "url": "https://store.softline.ru/safib/-535437/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "535438",
+          "name": "САФИБ АССИСТЕНТ (право использования программы для ЭВМ Система удаленного мониторинга и управления версия 7), в",
+          "url": "https://store.softline.ru/safib/-535438/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "АССИСТЕНТ"
+    },
+    "46113": {
+      "family_id": "litemanager",
+      "vendor_path": "/litemanagerteam/",
+      "source_url": "https://store.softline.ru/litemanagerteam/-368182/",
+      "offers": 8,
+      "scope_mismatches": 0,
+      "priced": 8,
+      "available": 8,
+      "license_parameters": {
+        "Полная версия": 8
+      },
+      "examples": [
+        {
+          "offer_id": "368182",
+          "name": "LiteManagerTeam LiteManager (лицензия), Количество ПК",
+          "url": "https://store.softline.ru/litemanagerteam/-368182/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "368183",
+          "name": "LiteManagerTeam LiteManager (лицензия), Количество ПК",
+          "url": "https://store.softline.ru/litemanagerteam/-368183/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "LiteManager"
+    },
+    "301708": {
+      "family_id": "edraw-max",
+      "vendor_path": "/wondershare/",
+      "source_url": "https://store.softline.ru/wondershare/-376435/",
+      "offers": 40,
+      "scope_mismatches": 0,
+      "priced": 40,
+      "available": 40,
+      "license_parameters": {
+        "Подписка": 2,
+        "Подписка CSP": 1,
+        "Полная версия": 32
+      },
+      "examples": [
+        {
+          "offer_id": "376435",
+          "name": "Wondershare EdrawMax (коммерческая лицензия), Business License. Подписка на 1 год",
+          "url": "https://store.softline.ru/wondershare/-376435/",
+          "license_parameters": [
+            "Подписка CSP"
+          ]
+        },
+        {
+          "offer_id": "441174",
+          "name": "Wondershare EdrawMax (коммерческая лицензия), Business License 3-Year License",
+          "url": "https://store.softline.ru/wondershare/em002-441174/",
+          "license_parameters": []
+        }
+      ],
+      "group_name": "Wondershare EdrawMax"
+    },
+    "301736": {
+      "family_id": "edraw-mind",
+      "vendor_path": "/wondershare/",
+      "source_url": "https://store.softline.ru/wondershare/-376504/",
+      "offers": 30,
+      "scope_mismatches": 0,
+      "priced": 30,
+      "available": 30,
+      "license_parameters": {
+        "Подписка": 2,
+        "Полная версия": 24
+      },
+      "examples": [
+        {
+          "offer_id": "376504",
+          "name": "Wondershare EdrawMind (лицензия для образовательных учреждений), Education License. Подписка на 1 год",
+          "url": "https://store.softline.ru/wondershare/-376504/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        },
+        {
+          "offer_id": "376505",
+          "name": "Wondershare EdrawMind (лицензия для образовательных учреждений), Education License. Подписка на 2 года",
+          "url": "https://store.softline.ru/wondershare/-376505/",
+          "license_parameters": [
+            "Полная версия"
+          ]
+        }
+      ],
+      "group_name": "Wondershare EdrawMind"
+    },
+    "301233": {
+      "family_id": "edraw-proj",
+      "vendor_path": "/wondershare/",
+      "source_url": "https://store.softline.ru/wondershare/-368209/",
+      "offers": 5,
+      "scope_mismatches": 0,
+      "priced": 5,
+      "available": 5,
+      "license_parameters": {
+        "Full": 3,
+        "Подписка": 1,
+        "Полная версия": 1
+      },
+      "examples": [
+        {
+          "offer_id": "368209",
+          "name": "Wondershare EdrawProj (лицензия), Подписка на 1 год",
+          "url": "https://store.softline.ru/wondershare/-368209/",
+          "license_parameters": [
+            "Подписка"
+          ]
+        },
+        {
+          "offer_id": "526050",
+          "name": "Wondershare EdrawProj (лицензия Education), Semi-Annual Plan",
+          "url": "https://store.softline.ru/wondershare/em021-526050/",
+          "license_parameters": [
+            "Full"
+          ]
+        }
+      ],
+      "group_name": "Wondershare EdrawProj"
     }
   }
 }
