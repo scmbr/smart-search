@@ -1,152 +1,1308 @@
 {
+  "dataset_version": "evaluation-v3",
   "dataset_role": "frozen_draft_holdout_pending_review",
+  "label_status": "draft_requires_independent_review",
   "independent_evaluation": {
     "eligible": false,
     "review_status": "pending",
     "execution_status": "not_run"
   },
   "frozen_on": "2026-11-27",
-  "cases_sha256": "4df626635b17782905cc4988be7ed132dd418520f208e2f3740eb18ee0fe4935",
   "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
-  "policy": "Expected targets frozen before running search. Never tune on these cases; after exposure move to regression. No quality claims before independent review. Family/variant constraints are separate.",
+  "cases_sha256": "e167d4ac9faab22304c47d5101057b7166a2bb2079bcd7746d6eeb85a016856b",
+  "families_sha256": "a965340f1e72eb548be165e2d5df72953d026352355393728e59eb68ab98c4f7",
+  "split_policy": "All aliases, families and broad requests of a brand stay on the same side. Holdout has no search results and is not used to tune ranking.",
+  "result_policy": "Use catalog SKUs only. Four different families require eligible direct matches or verified cross-sells; no random fill. Unknown rights are not confirmed eligibility.",
+  "metric_policy": "Family labels are draft; brand scopes are non-exhaustive diagnostic labels, not Family Hit/Precision/nDCG gold. Do not score independent quality until review.",
+  "families": {
+    "acrobat": {
+      "name": "Adobe Acrobat",
+      "brand_id": "adobe",
+      "group_ids": [
+        "437",
+        "459"
+      ]
+    },
+    "photoshop": {
+      "name": "Adobe Photoshop",
+      "brand_id": "adobe",
+      "group_ids": [
+        "569",
+        "274384"
+      ]
+    },
+    "illustrator": {
+      "name": "Adobe Illustrator",
+      "brand_id": "adobe",
+      "group_ids": [
+        "547",
+        "274055"
+      ]
+    },
+    "trueconf-server": {
+      "name": "TrueConf Server",
+      "brand_id": "trueconf",
+      "group_ids": [
+        "50590"
+      ]
+    },
+    "drweb-space": {
+      "name": "Dr.Web Security Space",
+      "brand_id": "drweb",
+      "group_ids": [
+        "193420"
+      ]
+    },
+    "drweb-desktop": {
+      "name": "Dr.Web Desktop Security Suite",
+      "brand_id": "drweb",
+      "group_ids": [
+        "4069"
+      ]
+    },
+    "drweb-server": {
+      "name": "Dr.Web Server Security Suite",
+      "brand_id": "drweb",
+      "group_ids": [
+        "4092",
+        "409060"
+      ]
+    },
+    "usergate-ngfw": {
+      "name": "UserGate NGFW",
+      "brand_id": "entensys",
+      "group_ids": [
+        "43606"
+      ]
+    },
+    "usergate-mail": {
+      "name": "UserGate Mail Security",
+      "brand_id": "entensys",
+      "group_ids": [
+        "43337"
+      ]
+    },
+    "usergate-atp": {
+      "name": "UserGate Advanced Threat Protection",
+      "brand_id": "entensys",
+      "group_ids": [
+        "434606"
+      ]
+    },
+    "usergate-av": {
+      "name": "UserGate Stream Antivirus",
+      "brand_id": "entensys",
+      "group_ids": [
+        "434609"
+      ]
+    }
+  },
   "catalog_evidence": {
+    "437": {
+      "group_name": "Adobe Acrobat Standard",
+      "offers": 28,
+      "example_offer_id": "444",
+      "example_url": "https://store.softline.ru/adobe/65234087ba01a12-444/"
+    },
     "459": {
-      "offers": 60,
       "group_name": "Adobe Acrobat Professional",
+      "offers": 60,
       "example_offer_id": "457",
       "example_url": "https://store.softline.ru/adobe/65234083ba01a12-457/"
     },
+    "569": {
+      "group_name": "Adobe Photoshop",
+      "offers": 78,
+      "example_offer_id": "509",
+      "example_url": "https://store.softline.ru/adobe/65272493bb01a12-509/"
+    },
+    "274384": {
+      "group_name": "Adobe Photoshop Pro",
+      "offers": 34,
+      "example_offer_id": "336260",
+      "example_url": "https://store.softline.ru/adobe/65309772ba04a12-336260/"
+    },
+    "547": {
+      "group_name": "Adobe Illustrator",
+      "offers": 78,
+      "example_offer_id": "500",
+      "example_url": "https://store.softline.ru/adobe/65270494ba01a12-500/"
+    },
+    "274055": {
+      "group_name": "Adobe Illustrator Pro",
+      "offers": 33,
+      "example_offer_id": "335932",
+      "example_url": "https://store.softline.ru/adobe/65309198ba04a12-335932/"
+    },
     "50590": {
-      "offers": 50,
       "group_name": "TrueConf Server",
+      "offers": 50,
       "example_offer_id": "51167",
       "example_url": "https://store.softline.ru/trueconf/-51167/"
     },
     "193420": {
-      "offers": 68,
       "group_name": "Dr.Web Security Space",
+      "offers": 68,
       "example_offer_id": "231538",
       "example_url": "https://store.softline.ru/drweb/lhw-bk-12m-1-a3-231538/"
     },
+    "4069": {
+      "group_name": "Dr.Web Desktop Security Suite",
+      "offers": 2952,
+      "example_offer_id": "5317",
+      "example_url": "https://store.softline.ru/drweb/lbw-bk-12m-10-a3-5317/"
+    },
+    "4092": {
+      "group_name": "Dr.Web Server Security Suite",
+      "offers": 37,
+      "example_offer_id": "356798",
+      "example_url": "https://store.softline.ru/drweb/lbs-ac-12m-21-a3-356798/"
+    },
+    "409060": {
+      "group_name": "Dr.Web Server Security Suite Base Price",
+      "offers": 150,
+      "example_offer_id": "496050",
+      "example_url": "https://store.softline.ru/drweb/lbs-ac-12m-5-a3-496050/"
+    },
     "43606": {
-      "offers": 3,
       "group_name": "UserGate NGFW",
+      "offers": 3,
       "example_offer_id": "528070",
       "example_url": "https://store.softline.ru/entensys/-528070/"
+    },
+    "43337": {
+      "group_name": "UserGate Mail Security",
+      "offers": 1,
+      "example_offer_id": "528073",
+      "example_url": "https://store.softline.ru/entensys/-528073/"
+    },
+    "434606": {
+      "group_name": "UserGate Advanced Threat Protection",
+      "offers": 1,
+      "example_offer_id": "528074",
+      "example_url": "https://store.softline.ru/entensys/-528074/"
+    },
+    "434609": {
+      "group_name": "UserGate Stream Antivirus",
+      "offers": 1,
+      "example_offer_id": "528075",
+      "example_url": "https://store.softline.ru/entensys/-528075/"
     }
   },
   "cases": [
     {
       "id": "hold-v2-adobe-acrobat-1",
-      "family": "adobe-acrobat",
+      "split": "holdout",
+      "brand_id": "adobe",
       "query": "Adobe Acrobat Professional лицензия",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "acrobat"
+      ],
       "group_ids": [
         "459"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
-      ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
     },
     {
       "id": "hold-v2-adobe-acrobat-2",
-      "family": "adobe-acrobat",
+      "split": "holdout",
+      "brand_id": "adobe",
       "query": "адоб акробат про",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "acrobat"
+      ],
       "group_ids": [
         "459"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-003",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "adobe acroabt pro",
+      "tags": [
+        "typo"
       ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "target_scope": "family",
+      "target_ids": [
+        "acrobat"
+      ],
+      "group_ids": [
+        "459"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-004",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "адоб",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "acrobat",
+        "photoshop",
+        "illustrator"
+      ],
+      "group_ids": [
+        "437",
+        "459",
+        "569",
+        "274384",
+        "547",
+        "274055"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "hold-005",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "Adobe Photoshop",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "photoshop"
+      ],
+      "group_ids": [
+        "569",
+        "274384"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-006",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "фотошоп",
+      "tags": [
+        "slang",
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "photoshop"
+      ],
+      "group_ids": [
+        "569",
+        "274384"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-007",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "adobe photoshp в наличии",
+      "tags": [
+        "typo",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "photoshop"
+      ],
+      "group_ids": [
+        "569",
+        "274384"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ],
+        "availability_policy": "available_only"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Показывать только доступные SKU; если таких нет, объяснить отсутствие, не подменять продлением."
+    },
+    {
+      "id": "hold-008",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "Adobe Illustrator для векторной графики",
+      "tags": [
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "illustrator"
+      ],
+      "group_ids": [
+        "547",
+        "274055"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-009",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "продление Adobe Acrobat Pro",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "acrobat"
+      ],
+      "group_ids": [
+        "459"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "offer_kind": "renewal"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "hold-010",
+      "split": "holdout",
+      "brand_id": "adobe",
+      "query": "Adobe Acrobat Standard",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "acrobat"
+      ],
+      "group_ids": [
+        "437"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "edition": "Standard",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
       "id": "hold-v2-trueconf-server-1",
-      "family": "trueconf-server",
+      "split": "holdout",
+      "brand_id": "trueconf",
       "query": "TrueConf Server лицензия",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
       "group_ids": [
         "50590"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
-      ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
     },
     {
       "id": "hold-v2-trueconf-server-2",
-      "family": "trueconf-server",
+      "split": "holdout",
+      "brand_id": "trueconf",
       "query": "труконф сервер",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
       "group_ids": [
         "50590"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-013",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "truecnof server",
+      "tags": [
+        "typo"
       ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-014",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "тру конф",
+      "tags": [
+        "brand",
+        "transliteration"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "hold-015",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "TrueConf",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "hold-016",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "TrueConf Server для видеоконференций",
+      "tags": [
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-017",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "труконф для видеовстреч",
+      "tags": [
+        "slang",
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-018",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "TrueConf Server на 50 пользователей",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "min_users": 50,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "hold-019",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "TrueConf Server на один год",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "term_months": 12,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "hold-020",
+      "split": "holdout",
+      "brand_id": "trueconf",
+      "query": "51167",
+      "tags": [
+        "exact_sku"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "trueconf-server"
+      ],
+      "group_ids": [
+        "50590"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "offer_kind": "new_license"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Точный ID предложения TrueConf Server из feed; не менять цифры."
     },
     {
       "id": "hold-v2-drweb-security-space-1",
-      "family": "drweb-security-space",
+      "split": "holdout",
+      "brand_id": "drweb",
       "query": "Dr.Web Security Space",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-space"
+      ],
       "group_ids": [
         "193420"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
-      ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
     },
     {
       "id": "hold-v2-drweb-security-space-2",
-      "family": "drweb-security-space",
+      "split": "holdout",
+      "brand_id": "drweb",
       "query": "доктор веб секьюрити спейс",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-space"
+      ],
       "group_ids": [
         "193420"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-023",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "dr.web securty space",
+      "tags": [
+        "typo"
       ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-space"
+      ],
+      "group_ids": [
+        "193420"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-024",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "доктор веб",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "drweb-space",
+        "drweb-desktop",
+        "drweb-server"
+      ],
+      "group_ids": [
+        "193420",
+        "4069",
+        "4092",
+        "409060"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "hold-025",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "докторвеб для домашнего компьютера",
+      "tags": [
+        "slang",
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-space"
+      ],
+      "group_ids": [
+        "193420"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-026",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "Dr.Web Desktop Security Suite",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-desktop"
+      ],
+      "group_ids": [
+        "4069"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-027",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "Dr.Web для защиты сервера",
+      "tags": [
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-server"
+      ],
+      "group_ids": [
+        "4092",
+        "409060"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-028",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "Dr.Web Security Space на 2 компьютера на год",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-space"
+      ],
+      "group_ids": [
+        "193420"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "min_devices": 2,
+        "term_months": 12,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "hold-029",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "продление Dr.Web Security Space",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "drweb-space"
+      ],
+      "group_ids": [
+        "193420"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "offer_kind": "renewal"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "hold-030",
+      "split": "holdout",
+      "brand_id": "drweb",
+      "query": "Dr Web",
+      "tags": [
+        "brand",
+        "punctuation"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "drweb-space",
+        "drweb-desktop",
+        "drweb-server"
+      ],
+      "group_ids": [
+        "193420",
+        "4069",
+        "4092",
+        "409060"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
     },
     {
       "id": "hold-v2-usergate-ngfw-1",
-      "family": "usergate-ngfw",
+      "split": "holdout",
+      "brand_id": "entensys",
       "query": "UserGate NGFW",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-ngfw"
+      ],
       "group_ids": [
         "43606"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
-      ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
     },
     {
       "id": "hold-v2-usergate-ngfw-2",
-      "family": "usergate-ngfw",
+      "split": "holdout",
+      "brand_id": "entensys",
       "query": "юзергейт ngfw межсетевой экран",
+      "tags": [
+        "transliteration",
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-ngfw"
+      ],
       "group_ids": [
         "43606"
       ],
-      "forbidden_offer_kinds": [
-        "renewal",
-        "upgrade",
-        "support"
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-033",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "usergte ngfw",
+      "tags": [
+        "typo"
       ],
-      "target_note": "Candidate family/variant label from catalog; eligibility and independent semantic review still required."
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-ngfw"
+      ],
+      "group_ids": [
+        "43606"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-034",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "юзергейт",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "usergate-ngfw",
+        "usergate-mail",
+        "usergate-atp",
+        "usergate-av"
+      ],
+      "group_ids": [
+        "43606",
+        "43337",
+        "434606",
+        "434609"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "hold-035",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "UserGate для защиты почты",
+      "tags": [
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-mail"
+      ],
+      "group_ids": [
+        "43337"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-036",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "UserGate Mail Security",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-mail"
+      ],
+      "group_ids": [
+        "43337"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-037",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "UserGate Advanced Threat Protection",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-atp"
+      ],
+      "group_ids": [
+        "434606"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-038",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "UserGate Stream Antivirus",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-av"
+      ],
+      "group_ids": [
+        "434609"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "hold-039",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "UserGate NGFW аппаратный комплекс",
+      "tags": [
+        "task_intent",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-ngfw"
+      ],
+      "group_ids": [
+        "43606"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "product_type": "hardware",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "hold-040",
+      "split": "holdout",
+      "brand_id": "entensys",
+      "query": "UserGate NGFW без ограничения срока",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "usergate-ngfw"
+      ],
+      "group_ids": [
+        "43606"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "term": "perpetual",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     }
-  ]
+  ],
+  "supersedes_cases_sha256": "4df626635b17782905cc4988be7ed132dd418520f208e2f3740eb18ee0fe4935",
+  "revision_reason": "Expanded from 8 to 40 before the first search run at user request; original eight query IDs and targets retained."
 }
