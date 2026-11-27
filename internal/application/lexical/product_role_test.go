@@ -16,6 +16,10 @@ func TestProductRoleCannotBeBypassedByBackend(t *testing.T) {
 	}{
 		{query: "диаграммы", name: "Diagram SDK"},
 		{query: "диаграммы", name: "Дополнительные компоненты продукта"},
+		{query: "сканер уязвимостей", name: "XSpider Pro на дополнительный IP к лицензии на 4 IP"},
+		{query: "сканер уязвимостей", name: "XSpider Pro на дополнительный IP к лицензии на 4 IP", forge: true},
+		{query: "дополнительный IP", name: "XSpider Pro на дополнительный IP к лицензии на 4 IP", valid: true},
+		{query: "SKU-1234", name: "XSpider Pro на дополнительный IP к лицензии на 4 IP", valid: true},
 		{query: "диаграммы", name: "Diagram SDK", forge: true},
 		{query: "библиотека диаграмм", name: "Diagram SDK", valid: true},
 		{query: "библиотека диаграмм", name: "Неизвестный продукт"},

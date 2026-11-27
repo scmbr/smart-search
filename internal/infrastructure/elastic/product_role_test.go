@@ -26,7 +26,7 @@ func TestProductRolesFilterBeforeCollapseInEveryBranch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := a.NewSpec(a.CatalogInfo{ID: "roles-" + id, Offers: 5}, "families")
+	spec := a.NewSpec(a.CatalogInfo{ID: "roles-" + id, Offers: 9}, "families")
 	t.Cleanup(func() {
 		meta, exists, err := client.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -54,6 +54,10 @@ func TestProductRolesFilterBeforeCollapseInEveryBranch(t *testing.T) {
 		{OfferID: "SDK-1234", FamilyID: "library", GroupID: "lib", Name: "Diagram SDK библиотека", HasPrice: true, PriceMinor: &price},
 		{OfferID: "media", FamilyID: "media", GroupID: "media", Name: "Diagram медиа-комплект", HasPrice: true, PriceMinor: &price},
 		{OfferID: "unpriced", FamilyID: "unpriced", GroupID: "unpriced", Name: "Unique дистрибутив"},
+		{OfferID: "capacity-base", FamilyID: "capacity", GroupID: "capacity", Name: "VulnScanner основная лицензия на 4 IP", HasPrice: true, PriceMinor: &price},
+		{OfferID: "IP-1234", FamilyID: "capacity", GroupID: "capacity", Name: "VulnScanner VulnScanner на дополнительный IP к лицензии на 4 IP", HasPrice: true, PriceMinor: &price},
+		{OfferID: "capacity-unpriced", FamilyID: "capacity-unpriced", GroupID: "capacity-unpriced", Name: "CapacityOnly на дополнительный узел"},
+		{OfferID: "migration-1234", FamilyID: "capacity", GroupID: "capacity", Name: "VulnScanner VulnScanner лицензия перехода с OldScanner", HasPrice: true, PriceMinor: &price},
 	}
 	for i := range docs {
 		docs[i].CatalogID = spec.CatalogID
@@ -77,6 +81,10 @@ func TestProductRolesFilterBeforeCollapseInEveryBranch(t *testing.T) {
 		{"Diagram библиотека", "SDK-1234", false}, {"Diagram дополнительные компоненты", "addon", false},
 		{"Diagram медиа-комплект", "media", false}, {"SDK-1234", "SDK-1234", false},
 		{"Unique", "", false}, {"Unique дистрибутив", "unpriced", true},
+		{"VulnScanner", "capacity-base", false}, {"VulnScanner дополнительный IP", "IP-1234", false},
+		{"IP-1234", "IP-1234", false},
+		{"migration-1234", "migration-1234", false},
+		{"CapacityOnly", "", false}, {"CapacityOnly дополнительный узел", "capacity-unpriced", true},
 	} {
 		result, err := a.Search(ctx, client, d.Request{Query: tc.query, Limit: 4})
 		if err != nil {
@@ -96,5 +104,9 @@ func TestProductRolesFilterBeforeCollapseInEveryBranch(t *testing.T) {
 	hits, err := client.Resolve(ctx, r, []d.GroupCandidate{{GroupID: "lib", Vendor: "vendor", Score: .9}, {GroupID: "g", Vendor: "vendor", Score: .8}}, true, spec.CatalogID, spec.Fingerprint)
 	if err != nil || len(hits) != 1 || hits[0].Document.OfferID != "base" {
 		t.Fatalf("resolve bypass: %+v %v", hits, err)
+	}
+	hits, err = client.Resolve(ctx, r, []d.GroupCandidate{{GroupID: "capacity", Vendor: "vendor", Score: .9}}, true, spec.CatalogID, spec.Fingerprint)
+	if err != nil || len(hits) != 1 || hits[0].Document.OfferID != "capacity-base" {
+		t.Fatalf("capacity collapse bypass: %+v %v", hits, err)
 	}
 }

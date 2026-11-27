@@ -40,6 +40,9 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 		return map[string]any{"term": map[string]any{field: value}}
 	}
 	filters := []any{term("HasPrice", priced), term("RoleConflict", false)}
+	for _, phrase := range domain.ExcludedLicenseDependencyPhrases(r) {
+		filters = append(filters, map[string]any{"bool": map[string]any{"must_not": []any{map[string]any{"match_phrase": map[string]any{"Name": phrase}}}}})
+	}
 	required, excludedNames := domain.PurposeLicensePhrases(r)
 	if len(required) > 0 {
 		var choices []any

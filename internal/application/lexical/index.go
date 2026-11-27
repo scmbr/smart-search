@@ -13,7 +13,7 @@ import (
 	domain "github.com/scmbr/smart-search/internal/domain/search"
 )
 
-const DocumentSchemaVersion = "lexical-v6"
+const DocumentSchemaVersion = "lexical-v7"
 
 var ErrCatalogChanged = errors.New("active catalog changed during index build")
 

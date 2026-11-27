@@ -32,6 +32,8 @@ var quantityRange = regexp.MustCompile(`(?:от\s+[0-9]+\s+до\s+|[0-9]+\s*[-�
 var negativeQuantity = regexp.MustCompile(`(?:^|\s)(?:(?:на|для|до)\s*)?-[0-9]+\s+(?:пользовател|users?|пк|устройств|участник|ip|месяц|мес|год|лет)`)
 var negatedConstraint = regexp.MustCompile(`(?:^|\s)(?:не|без)\s+(?:(?:на|для)\s+)?(?:сервера|рабочей\s+станции|новая\s+лицензия|standard|enterprise|professional|advanced|family|personal|продлени[ея]|обновлени[ея]|поддержк[аи]|[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|участник|ip|месяц|год|лет)|год)`)
 var mixedCapacityQuery = regexp.MustCompile(`[0-9]+\s+(?:пк|пользовател[ьяей]+|users?|ip|участник[аоыев]*)\s*/`)
+var additionalCapacityQuantity = regexp.MustCompile(`(?:(?:` + countWords + `)\s+дополнительн[\p{L}]*|дополнительн[\p{L}]*\s+(?:` + countWords + `))\s+(?:ip|уз(?:ел|л[\p{L}]*)|устройств[\p{L}]*)(?:$|[^\p{L}\p{N}])`)
+var nodeQuantityQuery = regexp.MustCompile(`(?:^|\s)(?:` + countWords + `)\s+уз(?:ел|л[\p{L}]*)(?:$|[^\p{L}\p{N}])`)
 
 func parseCount(s string) (int, error) {
 	words := map[string]int{"один": 1, "одну": 1, "одна": 1, "одного": 1, "одной": 1, "два": 2, "две": 2, "двух": 2, "три": 3, "трех": 3, "четыре": 4, "четырех": 4, "пять": 5, "пяти": 5, "шесть": 6, "шести": 6, "семь": 7, "семи": 7, "восемь": 8, "восьми": 8, "девять": 9, "девяти": 9, "десять": 10, "десяти": 10}
@@ -86,6 +88,14 @@ func parseConstraints(r *Request) error {
 	}
 	unsupported := func(field, fragment string) {
 		r.UnsupportedConstraints = append(r.UnsupportedConstraints, QueryConstraint{Field: field, Text: fragment, Source: "query"})
+	}
+	if additionalCapacityQuantity.MatchString(text) || (capacityExtension.MatchString(text) && quantityQuery.MatchString(text)) {
+		unsupported("additional_capacity_quantity", text)
+		return nil
+	}
+	if nodeQuantityQuery.MatchString(text) {
+		unsupported("nodes", text)
+		return nil
 	}
 	if negatedConstraint.MatchString(text) {
 		unsupported("negated_constraint", text)
