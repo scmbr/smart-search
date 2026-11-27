@@ -166,6 +166,7 @@ func Prepare(r Request) (Request, error) {
 	r.Plan.ProductRoleVersion = ProductRolePolicyVersion
 	r.Plan.RequestedProductRole = r.RequestedProductRole
 	r.Plan.ExcludedProductRoles = ExcludedProductRoles(r)
+	r.Plan.Purpose = requestedPurpose(r)
 	return r, nil
 }
 

@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-const QueryPolicyVersion = "query-v5"
+const QueryPolicyVersion = "query-v6"
 
 type QueryTerm struct {
 	Text      string
@@ -19,6 +19,7 @@ type QueryVariant struct {
 }
 
 type QueryPlan struct {
+	Purpose                                  string
 	ProductRoleVersion, RequestedProductRole string
 	ExcludedProductRoles                     []string
 	Version                                  string

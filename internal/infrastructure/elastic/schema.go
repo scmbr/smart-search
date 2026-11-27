@@ -40,6 +40,24 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 		return map[string]any{"term": map[string]any{field: value}}
 	}
 	filters := []any{term("HasPrice", priced), term("RoleConflict", false)}
+	required, excludedNames := domain.PurposeLicensePhrases(r)
+	if len(required) > 0 {
+		var choices []any
+		for _, phrase := range required {
+			choices = append(choices, map[string]any{"match_phrase": map[string]any{"Name": phrase}})
+		}
+		filters = append(filters, map[string]any{"bool": map[string]any{"should": choices, "minimum_should_match": 1}})
+	}
+	for _, phrase := range excludedNames {
+		filters = append(filters, map[string]any{"bool": map[string]any{"must_not": []any{map[string]any{"match_phrase": map[string]any{"Name": phrase}}}}})
+	}
+	if scopes := domain.PurposeScopes(r.Plan.Purpose); len(scopes) > 0 {
+		var choices []any
+		for _, scope := range scopes {
+			choices = append(choices, map[string]any{"bool": map[string]any{"filter": []any{term("GroupID", scope.Group), map[string]any{"prefix": map[string]any{"URL": "https://store.softline.ru/" + scope.Vendor + "/"}}}}})
+		}
+		filters = append(filters, map[string]any{"bool": map[string]any{"should": choices, "minimum_should_match": 1}})
+	}
 	if r.RequestedProductRole != "" {
 		filters = append(filters, term("ProductRole", r.RequestedProductRole))
 	}

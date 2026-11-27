@@ -50,7 +50,10 @@ docs/lexical-baseline.md. Маппинг семейств — internal/infrastru
 повышения DocumentSchemaVersion; provisional family keys не означают разные семейства.
 Query policy — docs/query-normalization.md и docs/query-constraints.md, версионируется QueryPolicyVersion отдельно
 от индекса. Не расширяй цифры/артикулы fuzzy; фильтры сохраняются во всех попытках.
-Роли SKU — docs/product-roles.md: lexical-v6/query-v5, product-role-v1.
+Роли SKU — docs/product-roles.md: lexical-v6, product-role-v1.
+Назначение — docs/product-purpose.md: purpose-v1/query-v6, явный запрос ОС/замены AD,
+vendor/group + условия SKU до collapse и повтор в application; unknown не равен
+доказанному назначению. Существующий индекс lexical-v6 совместим, схема не менялась.
 Классифицируй по идентичности/источникам, а не по query targets. Фильтруй до
 collapse во всех ветках; application пересчитывает роль/evidence. Unknown не
 является подтверждённым основным продуктом. Не исключай SaaS по слову «сервис»
