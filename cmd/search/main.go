@@ -26,6 +26,7 @@ func run(ctx context.Context) error {
 	corpus := flag.String("hybrid-corpus", "", "experimental cached development corpus; no paid API calls")
 	fullCorpus := flag.String("vector-corpus", "", "complete versioned vector corpus")
 	liveQuery := flag.Bool("live-query", false, "explicitly enable embeddings of new queries with the shared budget")
+	parserMode := flag.String("parser-mode", "off", "selective query parser: off, replay or live")
 	batch := flag.Bool("batch", false, "read JSON query strings from stdin, one per line, reusing the loaded corpus")
 	flag.StringVar(&r.Query, "query", "", "search text")
 	flag.StringVar(&r.FamilyID, "family", "", "explicit confirmed family ID")
@@ -53,6 +54,9 @@ func run(ctx context.Context) error {
 	if *batch && r.Query != "" {
 		return fmt.Errorf("batch and query are mutually exclusive")
 	}
+	if err := validateParserMode(*parserMode, *fullCorpus, *liveQuery, *batch); err != nil {
+		return err
+	}
 	validationInput := r
 	if *batch {
 		validationInput.Query = "query"
@@ -78,7 +82,7 @@ func run(ctx context.Context) error {
 		searchBackend = combined
 	}
 	if *fullCorpus != "" {
-		combined, closePool, err := fullHybrid(ctx, s, backend, *fullCorpus, *liveQuery)
+		combined, closePool, err := fullHybrid(ctx, s, backend, *fullCorpus, *liveQuery, *parserMode)
 		if err != nil {
 			return err
 		}

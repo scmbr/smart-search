@@ -21,6 +21,9 @@
 | План расходов / повтор из кэша | `go run ./cmd/embedding-pilot -mode plan` / `-mode replay` |
 | Полный корпус только из feed | `python scripts/prepare-vector-corpus.py --feed <путь>` |
 | Полный план / проверка кэша | `go run ./cmd/vector-index -mode plan` / `-mode replay` |
+| План интерпретации без сети | `go run ./cmd/query-parse -mode plan -query "нужно помогать сотрудникам с компьютерами"` |
+| Кэшированный parser | `go run ./cmd/search -query "нужно помогать сотрудникам с компьютерами" -vector-corpus artifacts/vector-corpus.json -parser-mode replay` |
+| Development-план parser | `python scripts/evaluate-query-parser.py` после сборки bin/query-parse.exe |
 | Поиск по полному корпусу | `go run ./cmd/search -query "сервер" -vector-corpus artifacts/vector-corpus.json` |
 | Интеграционные тесты всех адаптеров | задать `TEST_POSTGRES_DSN` и `TEST_ELASTICSEARCH_URL`, затем `go test -count=1 -v ./internal/infrastructure/...` |
 | Интеграционные тесты | задать `TEST_POSTGRES_DSN`, затем `go test -count=1 -v ./internal/infrastructure/postgres` |
@@ -70,6 +73,14 @@ live-подключения и общего ledger, отсутствие кэш�
 Полный корпус не загружается частично; prefix-512 сохраняется в памяти процесса.
 Для development evaluation используй --vector-corpus <путь> --batch: это cache-only,
 не добавляй live-флаг и не используй holdout для настройки.
+Parser — docs/query-parser-runtime.md: replay без Provider, live только явным
+режимом и OPENAI_LIVE_ENABLED=true; $0.001 на интерпретацию, без retry. Общие
+ledger/API-слоты с эмбеддингами; migration 004, dimensions=0 для текста.
+Неизвестный исход не очищай. Невалидный оплаченный ответ кэшируется как неудача.
+Модель/prompt/schema/лимиты версионируй; не меняй молча кэш или тариф.
+Для диагностики с parser используй evaluate-tuning.py --vector-corpus <путь>
+--batch --parser-replay; live parser в batch запрещён, development-run отдельно
+планируется evaluate-query-parser.py с fingerprint и лимитом $0.02.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.
 

@@ -10,6 +10,7 @@ import (
 
 	embedding "github.com/scmbr/smart-search/internal/application/embeddingpilot"
 	hybrid "github.com/scmbr/smart-search/internal/application/hybrid"
+	parser "github.com/scmbr/smart-search/internal/application/queryparser"
 	catalog "github.com/scmbr/smart-search/internal/domain/catalog"
 	d "github.com/scmbr/smart-search/internal/domain/embeddingpilot"
 	"github.com/scmbr/smart-search/internal/infrastructure/elastic"
@@ -56,11 +57,16 @@ func cachedHybrid(ctx context.Context, s localconfig.Settings, backend *elastic.
 	return result, pool.Close, nil
 }
 
-func fullHybrid(ctx context.Context, s localconfig.Settings, backend *elastic.Client, file string, live bool) (hybrid.Backend, func(), error) {
+func fullHybrid(ctx context.Context, s localconfig.Settings, backend *elastic.Client, file string, live bool, parserMode string) (hybrid.Backend, func(), error) {
 	var result hybrid.Backend
 	x, err := vectorcache.LoadManifest(file)
 	if err != nil {
 		return result, nil, err
+	}
+	if parserMode == "live" {
+		if err = localconfig.CheckParserLive(); err != nil {
+			return result, nil, err
+		}
 	}
 	var p embedding.Provider
 	if live {
@@ -90,5 +96,13 @@ func fullHybrid(ctx context.Context, s localconfig.Settings, backend *elastic.Cl
 		pool.Close()
 		return result, nil, err
 	}
-	return hybrid.Backend{Lexical: backend, Vectors: vectors, ExpectedCatalog: catalogID, CorpusSHA: x.SHA, CorpusDocuments: len(x.Documents)}, pool.Close, nil
+	result = hybrid.Backend{Lexical: backend, Vectors: vectors, ExpectedCatalog: catalogID, CorpusSHA: x.SHA, CorpusDocuments: len(x.Documents)}
+	if parserMode == "replay" || parserMode == "live" {
+		service := parser.Service{Store: postgres.NewQueryParserStore(pool), Live: parserMode == "live"}
+		if service.Live {
+			service.Provider = provider.NewQueryParser(os.Getenv("OPENAI_API_KEY"))
+		}
+		result.Parser = service
+	}
+	return result, pool.Close, nil
 }
