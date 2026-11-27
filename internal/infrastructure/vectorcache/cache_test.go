@@ -34,7 +34,7 @@ func TestCachedCandidatesWithoutPaymentOrLabelLookup(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	got, err := corpus.Candidates(context.Background(), search.Request{OriginalQuery: "task"})
+	got, err := corpus.Candidates(context.Background(), search.Request{OriginalQuery: "uncached original", SemanticQuery: "task"})
 	if err != nil || len(got) != 1 || got[0].GroupID != "g" {
 		t.Fatalf("%+v %v", got, err)
 	}
