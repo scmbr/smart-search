@@ -40,7 +40,9 @@ def score(case, result):
 def validate_results(results, cases, manifest):
     if len(results) != len(cases):
         raise ValueError("Incomplete batch")
-    for result in results:
+    for case, result in zip(cases, results):
+        if "query" in case and result.get("Query") != case["query"]:
+            raise ValueError("Returned query differs from requested query")
         # Unsupported queries legitimately do not search and have no index identity.
         if result.get("SearchMode") == "not_searched":
             continue
@@ -51,12 +53,24 @@ def validate_results(results, cases, manifest):
             raise ValueError("Query policy differs from frozen configuration")
 
 
+def validate_coverage(results):
+    for result in results:
+        if result.get("SearchMode") == "not_searched":
+            continue
+        trace = result.get("Hybrid") or {}
+        if trace.get("VectorStatus") not in {"used", "no_candidates", "skipped_exact", "skipped_interpretation"}:
+            raise ValueError("Incomplete vector coverage")
+        if trace.get("InterpretationStatus") in {"fallback", "invalid"}:
+            raise ValueError("Incomplete parser coverage")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", default="testdata/evaluation/search-freeze-v1.json")
     parser.add_argument("--exe", default="bin/search.exe")
     parser.add_argument("--corpus", default="artifacts/vector-corpus.json")
     parser.add_argument("--output", required=True)
+    parser.add_argument("--require-complete", action="store_true", help="reject vector/parser fallback; still cache-only")
     args = parser.parse_args()
     output = Path(args.output)
     if output.exists():
@@ -69,10 +83,11 @@ def main():
     if digest(args.corpus) != manifest["corpus_file_sha256"]:
         raise ValueError("Wrong corpus file")
     executable = str(Path(args.exe).resolve())
-    payload = "".join(json.dumps(c["query"], ensure_ascii=False) + "\n" for c in source["cases"])
+    # ASCII JSON escapes preserve Unicode across Windows pipe/codepage boundaries.
+    payload = "".join(json.dumps(c["query"], ensure_ascii=True) + "\n" for c in source["cases"])
     # No target groups, family IDs or constraints are supplied to the search process.
     report = {"manifest_sha256": digest(args.manifest), "binary_sha256": digest(executable),
-              "mode": "independent_cache_only_comparison", "runs": {},
+              "mode": "independent_cache_only_comparison", "require_complete": args.require_complete, "runs": {},
               "limitations": "Raw group/brand hit@4 only; constraints and all-four precision ungraded. Cache misses are fallback, not full hybrid quality. CLI batch time is not request p95."}
     output.parent.mkdir(parents=True, exist_ok=True)
     # Reserve the path before execution; interrupted/failed runs remain visible.
@@ -92,6 +107,8 @@ def main():
                 "vector_statuses": dict(Counter((r.get("Hybrid") or {}).get("VectorStatus", "off") for r in results)),
                 "rows": rows}
             output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            if args.require_complete and mode == "hybrid_cache_only":
+                validate_coverage(results)
     except Exception as error:
         report["error"] = str(error)
         raise

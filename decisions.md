@@ -618,6 +618,26 @@
 - Спецификация: docs/independent-evaluation.md; компактный результат:
   testdata/evaluation/holdout-cache-only-v1-summary.json. SKU eligibility не оценена.
 
+## D-045. Полный hybrid не заменяет baseline по результатам holdout
+
+Дата: 2026-11-28. Статус: принято; измерение выполнено.
+
+- Frozen backend/query-v8, индекс, корпус и цели не менялись. Полный кэш,
+  replay без Provider: baseline 19/34 group + 3/6 brand, hybrid 18/34 + 3/6.
+- Векторы used 35, no_candidates 4, exact skip 1; fallback 0. Parser used 4.
+  Hits корректной live-подготовки и replay идентичны, query echo проверен.
+- Гибрид остаётся явным экспериментальным режимом. Отклонена автоматическая
+  замена baseline без подтверждённого выигрыша; не подбирать порог по holdout.
+- Ошибка первого warmup: UTF-8 прочитан системной кодировкой Windows, 25 текстов
+  искажены; исправлено явным UTF-8, не изменением поиска. Локальные артефакты
+  сохранены; две неполные попытки replay отклонены guard.
+- Общая стоимость задачи $0.00061271 (включая ошибку $0.00038199), ledger
+  $0.025425085/$5, pending=0; replay 0 новых вызовов. Действующие D-034/D-037.
+- Этап 3 завершён измерением, а не обещанием качества всех четырёх результатов.
+  Далее этап 4: HTTP API/frontend и программный verifier по прежнему плану.
+- Детали и ограничения: docs/independent-evaluation.md, сводка
+  testdata/evaluation/holdout-full-cache-v1-summary.json.
+
 ## Открытые решения
 
 - O-001: RAM — 16 ГБ; PostgreSQL 1 ГБ/2 CPU, Elasticsearch 2 ГБ/2 CPU (heap 512 МБ).
