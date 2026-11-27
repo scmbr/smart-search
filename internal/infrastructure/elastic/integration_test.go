@@ -101,6 +101,34 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 	if err := c.Activate(ctx, spec); err != nil {
 		t.Fatal(err)
 	}
+	t.Run("semantic groups preserve SKU filters and snapshot", func(t *testing.T) {
+		for _, tc := range []struct {
+			request domain.Request
+			groups  []domain.GroupCandidate
+			count   int
+		}{
+			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}, {GroupID: "391338", Vendor: "microsoft", Score: 0.8}, {GroupID: "391347", Vendor: "microsoft", Score: 0.7}}, 2},
+			{domain.Request{Query: "задача без названия", Limit: 4, Version: "2021"}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}}, 0},
+			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "other", Score: 0.9}}, 0},
+			{domain.Request{Query: "задача без названия", Limit: 4, Kind: "renewal"}, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}}, 0},
+			{domain.Request{Query: "задача без названия", Limit: 4, MinDevices: 3}, []domain.GroupCandidate{{GroupID: "306539", Vendor: "anydesk", Score: 0.9}}, 0},
+			{domain.Request{Query: "задача без названия", Limit: 4, MinDevices: 2}, []domain.GroupCandidate{{GroupID: "306539", Vendor: "anydesk", Score: 0.9}}, 1},
+			{domain.Request{Query: "задача без названия", Limit: 4, MinUsers: 2}, []domain.GroupCandidate{{GroupID: "306539", Vendor: "anydesk", Score: 0.9}}, 0},
+		} {
+			r, err := domain.Prepare(tc.request)
+			if err != nil {
+				t.Fatal(err)
+			}
+			hits, err := c.Resolve(ctx, r, tc.groups, true, spec.CatalogID, spec.Fingerprint)
+			if err != nil || len(hits) != tc.count {
+				t.Fatalf("%+v: %+v %v", tc.request, hits, err)
+			}
+		}
+		r, _ := domain.Prepare(domain.Request{Query: "задача", Limit: 4})
+		if _, err := c.Resolve(ctx, r, []domain.GroupCandidate{{GroupID: "391335", Vendor: "microsoft", Score: 0.9}}, true, "wrong", spec.Fingerprint); err == nil {
+			t.Fatal("mixed catalog accepted")
+		}
+	})
 	for _, tc := range []struct {
 		query, family, offer string
 		count                int
