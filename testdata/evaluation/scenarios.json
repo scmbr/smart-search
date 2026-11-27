@@ -1,148 +1,1890 @@
 {
+  "dataset_version": "evaluation-v3",
+  "dataset_role": "development_tuning",
   "label_status": "draft_requires_independent_review",
-  "split_policy": "Former holdout families were exposed during lexical baseline development. All cases are development/regression only; no independent quality claims.",
-  "cases": [
-    {
-      "id": "tune-astra-typo",
-      "split": "tuning",
-      "family": "astra",
-      "query": "астра линукс",
-      "group_ids": [
-        "121231"
-      ],
-      "checks": [
-        "typo_or_transliteration",
-        "base_license_not_support"
-      ],
-      "original_split": "tuning"
-    },
-    {
-      "id": "tune-crypto-version",
-      "split": "tuning",
-      "family": "cryptopro",
-      "query": "крипто про csp 5.0",
-      "group_ids": [
-        "22268"
-      ],
-      "checks": [
-        "preserve_5.0",
-        "reject_4.0",
-        "do_not_default_to_upgrade"
-      ],
-      "original_split": "tuning"
-    },
-    {
-      "id": "tune-kaspersky-slang",
-      "split": "tuning",
-      "family": "kaspersky",
-      "query": "касперский для маленького офиса",
-      "group_ids": [
-        "3761"
-      ],
-      "checks": [
-        "new_license_not_renewal"
-      ],
-      "original_split": "tuning"
-    },
-    {
-      "id": "tune-server-hardware",
-      "split": "tuning",
-      "family": "server",
-      "query": "сервер",
-      "intent": "hardware",
-      "checks": [
-        "hardware_before_server_software"
-      ],
-      "original_split": "tuning"
-    },
-    {
-      "id": "tune-server-software",
-      "split": "tuning",
-      "family": "server",
-      "query": "операционная система для сервера",
-      "intent": "software",
-      "checks": [
-        "server_os_before_hardware"
-      ],
-      "original_split": "tuning"
-    },
-    {
-      "id": "hold-anydesk-typo",
-      "split": "regression",
-      "family": "anydesk",
-      "query": "анидеск",
-      "group_ids": [
-        "306539"
-      ],
-      "checks": [
-        "transliteration"
-      ],
-      "original_split": "holdout"
-    },
-    {
-      "id": "hold-backup-task",
-      "split": "regression",
-      "family": "cyberbackup",
-      "query": "киберпротект резервное копирование сервера",
-      "category_id": "1033",
-      "vendor_path": "/cyberprotect/",
-      "checks": [
-        "task_intent",
-        "license_constraints"
-      ],
-      "original_split": "holdout"
-    },
-    {
-      "id": "hold-scanner-typo",
-      "split": "regression",
-      "family": "scanner",
-      "query": "сканер вс",
-      "group_ids": [
-        "46421"
-      ],
-      "checks": [
-        "punctuation_variant"
-      ],
-      "original_split": "holdout"
-    },
-    {
-      "id": "hold-office-family",
-      "split": "regression",
-      "family": "office365",
-      "query": "майкрософт 365 для семьи",
-      "group_ids": [
-        "165034"
-      ],
-      "checks": [
-        "family_not_business"
-      ],
-      "original_split": "holdout"
-    },
-    {
-      "id": "hold-unknown",
-      "split": "regression",
-      "family": "unknown",
-      "query": "корм для аквариумных рыб",
-      "intent": "out_of_catalog",
-      "checks": [
-        "no_fabricated_products",
-        "no_random_fill"
-      ],
-      "original_split": "holdout"
-    }
-  ],
-  "primary_metrics": [
-    "family_hit_at_4",
-    "family_precision_at_4",
-    "family_ndcg_at_4_when_graded",
-    "distinct_families_in_top4",
-    "verified_cross_sell_rate"
-  ],
-  "dataset_role": "development_regression_not_holdout",
   "independent_evaluation": {
     "eligible": false,
     "review_status": "pending",
-    "replacement_holdout_status": "frozen_draft_pending_review",
-    "reason": "AnyDesk, Cyber Backup, Scanner and Microsoft 365 families were used in reference smoke and baseline ranking work."
-  }
+    "execution_status": "not_run_as_60_case_suite"
+  },
+  "frozen_on": "2026-11-27",
+  "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
+  "cases_sha256": "389f426b26aefb62edc6091a36af790e2875eafc2cf6343721125ae596b4faf7",
+  "families_sha256": "b36a5db6898dde4c83a24165beb90bbe1ccbddae9e49cec75b0bf63bb5d24ec6",
+  "split_policy": "All aliases, families and broad requests of a brand stay on the same side. Holdout has no search results and is not used to tune ranking.",
+  "result_policy": "Use catalog SKUs only. Four different families require eligible direct matches or verified cross-sells; no random fill. Unknown rights are not confirmed eligibility.",
+  "metric_policy": "Family labels are draft; brand scopes are non-exhaustive diagnostic labels, not Family Hit/Precision/nDCG gold. Do not score independent quality until review.",
+  "families": {
+    "astra-se": {
+      "name": "Astra Linux Special Edition",
+      "brand_id": "astralinux",
+      "group_ids": [
+        "121231"
+      ]
+    },
+    "office": {
+      "name": "Microsoft Office",
+      "brand_id": "microsoft",
+      "group_ids": [
+        "391338",
+        "391335"
+      ]
+    },
+    "m365": {
+      "name": "Microsoft 365",
+      "brand_id": "microsoft",
+      "group_ids": [
+        "165034",
+        "283494"
+      ]
+    },
+    "ksos": {
+      "name": "Kaspersky Small Office Security",
+      "brand_id": "kaspersky",
+      "group_ids": [
+        "3761"
+      ]
+    },
+    "csp": {
+      "name": "КриптоПро CSP",
+      "brand_id": "kripto-pro",
+      "group_ids": [
+        "22268"
+      ]
+    },
+    "csp-tls": {
+      "name": "КриптоПро CSP TLS",
+      "brand_id": "kripto-pro",
+      "group_ids": [
+        "385280"
+      ]
+    },
+    "anydesk": {
+      "name": "AnyDesk",
+      "brand_id": "anydesk",
+      "group_ids": [
+        "306539"
+      ]
+    },
+    "cyber-backup": {
+      "name": "Кибер Бэкап",
+      "brand_id": "cyberprotect",
+      "group_ids": [
+        "173614",
+        "173615"
+      ]
+    },
+    "cyber-cloud": {
+      "name": "Кибер Бэкап Облачный",
+      "brand_id": "cyberprotect",
+      "group_ids": [
+        "442025"
+      ]
+    },
+    "cyber-start": {
+      "name": "Кибер Бэкап Старт",
+      "brand_id": "cyberprotect",
+      "group_ids": [
+        "444870"
+      ]
+    },
+    "scanner-vs": {
+      "name": "Сканер-ВС",
+      "brand_id": "npo-echelon",
+      "group_ids": [
+        "46421"
+      ]
+    },
+    "mts-link": {
+      "name": "МТС Линк",
+      "brand_id": "webinar",
+      "group_ids": [
+        "414326",
+        "447242",
+        "447243"
+      ]
+    },
+    "maxpatrol-epp": {
+      "name": "MaxPatrol Endpoint Protection Platform",
+      "brand_id": "positive-technologies",
+      "group_ids": [
+        "437421"
+      ]
+    }
+  },
+  "catalog_evidence": {
+    "121231": {
+      "group_name": "Astra Linux Special Edition",
+      "offers": 803,
+      "example_offer_id": "482091",
+      "example_url": "https://store.softline.ru/astralinux/tc1000x8600digsktws00-pr12-482091/"
+    },
+    "391338": {
+      "group_name": "Microsoft Office 2024 для дома и бизнеса",
+      "offers": 1,
+      "example_offer_id": "473582",
+      "example_url": "https://store.softline.ru/microsoft/ep2-06605-473582/"
+    },
+    "391335": {
+      "group_name": "Microsoft Office 2024 для дома и учёбы",
+      "offers": 1,
+      "example_offer_id": "473568",
+      "example_url": "https://store.softline.ru/microsoft/ep2-06797-473568/"
+    },
+    "165034": {
+      "group_name": "Microsoft 365 Family (для семьи)",
+      "offers": 1,
+      "example_offer_id": "195981",
+      "example_url": "https://store.softline.ru/microsoft/6gq-00084-195981/"
+    },
+    "283494": {
+      "group_name": "Microsoft 365 Personal (Персональный)",
+      "offers": 1,
+      "example_offer_id": "195982",
+      "example_url": "https://store.softline.ru/microsoft/qq2-00004-195982/"
+    },
+    "3761": {
+      "group_name": "Kaspersky Small Office Security",
+      "offers": 31,
+      "example_offer_id": "248970",
+      "example_url": "https://store.softline.ru/kaspersky/kl4141rcefs-248970/"
+    },
+    "22268": {
+      "group_name": "Программа КриптоПро CSP 5.0",
+      "offers": 42,
+      "example_offer_id": "25266",
+      "example_url": "https://store.softline.ru/kripto-pro/-25266/"
+    },
+    "385280": {
+      "group_name": "КриптоПро CSP TLS",
+      "offers": 14,
+      "example_offer_id": "365837",
+      "example_url": "https://store.softline.ru/kripto-pro/-365837/"
+    },
+    "306539": {
+      "group_name": "AnyDesk",
+      "offers": 11,
+      "example_offer_id": "402265",
+      "example_url": "https://store.softline.ru/anydesk/-402265/"
+    },
+    "173614": {
+      "group_name": "Кибер Бэкап Стандартная редакция",
+      "offers": 48,
+      "example_offer_id": "418697",
+      "example_url": "https://store.softline.ru/cyberprotect/ps16nl-418697/"
+    },
+    "173615": {
+      "group_name": "Кибер Бэкап Расширенная редакция",
+      "offers": 450,
+      "example_offer_id": "418698",
+      "example_url": "https://store.softline.ru/cyberprotect/pa16nl-418698/"
+    },
+    "442025": {
+      "group_name": "Кибер Бэкап Облачный",
+      "offers": 6,
+      "example_offer_id": "536456",
+      "example_url": "https://store.softline.ru/cyberprotect/speam1-536456/"
+    },
+    "444870": {
+      "group_name": "Кибер Бэкап Старт",
+      "offers": 56,
+      "example_offer_id": "539763",
+      "example_url": "https://store.softline.ru/cyberprotect/bss1pc0gb-1y-sub-539763/"
+    },
+    "46421": {
+      "group_name": "Эшелон «СКАНЕР-ВС»",
+      "offers": 472,
+      "example_offer_id": "486957",
+      "example_url": "https://store.softline.ru/npo-echelon/scaner-vs-7-256-e-f-486957/"
+    },
+    "414326": {
+      "group_name": "МТС Линк Optimum 30",
+      "offers": 1,
+      "example_offer_id": "535950",
+      "example_url": "https://store.softline.ru/webinar/-535950/"
+    },
+    "447242": {
+      "group_name": "МТС Линк Стандарт",
+      "offers": 1,
+      "example_offer_id": "541589",
+      "example_url": "https://store.softline.ru/webinar/-541589/"
+    },
+    "447243": {
+      "group_name": "МТС Линк Про",
+      "offers": 1,
+      "example_offer_id": "541591",
+      "example_url": "https://store.softline.ru/webinar/-541591/"
+    },
+    "437421": {
+      "group_name": "MaxPatrol Endpoint Protection Platform",
+      "offers": 6,
+      "example_offer_id": "531243",
+      "example_url": "https://store.softline.ru/positive-technologies/pt-mxepp-ep-1-50-531243/"
+    }
+  },
+  "cases": [
+    {
+      "id": "tune-001",
+      "split": "tuning",
+      "brand_id": "astralinux",
+      "query": "Astra Linux Special Edition",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "astra-se"
+      ],
+      "group_ids": [
+        "121231"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-002",
+      "split": "tuning",
+      "brand_id": "astralinux",
+      "query": "астра линукс",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "astra-se"
+      ],
+      "group_ids": [
+        "121231"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-003",
+      "split": "tuning",
+      "brand_id": "astralinux",
+      "query": "astra linxu",
+      "tags": [
+        "typo"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "astra-se"
+      ],
+      "group_ids": [
+        "121231"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-004",
+      "split": "tuning",
+      "brand_id": "astralinux",
+      "query": "astraLinux special edition",
+      "tags": [
+        "mixed_language"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "astra-se"
+      ],
+      "group_ids": [
+        "121231"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-005",
+      "split": "tuning",
+      "brand_id": "astralinux",
+      "query": "астра",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "astra-se"
+      ],
+      "group_ids": [
+        "121231"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "tune-006",
+      "split": "tuning",
+      "brand_id": "astralinux",
+      "query": "Астра Линукс операционная система для рабочей станции в наличии",
+      "tags": [
+        "task_intent",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "astra-se"
+      ],
+      "group_ids": [
+        "121231"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "product_type": "software",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ],
+        "availability_policy": "available_only"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Только доступные SKU; поддержка и продление не заменяют новую лицензию ОС."
+    },
+    {
+      "id": "tune-007",
+      "split": "tuning",
+      "brand_id": "astralinux",
+      "query": "Astra Linux Special Edition 1.7",
+      "tags": [
+        "license_constraint",
+        "version"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "astra-se"
+      ],
+      "group_ids": [
+        "121231"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "version": "1.7",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-008",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "Microsoft Office для дома и бизнеса 2024",
+      "tags": [
+        "exact",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "office"
+      ],
+      "group_ids": [
+        "391338"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "edition": "Home and Business",
+        "version": "2024",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-009",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "майкрософт офис для дома и бизнеса",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "office"
+      ],
+      "group_ids": [
+        "391338"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-010",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "microsfot office home business",
+      "tags": [
+        "typo"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "office"
+      ],
+      "group_ids": [
+        "391338"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-011",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "офис майков для бизнеса",
+      "tags": [
+        "slang"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "office"
+      ],
+      "group_ids": [
+        "391338"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-012",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "Microsoft 365 для семьи",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "m365"
+      ],
+      "group_ids": [
+        "165034"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-013",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "майкрософт 365 персональный",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "m365"
+      ],
+      "group_ids": [
+        "283494"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-014",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "microsft 365 family",
+      "tags": [
+        "typo"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "m365"
+      ],
+      "group_ids": [
+        "165034"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-015",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "Microsoft 365 для шести пользователей на год",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "m365"
+      ],
+      "group_ids": [
+        "165034"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "min_users": 6,
+        "term_months": 12,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-016",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "майкрософт",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "office",
+        "m365"
+      ],
+      "group_ids": [
+        "391338",
+        "391335",
+        "165034",
+        "283494"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "tune-017",
+      "split": "tuning",
+      "brand_id": "microsoft",
+      "query": "Microsoft Office для дома и учебы 2024",
+      "tags": [
+        "exact",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "office"
+      ],
+      "group_ids": [
+        "391335"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "edition": "Home and Student",
+        "version": "2024",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-018",
+      "split": "tuning",
+      "brand_id": "kaspersky",
+      "query": "Kaspersky Small Office Security",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "ksos"
+      ],
+      "group_ids": [
+        "3761"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-019",
+      "split": "tuning",
+      "brand_id": "kaspersky",
+      "query": "касперский смол офис секьюрити",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "ksos"
+      ],
+      "group_ids": [
+        "3761"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-020",
+      "split": "tuning",
+      "brand_id": "kaspersky",
+      "query": "kasperski small ofice security",
+      "tags": [
+        "typo"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "ksos"
+      ],
+      "group_ids": [
+        "3761"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-021",
+      "split": "tuning",
+      "brand_id": "kaspersky",
+      "query": "каспер для маленького офиса",
+      "tags": [
+        "slang",
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "ksos"
+      ],
+      "group_ids": [
+        "3761"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-022",
+      "split": "tuning",
+      "brand_id": "kaspersky",
+      "query": "касперский",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "ksos"
+      ],
+      "group_ids": [
+        "3761"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "tune-023",
+      "split": "tuning",
+      "brand_id": "kaspersky",
+      "query": "Kaspersky Small Office Security на 5 пользователей на год",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "ksos"
+      ],
+      "group_ids": [
+        "3761"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "min_users": 5,
+        "term_months": 12,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-024",
+      "split": "tuning",
+      "brand_id": "kaspersky",
+      "query": "продление Kaspersky Small Office Security",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "ksos"
+      ],
+      "group_ids": [
+        "3761"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "offer_kind": "renewal"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-025",
+      "split": "tuning",
+      "brand_id": "kripto-pro",
+      "query": "КриптоПро CSP 5.0",
+      "tags": [
+        "exact",
+        "version"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "csp"
+      ],
+      "group_ids": [
+        "22268"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "version": "5.0",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-026",
+      "split": "tuning",
+      "brand_id": "kripto-pro",
+      "query": "крипто про цсп 5.0",
+      "tags": [
+        "transliteration",
+        "version"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "csp"
+      ],
+      "group_ids": [
+        "22268"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "version": "5.0",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-027",
+      "split": "tuning",
+      "brand_id": "kripto-pro",
+      "query": "криптопор csp 5.0",
+      "tags": [
+        "typo",
+        "version"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "csp"
+      ],
+      "group_ids": [
+        "22268"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "version": "5.0",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-028",
+      "split": "tuning",
+      "brand_id": "kripto-pro",
+      "query": "КриптоПро CSP 4.0",
+      "tags": [
+        "version",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "csp"
+      ],
+      "group_ids": [
+        "22268"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "version": "4.0",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-029",
+      "split": "tuning",
+      "brand_id": "kripto-pro",
+      "query": "КриптоПро CSP 5.0 лицензия для сервера",
+      "tags": [
+        "task_intent",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "csp"
+      ],
+      "group_ids": [
+        "22268"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "version": "5.0",
+        "deployment": "server",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-030",
+      "split": "tuning",
+      "brand_id": "kripto-pro",
+      "query": "КриптоПро CSP TLS",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "csp-tls"
+      ],
+      "group_ids": [
+        "385280"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-031",
+      "split": "tuning",
+      "brand_id": "kripto-pro",
+      "query": "криптопро",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "csp",
+        "csp-tls"
+      ],
+      "group_ids": [
+        "22268",
+        "385280"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "tune-032",
+      "split": "tuning",
+      "brand_id": "anydesk",
+      "query": "AnyDesk",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "anydesk"
+      ],
+      "group_ids": [
+        "306539"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-033",
+      "split": "tuning",
+      "brand_id": "anydesk",
+      "query": "анидеск",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "anydesk"
+      ],
+      "group_ids": [
+        "306539"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-034",
+      "split": "tuning",
+      "brand_id": "anydesk",
+      "query": "anydsek",
+      "tags": [
+        "typo"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "anydesk"
+      ],
+      "group_ids": [
+        "306539"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-035",
+      "split": "tuning",
+      "brand_id": "anydesk",
+      "query": "энидеск удалёнка",
+      "tags": [
+        "slang",
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "anydesk"
+      ],
+      "group_ids": [
+        "306539"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-036",
+      "split": "tuning",
+      "brand_id": "anydesk",
+      "query": "AnyDesk Standard на год",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "anydesk"
+      ],
+      "group_ids": [
+        "306539"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "edition": "Standard",
+        "term_months": 12,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-037",
+      "split": "tuning",
+      "brand_id": "anydesk",
+      "query": "402265",
+      "tags": [
+        "exact_sku"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "anydesk"
+      ],
+      "group_ids": [
+        "306539"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": "Точный ID предложения AnyDesk из feed; не менять цифры при исправлении запроса."
+    },
+    {
+      "id": "tune-038",
+      "split": "tuning",
+      "brand_id": "cyberprotect",
+      "query": "Кибер Бэкап",
+      "tags": [
+        "exact",
+        "ambiguous"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "cyber-backup",
+        "cyber-cloud",
+        "cyber-start"
+      ],
+      "group_ids": [
+        "173614",
+        "173615",
+        "442025",
+        "444870"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": "Без редакции допустимы разные варианты; редакции одного семейства не занимают разные места."
+    },
+    {
+      "id": "tune-039",
+      "split": "tuning",
+      "brand_id": "cyberprotect",
+      "query": "кибер бэкап стандартный",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "cyber-backup"
+      ],
+      "group_ids": [
+        "173614"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-040",
+      "split": "tuning",
+      "brand_id": "cyberprotect",
+      "query": "кибер бекап расширенный",
+      "tags": [
+        "typo",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "cyber-backup"
+      ],
+      "group_ids": [
+        "173615"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "edition": "Расширенная",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-041",
+      "split": "tuning",
+      "brand_id": "cyberprotect",
+      "query": "Кибер Бэкап для резервного копирования сервера",
+      "tags": [
+        "task_intent",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "cyber-backup"
+      ],
+      "group_ids": [
+        "173614",
+        "173615"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "deployment": "server",
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-042",
+      "split": "tuning",
+      "brand_id": "cyberprotect",
+      "query": "Кибер Бэкап Облачный",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "cyber-cloud"
+      ],
+      "group_ids": [
+        "442025"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-043",
+      "split": "tuning",
+      "brand_id": "cyberprotect",
+      "query": "киберпротект",
+      "tags": [
+        "brand"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "cyber-backup",
+        "cyber-cloud",
+        "cyber-start"
+      ],
+      "group_ids": [
+        "173614",
+        "173615",
+        "442025",
+        "444870"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
+    },
+    {
+      "id": "tune-044",
+      "split": "tuning",
+      "brand_id": "cyberprotect",
+      "query": "Кибер Бэкап Старт",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "cyber-start"
+      ],
+      "group_ids": [
+        "444870"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-045",
+      "split": "tuning",
+      "brand_id": "npo-echelon",
+      "query": "Сканер-ВС",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "scanner-vs"
+      ],
+      "group_ids": [
+        "46421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-046",
+      "split": "tuning",
+      "brand_id": "npo-echelon",
+      "query": "skaner vs",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "scanner-vs"
+      ],
+      "group_ids": [
+        "46421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-047",
+      "split": "tuning",
+      "brand_id": "npo-echelon",
+      "query": "сканнер вс",
+      "tags": [
+        "typo"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "scanner-vs"
+      ],
+      "group_ids": [
+        "46421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-048",
+      "split": "tuning",
+      "brand_id": "npo-echelon",
+      "query": "сканер вс эшелон",
+      "tags": [
+        "punctuation"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "scanner-vs"
+      ],
+      "group_ids": [
+        "46421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-049",
+      "split": "tuning",
+      "brand_id": "npo-echelon",
+      "query": "Сканер-ВС для проверки уязвимостей",
+      "tags": [
+        "task_intent"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "scanner-vs"
+      ],
+      "group_ids": [
+        "46421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-050",
+      "split": "tuning",
+      "brand_id": "npo-echelon",
+      "query": "Сканер-ВС Enterprise на 256 IP на год",
+      "tags": [
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "scanner-vs"
+      ],
+      "group_ids": [
+        "46421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "edition": "Enterprise",
+        "min_ip_addresses": 256,
+        "term_months": 12,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-051",
+      "split": "tuning",
+      "brand_id": "webinar",
+      "query": "МТС Линк Optimum 30",
+      "tags": [
+        "exact"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "mts-link"
+      ],
+      "group_ids": [
+        "414326"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-052",
+      "split": "tuning",
+      "brand_id": "webinar",
+      "query": "mts link",
+      "tags": [
+        "transliteration"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "mts-link"
+      ],
+      "group_ids": [
+        "414326",
+        "447242",
+        "447243"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-053",
+      "split": "tuning",
+      "brand_id": "webinar",
+      "query": "мтс линкк",
+      "tags": [
+        "typo"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "mts-link"
+      ],
+      "group_ids": [
+        "414326",
+        "447242",
+        "447243"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "retrieve_targets",
+      "review_status": "pending",
+      "note_ru": ""
+    },
+    {
+      "id": "tune-054",
+      "split": "tuning",
+      "brand_id": "webinar",
+      "query": "мтс",
+      "tags": [
+        "brand",
+        "ambiguous"
+      ],
+      "target_scope": "brand",
+      "target_ids": [
+        "mts-link"
+      ],
+      "group_ids": [
+        "414326",
+        "447242",
+        "447243"
+      ],
+      "targets_exhaustive": false,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "brand_browse_or_clarify",
+      "review_status": "pending",
+      "note_ru": "По контексту магазина допустим МТС Линк; если уверенности нет, уточнить, не обещать единственный смысл аббревиатуры."
+    },
+    {
+      "id": "tune-055",
+      "split": "tuning",
+      "brand_id": "webinar",
+      "query": "МТС Линк для вебинара на 30 участников",
+      "tags": [
+        "task_intent",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "mts-link"
+      ],
+      "group_ids": [
+        "414326"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "min_participants": 30,
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
+    },
+    {
+      "id": "tune-056",
+      "split": "tuning",
+      "brand_id": "positive-technologies",
+      "query": "продление MaxPatrol Endpoint Protection Platform",
+      "tags": [
+        "exact",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "maxpatrol-epp"
+      ],
+      "group_ids": [
+        "437421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "offer_kind": "renewal"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "В исходной группе шесть продлений; не считать их новой лицензией."
+    },
+    {
+      "id": "tune-057",
+      "split": "tuning",
+      "brand_id": "positive-technologies",
+      "query": "продление макспатрол епп",
+      "tags": [
+        "transliteration",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "maxpatrol-epp"
+      ],
+      "group_ids": [
+        "437421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "offer_kind": "renewal"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "В исходной группе шесть продлений; не считать их новой лицензией."
+    },
+    {
+      "id": "tune-058",
+      "split": "tuning",
+      "brand_id": "positive-technologies",
+      "query": "продление maxpatrlo epp",
+      "tags": [
+        "typo",
+        "license_constraint"
+      ],
+      "target_scope": "family",
+      "target_ids": [
+        "maxpatrol-epp"
+      ],
+      "group_ids": [
+        "437421"
+      ],
+      "targets_exhaustive": true,
+      "constraints": {
+        "offer_kind": "renewal"
+      },
+      "expected_behavior": "eligible_targets_or_explained_shortfall",
+      "review_status": "pending",
+      "note_ru": "В исходной группе шесть продлений; не считать их новой лицензией."
+    },
+    {
+      "id": "tune-059",
+      "split": "tuning",
+      "brand_id": "out-of-catalog",
+      "query": "корм для аквариумных рыб",
+      "tags": [
+        "out_of_catalog"
+      ],
+      "target_scope": "empty",
+      "target_ids": [],
+      "group_ids": [],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "empty_without_random_fill",
+      "review_status": "pending",
+      "note_ru": "Предварительный отрицательный пример, требует проверки отсутствия подходящего товара."
+    },
+    {
+      "id": "tune-060",
+      "split": "tuning",
+      "brand_id": "out-of-catalog",
+      "query": "свежие яблоки килограмм",
+      "tags": [
+        "out_of_catalog"
+      ],
+      "target_scope": "empty",
+      "target_ids": [],
+      "group_ids": [],
+      "targets_exhaustive": true,
+      "constraints": {
+        "exclude_offer_kinds": [
+          "renewal",
+          "upgrade",
+          "support"
+        ]
+      },
+      "expected_behavior": "empty_without_random_fill",
+      "review_status": "pending",
+      "note_ru": "Предварительный отрицательный пример, требует проверки отсутствия подходящего товара."
+    }
+  ]
 }
