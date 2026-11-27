@@ -33,6 +33,7 @@ func Search(ctx context.Context, backend Backend, input domain.Request) (domain.
 		d := hit.Document
 		invalid := d.OfferID == "" || d.FamilyID == "" || families[d.FamilyID] || offers[d.OfferID] || d.CatalogID != result.CatalogID || d.RoleConflict
 		invalid = invalid || !domain.ValidProductRole(d) || !domain.ProductRoleAllowed(r, d.ProductRole)
+		invalid = invalid || !domain.PurposeAllowed(r, d)
 		invalid = invalid || (r.FamilyID != "" && (d.FamilyID != r.FamilyID || !d.FamilyConfirmed))
 		invalid = invalid || (r.Kind != "" && d.OfferKind != r.Kind) || (r.Kind == "" && slices.Contains([]string{"renewal", "upgrade", "support"}, d.OfferKind))
 		invalid = invalid || (r.Version != "" && d.Version != r.Version) || (r.Platform != "" && !slices.Contains(d.Platforms, r.Platform)) || (r.ProductType != "" && d.ProductType != r.ProductType)

@@ -33,7 +33,7 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 15}, version)
+	spec := app.NewSpec(app.CatalogInfo{ID: "mapped-" + id, Offers: 18}, version)
 	t.Cleanup(func() {
 		m, exists, err := c.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -71,6 +71,9 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 		{"suite-personal", "326067", "OfficeSuite Personal"},
 		{"mobi-office", "397581", "MobiOffice OfficeSuite Windows 2025"},
 		{"mobi-pdf", "393014", "MobiPDF Windows 2025"},
+		{"red-edu", "165644", "РЕД ОС для образовательных организаций"},
+		{"ald-client", "287015", "ALD Pro клиентская лицензия"},
+		{"ald-server", "287015", "ALD Pro серверные лицензии"},
 	} {
 		price := int64(100)
 		vendor := "microsoft"
@@ -81,10 +84,14 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			vendor = "cyberprotect"
 		case "astra":
 			vendor = "astralinux"
+		case "ald-client", "ald-server":
+			vendor = "astralinux"
 		case "scanner":
 			vendor = "npo-echelon"
 		case "ungrouped":
 			vendor = "softlab_nsk"
+		case "red-edu":
+			vendor = "redsoft"
 		case "suite-home", "suite-family", "suite-personal", "mobi-office", "mobi-pdf":
 			vendor = "mobilesystems"
 		}
@@ -120,6 +127,10 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			groups  []domain.GroupCandidate
 			count   int
 		}{
+			{domain.Request{Query: "альтернатива Active Directory", Limit: 4}, []domain.GroupCandidate{{GroupID: "287015", Vendor: "astralinux", Score: 0.9}}, 1},
+			{domain.Request{Query: "операционная система", Limit: 4}, []domain.GroupCandidate{{GroupID: "165644", Vendor: "redsoft", Score: 0.9}}, 0},
+			{domain.Request{Query: "операционная система для школы", Limit: 4}, []domain.GroupCandidate{{GroupID: "165644", Vendor: "redsoft", Score: 0.9}}, 1},
+			{domain.Request{Query: "операционная система", Limit: 4}, []domain.GroupCandidate{{GroupID: "not-reviewed", Vendor: "microsoft", Score: 0.9}, {GroupID: "121231", Vendor: "astralinux", Score: 0.8}}, 1},
 			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "397581", Vendor: "mobilesystems", Score: 0.8}}, 1},
 			{domain.Request{Query: "задача без названия", Limit: 4}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "397581", Vendor: "mobilesystems", Score: 0.8}, {GroupID: "393014", Vendor: "mobilesystems", Score: 0.7}}, 2},
 			{domain.Request{Query: "задача без названия", Limit: 4, Version: "2025"}, []domain.GroupCandidate{{GroupID: "326068", Vendor: "mobilesystems", Score: 0.9}, {GroupID: "397581", Vendor: "mobilesystems", Score: 0.8}}, 1},
@@ -142,6 +153,9 @@ func TestReviewedMappingCollapsesEditionsBeforeCountingFour(t *testing.T) {
 			hits, err := c.Resolve(ctx, r, tc.groups, true, spec.CatalogID, spec.Fingerprint)
 			if err != nil || len(hits) != tc.count {
 				t.Fatalf("%+v: %+v %v", tc.request, hits, err)
+			}
+			if r.Plan.Purpose == "directory_service" && hits[0].Document.OfferID != "ald-server" {
+				t.Fatal("client license hid server before collapse")
 			}
 		}
 		r, _ := domain.Prepare(domain.Request{Query: "задача", Limit: 4})
