@@ -11,8 +11,9 @@
 PostgreSQL со staging-снимками и Docker Compose. Сервер и frontend ещё не реализованы.
 Добавлены CLI индексации и лексического поиска; спецификация и статус проверки —
 [лексический baseline](docs/lexical-baseline.md). Это следующий шаг к публичному API.
-Прохождение текущих тестов подтверждает согласованность контракта и fixtures,
-а не качество работающего поиска.
+Добавлена [обработка запросов query-v1](docs/query-normalization.md): алиасы,
+транслитерация, раскладка и ограниченный fuzzy fallback. Независимое качество
+поиска ещё не измерено; контрактные тесты сами по себе его не подтверждают.
 
 - [Спецификации](docs/README.md)
 - [Контракт OpenAPI 3.0.3](docs/openapi.yaml)
@@ -34,7 +35,8 @@ gofmt -l internal cmd contracts
 ```
 
 Docker, исходный feed и ключ OpenAI для этих проверок не нужны. Тесты не вызывают
-OpenAI и Elasticsearch. PostgreSQL-тесты пропускаются без TEST_POSTGRES_DSN.
+OpenAI. PostgreSQL/Elasticsearch-интеграции пропускаются без TEST_POSTGRES_DSN /
+TEST_ELASTICSEARCH_URL; с этими переменными используют реальные сервисы.
 По умолчанию проверки не тратят бюджет API.
 
 ## Проверка XML/gzip-каталога

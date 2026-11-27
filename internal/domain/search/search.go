@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 
@@ -74,7 +75,11 @@ func (r *Families) Resolve(o catalog.Offer) Family {
 type Request struct {
 	OriginalQuery, Query, Policy, Version, Kind, Platform, ProductType string
 	Limit, MinUsers                                                    int
+	Plan                                                               QueryPlan
 }
+
+var queryCSPVersion = regexp.MustCompile(`(?:^|\s)(?:csp|цсп)\s*(?:v)?([0-9]{1,4}(?:\.[0-9]{1,4}){1,3})\b`)
+var queryDecimal = regexp.MustCompile(`(?:^|\s)v?[0-9]{1,4}(?:\.[0-9]{1,4}){1,3}(?:$|\s)`)
 
 func Prepare(r Request) (Request, error) {
 	if !utf8.ValidString(r.Query) || utf8.RuneCountInString(r.Query) > 256 || strings.TrimSpace(r.Query) == "" || r.Limit < 4 || r.Limit > 20 || r.MinUsers < 0 || r.MinUsers > 1000000 || utf8.RuneCountInString(r.Version) > 80 || utf8.RuneCountInString(r.Platform) > 80 {
@@ -99,7 +104,17 @@ func Prepare(r Request) (Request, error) {
 		return r, ErrInvalidQuery
 	}
 	r.Platform = strings.ToLower(strings.TrimSpace(r.Platform))
-	c := catalog.Normalize(catalog.Offer{Name: r.Query})
+	canonical := canonicalQuery(r.Query)
+	c := catalog.Normalize(catalog.Offer{Name: canonical})
+	if c.Version.Status == catalog.Conflict || c.OfferKind.Status == catalog.Conflict {
+		return r, ErrInvalidQuery
+	}
+	for _, match := range queryCSPVersion.FindAllStringSubmatch(canonical, -1) {
+		if r.Version != "" && r.Version != match[1] {
+			return r, fmt.Errorf("%w: conflicting versions", ErrInvalidQuery)
+		}
+		r.Version = match[1]
+	}
 	if c.Version.Status == catalog.Known {
 		if r.Version != "" && r.Version != c.Version.Value {
 			return r, fmt.Errorf("%w: conflicting versions", ErrInvalidQuery)
@@ -119,6 +134,12 @@ func Prepare(r Request) (Request, error) {
 		case "по для сервера", "программное обеспечение для сервера":
 			r.ProductType = "software"
 		}
+	}
+	r.Plan = queryPlan(r.Query, r.Kind)
+	if r.Version == "" && r.Plan.LimitReason == "" && queryDecimal.MatchString(canonical) {
+		r.Plan.ExactOnly = true
+		r.Plan.Variants = nil
+		r.Plan.LimitReason = "unparsed_numeric_constraint"
 	}
 	return r, nil
 }
@@ -200,6 +221,15 @@ type Result struct {
 	Hits                                        []Hit
 	UnpricedFallbackUsed, FourFamiliesConfirmed bool
 	ShortfallReason                             string
+	QueryPlan                                   QueryPlan
+	SearchMode                                  string
+	SearchAttempts                              []SearchAttempt
+}
+
+type SearchAttempt struct {
+	Mode             string
+	Priced           bool
+	FamiliesReturned int
 }
 
 func Describe(result *Result) {

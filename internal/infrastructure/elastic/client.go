@@ -126,6 +126,14 @@ func (c *Client) Prepare(ctx context.Context, spec app.Spec) (bool, error) {
 		return m.State == "ready", nil
 	}
 	_, code, err := c.request(ctx, "PUT", "/"+spec.Name, mapping(spec))
+	if err != nil && ctx.Err() == nil {
+		// A timed-out PUT may have created the index before transport retries it.
+		// Adopt only the exact expected immutable specification, never a foreign index.
+		m, exists, readErr := c.meta(ctx, spec.Name)
+		if readErr == nil && exists && m.Spec == spec && (m.State == "staging" || m.State == "ready") {
+			return m.State == "ready", nil
+		}
+	}
 	if code == 404 && err == nil {
 		err = domain.ErrUnavailable
 	}
@@ -262,6 +270,8 @@ func (c *Client) Activate(ctx context.Context, spec app.Spec) error {
 }
 
 func (c *Client) Search(ctx context.Context, r domain.Request) (domain.Result, error) {
+	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	defer cancel()
 	result := domain.Result{Query: r.OriginalQuery}
 	indexes, err := c.aliases(ctx)
 	if err != nil {
@@ -279,16 +289,31 @@ func (c *Client) Search(ctx context.Context, r domain.Request) (domain.Result, e
 	}
 	result.CatalogID = m.Spec.CatalogID
 	result.IndexVersion = m.Spec.Fingerprint
-	result.Hits, err = c.hits(ctx, indexes[0], r, true)
-	if err != nil {
-		return result, err
-	}
-	if len(result.Hits) == 0 {
-		result.Hits, err = c.hits(ctx, indexes[0], r, false)
-		result.UnpricedFallbackUsed = len(result.Hits) > 0
-	}
-	if err != nil {
-		return result, err
+	result.SearchMode = "none"
+	for _, priced := range []bool{true, false} {
+		for _, expanded := range []bool{false, true} {
+			if expanded && (r.Plan.ExactOnly || len(r.Plan.Variants) == 0) {
+				continue
+			}
+			hits, searchErr := c.hits(ctx, indexes[0], r, priced, expanded)
+			if searchErr != nil {
+				return result, searchErr
+			}
+			mode := "exact"
+			if expanded {
+				mode = "expanded"
+			}
+			result.SearchAttempts = append(result.SearchAttempts, domain.SearchAttempt{Mode: mode, Priced: priced, FamiliesReturned: len(hits)})
+			if len(hits) > 0 {
+				result.Hits = hits
+				result.SearchMode = mode
+				result.UnpricedFallbackUsed = !priced
+				break
+			}
+		}
+		if len(result.Hits) > 0 {
+			break
+		}
 	}
 	for _, hit := range result.Hits {
 		if hit.Document.CatalogID != result.CatalogID {
@@ -299,8 +324,8 @@ func (c *Client) Search(ctx context.Context, r domain.Request) (domain.Result, e
 	return result, nil
 }
 
-func (c *Client) hits(ctx context.Context, index string, r domain.Request, priced bool) ([]domain.Hit, error) {
-	raw, code, err := c.request(ctx, "POST", "/"+index+"/_search", queryBody(r, priced))
+func (c *Client) hits(ctx context.Context, index string, r domain.Request, priced, expanded bool) ([]domain.Hit, error) {
+	raw, code, err := c.request(ctx, "POST", "/"+index+"/_search", searchBody(r, priced, expanded))
 	if err != nil {
 		return nil, err
 	}

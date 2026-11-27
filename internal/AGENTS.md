@@ -15,6 +15,7 @@
 | Elasticsearch + PostgreSQL | `docker compose --profile search up -d --wait postgres elasticsearch` |
 | Индексация активного снимка | `go run ./cmd/catalog-index` |
 | Поиск CLI | `go run ./cmd/search -query "сервер"` |
+| Диагностика только tuning | `python scripts/evaluate-tuning.py` после сборки bin/search.exe |
 | Интеграционные тесты всех адаптеров | задать `TEST_POSTGRES_DSN` и `TEST_ELASTICSEARCH_URL`, затем `go test -count=1 -v ./internal/infrastructure/...` |
 | Интеграционные тесты | задать `TEST_POSTGRES_DSN`, затем `go test -count=1 -v ./internal/infrastructure/postgres` |
 | Сборка CLI | `go build -o bin/catalog-check.exe ./cmd/catalog-check` |
@@ -37,6 +38,9 @@ CLI search/catalog-index используют порты application; прави
 docs/lexical-baseline.md. Маппинг семейств — internal/infrastructure/families/rules.json;
 его канонический SHA-256 входит в index version. Новая семантика документа требует
 повышения DocumentSchemaVersion; provisional family keys не означают разные семейства.
+Query policy — docs/query-normalization.md, версионируется QueryPolicyVersion отдельно
+от индекса. Не расширяй цифры/артикулы fuzzy; фильтры сохраняются во всех попытках.
+Не запускай holdout для подбора правил; evaluate-tuning.py читает только tuning.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.

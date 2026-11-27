@@ -47,6 +47,8 @@ def main():
             "first_matching_rank": min(matching_ranks) if matching_ranks else None,
             "cli_elapsed_ms": round((time.perf_counter() - started) * 1000),
             "catalog_id": result["CatalogID"], "index_version": result["IndexVersion"],
+            "query_policy_version":result.get("QueryPlan",{}).get("Version","legacy_exact"),
+            "search_mode":result.get("SearchMode","legacy_exact"),
             "four_families_confirmed": result["FourFamiliesConfirmed"], "hits": hits,
         })
     errors = sum("error" in row for row in rows)
