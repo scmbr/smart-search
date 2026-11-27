@@ -22,9 +22,10 @@ type catalogFeed struct {
 	conn       *pgxpool.Conn
 	info       app.CatalogInfo
 	categories []catalog.Category
+	validation catalog.Validation
 }
 
-func (s *CatalogSource) Open(ctx context.Context) (_ app.Feed, err error) {
+func (s *CatalogSource) openMetadata(ctx context.Context) (_ *catalogFeed, err error) {
 	conn, err := s.pool.Acquire(ctx)
 	if err != nil {
 		return nil, err
@@ -59,6 +60,21 @@ func (s *CatalogSource) Open(ctx context.Context) (_ app.Feed, err error) {
 		return nil, err
 	}
 	f.info.Offers = validation.Accepted
+	f.validation = catalog.Validation(validation)
+	return f, nil
+}
+
+func (s *CatalogSource) Open(ctx context.Context) (_ app.Feed, err error) {
+	f, err := s.openMetadata(ctx)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err != nil {
+			err = errors.Join(err, f.Close())
+		}
+	}()
+	conn := f.conn
 	rows, err := conn.Query(ctx, "SELECT payload FROM catalog_records WHERE snapshot_id=$1 AND kind='category' ORDER BY ordinal", f.info.ID)
 	if err != nil {
 		return nil, err

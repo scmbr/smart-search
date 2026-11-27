@@ -86,6 +86,12 @@ catalog-import читает .env, переменные процесса имею
 Elasticsearch включается отдельно профилем search: 2 ГБ RAM/2 CPU, heap 512 МБ.
 После импорта запустить `docker compose --profile search up -d --wait elasticsearch`,
 `go run ./cmd/catalog-index`, затем `go run ./cmd/search -query "сервер"`.
+Для локального PostgreSQL с лимитом 1 ГБ перед индексацией в PowerShell:
+`$env:PGOPTIONS = '-c max_parallel_workers_per_gather=0 -c jit=off'`.
+Это проверенная конфигурация; без неё чтение категорий полного снимка превышало 30 с.
+При медленном чтении больших JSON можно индексировать оригинальный feed:
+`go run ./cmd/catalog-index -local-feed <путь-к-feed>` — только при совпадении SHA,
+версии нормализации и reader limits с активным снимком; [правила и измерения](docs/product-roles.md).
 Индексы хранятся в собственном named volume; старые автоматически не удаляются.
 
 После оплаченного пилота доступен эксперимент без новых API-вызовов:

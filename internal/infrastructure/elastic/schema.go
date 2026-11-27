@@ -9,9 +9,10 @@ import (
 
 func mapping(spec app.Spec) map[string]any {
 	properties := map[string]any{}
-	for _, name := range []string{"OfferID", "GroupID", "FamilyID", "FamilySource", "URL", "CategoryID", "CatalogID", "ProductType", "OfferKind", "Version", "Platforms", "Edition", "TermKind", "Deployment"} {
+	for _, name := range []string{"OfferID", "GroupID", "FamilyID", "FamilySource", "URL", "CategoryID", "CatalogID", "ProductType", "OfferKind", "Version", "Platforms", "Edition", "TermKind", "Deployment", "ProductRole", "ProductRoleRule", "ProductRoleSource"} {
 		properties[name] = map[string]any{"type": "keyword", "ignore_above": 8192}
 	}
+	properties["ProductRoleText"] = map[string]any{"type": "text", "index": false}
 	for _, name := range []string{"FamilyConfirmed", "RoleConflict", "HasPrice", "Available"} {
 		properties[name] = map[string]any{"type": "boolean"}
 	}
@@ -39,6 +40,9 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 		return map[string]any{"term": map[string]any{field: value}}
 	}
 	filters := []any{term("HasPrice", priced), term("RoleConflict", false)}
+	if r.RequestedProductRole != "" {
+		filters = append(filters, term("ProductRole", r.RequestedProductRole))
+	}
 	if r.FamilyID != "" {
 		filters = append(filters, term("FamilyID", r.FamilyID), term("FamilyConfirmed", true))
 	}
@@ -101,8 +105,15 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 	}
 	text := map[string]any{"bool": map[string]any{"minimum_should_match": 1, "should": clauses}}
 	boolQuery := map[string]any{"must": []any{text}, "filter": filters, "should": []any{map[string]any{"term": map[string]any{"OfferKind": map[string]any{"value": "new_license", "boost": 0.15}}}}}
+	var excluded []any
 	if r.Kind == "" {
-		boolQuery["must_not"] = []any{map[string]any{"terms": map[string]any{"OfferKind": []string{"renewal", "upgrade", "support"}}}}
+		excluded = append(excluded, map[string]any{"terms": map[string]any{"OfferKind": []string{"renewal", "upgrade", "support"}}})
+	}
+	if roles := domain.ExcludedProductRoles(r); len(roles) > 0 {
+		excluded = append(excluded, map[string]any{"terms": map[string]any{"ProductRole": roles}})
+	}
+	if len(excluded) > 0 {
+		boolQuery["must_not"] = excluded
 	}
 	return map[string]any{"size": r.Limit, "timeout": "5s", "track_total_hits": false, "query": map[string]any{"bool": boolQuery}, "collapse": map[string]any{"field": "FamilyID"}, "sort": []any{map[string]string{"_score": "desc"}, map[string]string{"Available": "desc"}, map[string]string{"OfferID": "asc"}}}
 }

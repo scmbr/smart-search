@@ -14,6 +14,7 @@
 | Импорт из CATALOG_PATH | `go run ./cmd/catalog-import` |
 | Elasticsearch + PostgreSQL | `docker compose --profile search up -d --wait postgres elasticsearch` |
 | Индексация активного снимка | `go run ./cmd/catalog-index` |
+| Индексация из сверенного feed | `go run ./cmd/catalog-index -local-feed <путь>`; SHA/normalization/limits должны совпасть с active snapshot |
 | Поиск CLI | `go run ./cmd/search -query "сервер"` |
 | Экспериментальный гибрид без API | `go run ./cmd/search -query "хочу находить уязвимости в сети компании" -hybrid-corpus artifacts/embedding-pilot-dataset.json` |
 | Диагностика только tuning | `python scripts/evaluate-tuning.py` после сборки bin/search.exe |
@@ -49,6 +50,15 @@ docs/lexical-baseline.md. Маппинг семейств — internal/infrastru
 повышения DocumentSchemaVersion; provisional family keys не означают разные семейства.
 Query policy — docs/query-normalization.md и docs/query-constraints.md, версионируется QueryPolicyVersion отдельно
 от индекса. Не расширяй цифры/артикулы fuzzy; фильтры сохраняются во всех попытках.
+Роли SKU — docs/product-roles.md: lexical-v6/query-v5, product-role-v1.
+Классифицируй по идентичности/источникам, а не по query targets. Фильтруй до
+collapse во всех ветках; application пересчитывает роль/evidence. Unknown не
+является подтверждённым основным продуктом. Не исключай SaaS по слову «сервис»
+или полную лицензию с включённой поддержкой. После изменения классификатора
+повышай версию документа и перестраивай отдельный индекс, без удаления старого.
+Файловый источник индекса не обходит pinning/validation/current check: приватная
+копия и spool <=4 ГиБ, полная проверка до Prepare, тот же domain.Normalize и
+проверенное равенство Document. Не импортируй изменённый файл под старым snapshot ID.
 Разметка 100 кейсов принята пользователем; не запрашивай это одобрение повторно.
 Не запускай holdout для подбора правил; evaluate-tuning.py читает только tuning.
 Пилот OpenAI — docs/embedding-pilot.md. Его live-режим требует явного разрешения

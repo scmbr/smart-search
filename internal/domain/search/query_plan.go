@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-const QueryPolicyVersion = "query-v4"
+const QueryPolicyVersion = "query-v5"
 
 type QueryTerm struct {
 	Text      string
@@ -19,10 +19,12 @@ type QueryVariant struct {
 }
 
 type QueryPlan struct {
-	Version     string
-	ExactOnly   bool
-	LimitReason string
-	Variants    []QueryVariant
+	ProductRoleVersion, RequestedProductRole string
+	ExcludedProductRoles                     []string
+	Version                                  string
+	ExactOnly                                bool
+	LimitReason                              string
+	Variants                                 []QueryVariant
 }
 
 // Alias phrases are word-boundary replacements, never rules for individual typos.
