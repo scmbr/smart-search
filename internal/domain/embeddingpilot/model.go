@@ -103,7 +103,11 @@ func Cosine(a, b []float64) (float64, error) {
 	if aa == 0 || bb == 0 {
 		return 0, errors.New("zero vector")
 	}
-	return dot / math.Sqrt(aa*bb), nil
+	score := dot / math.Sqrt(aa*bb)
+	if math.IsNaN(score) || math.IsInf(score, 0) || math.IsInf(aa*bb, 0) {
+		return 0, errors.New("vector arithmetic overflow")
+	}
+	return score, nil
 }
 func ValidateVector(v []float64) error {
 	if len(v) != Dimensions {

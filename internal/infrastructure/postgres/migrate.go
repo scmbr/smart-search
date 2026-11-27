@@ -20,6 +20,9 @@ var catalogSchema string
 //go:embed migrations/002_embedding_pilot.sql
 var embeddingSchema string
 
+//go:embed migrations/003_embedding_runtime.sql
+var embeddingRuntimeSchema string
+
 const migrationLock int64 = 7362784101
 const importLock int64 = 7362784102
 
@@ -36,7 +39,7 @@ func Migrate(ctx context.Context, pool *pgxpool.Pool) error {
 	if _, err := tx.Exec(ctx, `CREATE TABLE IF NOT EXISTS schema_migrations (version integer PRIMARY KEY, sha256 text NOT NULL, applied_at timestamptz NOT NULL DEFAULT now())`); err != nil {
 		return err
 	}
-	for i, schema := range []string{catalogSchema, embeddingSchema} {
+	for i, schema := range []string{catalogSchema, embeddingSchema, embeddingRuntimeSchema} {
 		version := i + 1
 		h := sha256.Sum256([]byte(schema))
 		checksum := hex.EncodeToString(h[:])

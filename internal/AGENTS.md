@@ -49,7 +49,10 @@ Query policy — docs/query-normalization.md и docs/query-constraints.md, ве�
 Ключ не выводить. Вызовы проходят через api_budget/api_reservations и embedding_cache
 (миграция 002); не обнулять расходы/неизвестные резервы при рестарте или ошибке.
 Новые платные компоненты должны учитывать этот же общий бюджет, а не создавать
-отдельный лимит 5 USD. Кэш/лимиты пилота не означают готовый production worker pool.
+отдельный лимит 5 USD. Эмбеддинги исполняй через application/embeddingpilot.Runtime:
+общие слоты/ключи и постоянные pending migration 003; см. docs/embedding-runtime.md.
+Не обходи Runtime прямым вызовом Provider/SDK. Не освобождай unresolved claims
+по TTL и не повторяй тайм-ауты/5xx автоматически. HTTP fallback пока не подключён.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
 CI запускает форматирование, vet, сборку и тесты на Linux и Windows при наличии
 отслеживаемого go.mod. Локальные проверки обязательны независимо от CI.
