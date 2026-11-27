@@ -73,6 +73,7 @@ func (r *Families) Resolve(o catalog.Offer) Family {
 }
 
 type Request struct {
+	SemanticQuery                                                      string
 	FamilyID                                                           string
 	ProductIntents                                                     []ProductIntent
 	OriginalQuery, Query, Policy, Version, Kind, Platform, ProductType string
@@ -88,6 +89,7 @@ var queryCSPVersion = regexp.MustCompile(`(?:^|\s)(?:csp|цсп)\s*(?:v)?([0-9]{
 var queryDecimal = regexp.MustCompile(`(?:^|\s)v?[0-9]{1,4}(?:\.[0-9]{1,4}){1,3}(?:$|\s)`)
 
 func Prepare(r Request) (Request, error) {
+	r.SemanticQuery = "" // Only the validated interpreter may set a retrieval hypothesis.
 	if len(r.FamilyID) > 128 || (r.FamilyID != "" && !familyIdentifier.MatchString(r.FamilyID)) {
 		return r, ErrInvalidQuery
 	}

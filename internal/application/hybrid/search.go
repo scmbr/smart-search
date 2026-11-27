@@ -4,6 +4,7 @@ package hybrid
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	d "github.com/scmbr/smart-search/internal/domain/search"
 )
@@ -15,7 +16,11 @@ type Catalog interface {
 type Vectors interface {
 	Candidates(context.Context, d.Request) ([]d.GroupCandidate, error)
 }
+type Parser interface {
+	Interpret(context.Context, string) (d.Interpretation, error)
+}
 type Backend struct {
+	Parser                     Parser
 	Lexical                    Catalog
 	Vectors                    Vectors
 	CorpusSHA, ExpectedCatalog string
@@ -39,7 +44,7 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 	if err != nil {
 		return result, err
 	}
-	trace := &d.HybridTrace{Version: d.HybridVersion, CorpusSHA: b.CorpusSHA, CorpusDocuments: b.CorpusDocuments, LexicalFamilies: len(result.Hits), VectorStatus: "fallback"}
+	trace := &d.HybridTrace{Version: d.HybridVersion, CorpusSHA: b.CorpusSHA, CorpusDocuments: b.CorpusDocuments, LexicalFamilies: len(result.Hits), VectorStatus: "fallback", InterpretationStatus: "not_selected"}
 	result.Hybrid = trace
 	finish := func() (d.Result, error) {
 		if err := ctx.Err(); err != nil {
@@ -62,7 +67,36 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 	if b.Vectors == nil {
 		return finish()
 	}
-	groups, err := b.Vectors.Candidates(ctx, r)
+	vectorRequest := r
+	vectorRequest.SemanticQuery = ""
+	if len(result.Hits) == 0 && len(strings.Fields(r.OriginalQuery)) >= 5 && r.FamilyID == "" && len(r.ProductIntents) == 0 {
+		trace.InterpretationStatus = "disabled"
+		if b.Parser != nil {
+			x, parseErr := b.Parser.Interpret(ctx, r.OriginalQuery)
+			if err := ctx.Err(); err != nil {
+				return d.Result{}, err
+			}
+			switch {
+			case parseErr != nil:
+				trace.InterpretationStatus = "fallback"
+			case d.ValidateInterpretation(r.OriginalQuery, x) != nil:
+				trace.InterpretationStatus = "invalid"
+			case x.Status == "clarify":
+				trace.InterpretationStatus = "clarification_required"
+				trace.VectorStatus = "skipped_interpretation"
+				return finish()
+			case x.Status == "unsupported":
+				trace.InterpretationStatus = "unsupported"
+				trace.VectorStatus = "skipped_interpretation"
+				return finish()
+			default:
+				trace.InterpretationStatus = "used"
+				trace.SemanticQuery = x.SemanticQuery
+				vectorRequest.SemanticQuery = x.SemanticQuery
+			}
+		}
+	}
+	groups, err := b.Vectors.Candidates(ctx, vectorRequest)
 	if err != nil {
 		return finish()
 	}

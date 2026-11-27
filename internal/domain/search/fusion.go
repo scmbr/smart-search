@@ -17,6 +17,7 @@ type GroupCandidate struct {
 	Score                    float64
 }
 type HybridTrace struct {
+	InterpretationStatus, SemanticQuery              string
 	Version, CorpusSHA, VectorStatus                 string
 	CorpusDocuments, LexicalFamilies, VectorFamilies int
 	VectorCandidates                                 []GroupCandidate

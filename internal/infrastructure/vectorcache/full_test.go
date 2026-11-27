@@ -66,7 +66,11 @@ func TestFullCorpusLoadedOnceAndSKUIdentityPreserved(t *testing.T) {
 		t.Fatal(err)
 	}
 	for i := 0; i < 2; i++ {
-		got, err := corpus.Candidates(context.Background(), search.Request{OriginalQuery: "task"})
+		request := search.Request{OriginalQuery: "task"}
+		if i == 1 {
+			request = search.Request{OriginalQuery: "uncached original", SemanticQuery: "task"}
+		}
+		got, err := corpus.Candidates(context.Background(), request)
 		if err != nil || len(got) != 2 || got[1].OfferID != "s" || got[1].GroupID != "" {
 			t.Fatalf("%+v %v", got, err)
 		}

@@ -38,7 +38,7 @@ func New(x embedding.Dataset, runtime app.Runtime) (*Corpus, error) {
 	return &Corpus{dataset: x, runtime: runtime}, nil
 }
 func (c *Corpus) Candidates(ctx context.Context, r d.Request) ([]d.GroupCandidate, error) {
-	query, err := c.runtime.Ensure(ctx, []string{r.OriginalQuery}, app.Options{})
+	query, err := c.runtime.Ensure(ctx, []string{r.VectorQuery()}, app.Options{})
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *Corpus) Candidates(ctx context.Context, r d.Request) ([]d.GroupCandidat
 	if err != nil {
 		return nil, err
 	}
-	q := query.Vectors[embedding.CacheKey(r.OriginalQuery)]
+	q := query.Vectors[embedding.CacheKey(r.VectorQuery())]
 	var out []d.GroupCandidate
 	for _, doc := range c.dataset.Documents {
 		if err := ctx.Err(); err != nil {

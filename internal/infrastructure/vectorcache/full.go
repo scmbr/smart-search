@@ -73,11 +73,11 @@ func (c *Full) Candidates(ctx context.Context, r d.Request) ([]d.GroupCandidate,
 	if err != nil {
 		return nil, err
 	}
-	query, err := c.runtime.Ensure(ctx, []string{r.OriginalQuery}, app.Options{Live: c.liveQueries, RunCapNano: QueryRunCapNano, ProjectCapNano: embedding.ProjectCapNano})
+	query, err := c.runtime.Ensure(ctx, []string{r.VectorQuery()}, app.Options{Live: c.liveQueries, RunCapNano: QueryRunCapNano, ProjectCapNano: embedding.ProjectCapNano})
 	if err != nil {
 		return nil, err
 	}
-	q := query.Vectors[embedding.CacheKey(r.OriginalQuery)]
+	q := query.Vectors[embedding.CacheKey(r.VectorQuery())]
 	var out []d.GroupCandidate
 	for _, doc := range documents {
 		if err := ctx.Err(); err != nil {
