@@ -1,4 +1,4 @@
-# Лексический поиск: lexical-v3
+# Лексический поиск: lexical-v4
 
 Целевой путь: активный PostgreSQL-снимок → Elasticsearch → CLI search.
 Статус: domain/application, адаптеры и CLI реализованы; unit/HTTP/реальные
@@ -6,8 +6,8 @@ PostgreSQL/Elasticsearch-тесты проходят. Полный feed прои
 Публичный HTTP API, рекомендации/verifier и интерфейс — следующие части MVP.
 Этот шаг не расходует OpenAI API и не подбирает параметры по holdout.
 Правила опечаток query-v1 описаны в [query-normalization.md](query-normalization.md).
-Новые [условия query-v2](query-constraints.md) используют characteristics-v3 /
-lexical-v3 и требуют нового снимка/индекса. Устаревшая схема возвращает not ready.
+Новые [условия query-v3](query-constraints.md) используют characteristics-v4 /
+lexical-v4 и требуют нового снимка/индекса. Устаревшая схема возвращает not ready.
 Для воспроизводимости выдачи CLI показывает также версию query policy.
 
 ## Подготовка индекса
@@ -43,7 +43,7 @@ group ID, если узел существует; это поисковый те
 Исторически query-v1: ProductName=24; в query-v2 вес повышен до 64
 после regression-проверки с расширенным каталогом SKU. Name=8, FamilyName=4, VendorCode=12, Vendor=2, CategoryNames=3,
 Description=1. Иначе ПО, которое упоминает платформу в длинном SKU, может вытеснить ОС.
-Reader v2 поддерживает старую схему v1 на время пересборки; новое поле аддитивно.
+Текущий reader принимает только актуальные версии схемы и нормализации; нужен новый immutable индекс.
 Анализатор разделяет CamelCase, сохраняет исходные токены, приводит регистр/ё и
 применяет русский stemming. Ввод передаётся как текст, не как query_string DSL.
 Фильтры характеристик применяются до collapse и к конкретному SKU.
@@ -78,6 +78,7 @@ docker compose --profile search up -d --wait postgres elasticsearch
 go run ./cmd/catalog-index
 go run ./cmd/search -query "КриптоПро CSP 5.0"
 go run ./cmd/search -query "сервер"
+go run ./cmd/search -query "Сканер-ВС" -min-ip-addresses 256
 $env:TEST_POSTGRES_DSN = 'postgres://smart_search:smart_search_local@127.0.0.1:5432/smart_search?sslmode=disable'
 $env:TEST_ELASTICSEARCH_URL = 'http://localhost:9200'
 go test -count=1 -v ./internal/infrastructure/...
@@ -87,6 +88,9 @@ go test -count=1 -v ./internal/infrastructure/...
 повторно копировать исходный feed не требуется. Сервис поиска читает физический
 индекс с метаданными; Elasticsearch API key при наличии используется только backend.
 Результат CLI — отладочный контракт baseline, не реализация docs/openapi.yaml.
+Ёмкости CLI: `-min-users`, `-min-devices`, `-min-ip-addresses`, `-min-participants`.
+Ноль означает отсутствие условия, положительное N — известную границу >= N;
+конфликт CLI и текста отклоняется. Эти четыре единицы не взаимозаменяемы.
 Нужен запас места для Docker-образа/индекса/Go-кэшей; перед первым запуском —
 не менее 10 ГБ свободного диска, контейнер ES ограничен 2 ГБ RAM/2 CPU, heap=512 МБ.
 

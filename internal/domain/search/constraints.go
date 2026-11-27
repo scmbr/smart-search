@@ -15,7 +15,7 @@ type QueryConstraint struct{ Field, Value, Text, Source string }
 
 const countWords = `-?[0-9]{1,7}|одного|одной|один|одну|одна|двух|два|две|трех|три|четырех|четыре|пяти|пять|шести|шесть|семи|семь|восьми|восемь|девяти|девять|десяти|десять`
 
-var quantityQuery = regexp.MustCompile(`(?:^|\s)(` + countWords + `)\s+(пользовател[ьяей]+|users?|пк|компьютер[аоыев]*|устройств[ао]*|участник[аоыев]*|ip(?:\s+адрес[аоыев]*)?)`)
+var quantityQuery = regexp.MustCompile(`(?:^|\s)(` + countWords + `)\s+(пользовател[ьяей]+|users?|пк|компьютер[аоыев]*|устройств[ао]*|участник[аоыев]*|ip(?:[- ]адрес[аоыев]*)?)`)
 var termQuery = regexp.MustCompile(`(?:^|\s)(` + countWords + `)\s+(месяц(?:а|ев)?|мес\.?|год(?:а)?|лет|months?|years?)`)
 var bareYearQuery = regexp.MustCompile(`(?:^|\s)на\s+год`)
 var perpetualQuery = regexp.MustCompile(`(?:^|\s)(бессрочн(?:о|ая|ый)|без ограничения срока|без ограничений по сроку)`)
@@ -23,13 +23,15 @@ var editionQuery = regexp.MustCompile(`(?:^|\s)(standard|enterprise|professional
 var explicitEditionQuery = regexp.MustCompile(`(?:^|\s)редакци[яи]\s+([\pL]+)`)
 var homeBusinessQuery = regexp.MustCompile(`(?:^|\s)(для дома и бизнеса|home and business)`)
 var homeStudentQuery = regexp.MustCompile(`(?:^|\s)(для дома и учебы|home and student)`)
+var officeHomeQuery = regexp.MustCompile(`(?:^|\s)(для дома|home)\s+2024`)
 var serverQuery = regexp.MustCompile(`(?:^|\s)для\s+(?:(?:физического|файлового|виртуального)\s+)?сервера`)
 var workstationQuery = regexp.MustCompile(`(?:^|\s)для\s+рабочей\s+станции`)
 var availabilityQuery = regexp.MustCompile(`(?:^|\s)в\s+наличии`)
 var daysQuery = regexp.MustCompile(`(?:^|\s)(` + countWords + `)\s+(день|дня|дней|days?)`)
-var quantityRange = regexp.MustCompile(`(?:от\s+[0-9]+\s+до\s+|[0-9]+\s*[-–/]\s*)[0-9]+\s+(?:пользовател|пк|устройств|месяц|год)`)
+var quantityRange = regexp.MustCompile(`(?:от\s+[0-9]+\s+до\s+|[0-9]+\s*[-–/]\s*)[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|участник|ip|месяц|год)`)
 var negativeQuantity = regexp.MustCompile(`(?:^|\s)(?:(?:на|для|до)\s*)?-[0-9]+\s+(?:пользовател|users?|пк|устройств|участник|ip|месяц|мес|год|лет)`)
-var negatedConstraint = regexp.MustCompile(`(?:^|\s)(?:не|без)\s+(?:на\s+)?(?:standard|enterprise|professional|advanced|family|personal|продлени[ея]|обновлени[ея]|поддержк[аи]|[0-9]+\s+(?:месяц|год|лет)|год)`)
+var negatedConstraint = regexp.MustCompile(`(?:^|\s)(?:не|без)\s+(?:на\s+)?(?:standard|enterprise|professional|advanced|family|personal|продлени[ея]|обновлени[ея]|поддержк[аи]|[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|участник|ip|месяц|год|лет)|год)`)
+var mixedCapacityQuery = regexp.MustCompile(`[0-9]+\s+(?:пк|пользовател[ьяей]+|users?|ip|участник[аоыев]*)\s*/`)
 
 func parseCount(s string) (int, error) {
 	words := map[string]int{"один": 1, "одну": 1, "одна": 1, "одного": 1, "одной": 1, "два": 2, "две": 2, "двух": 2, "три": 3, "трех": 3, "четыре": 4, "четырех": 4, "пять": 5, "пяти": 5, "шесть": 6, "шести": 6, "семь": 7, "семи": 7, "восемь": 8, "восьми": 8, "девять": 9, "девяти": 9, "десять": 10, "десяти": 10}
@@ -46,6 +48,11 @@ func parseCount(s string) (int, error) {
 func parseConstraints(r *Request) error {
 	r.Constraints = nil
 	r.UnsupportedConstraints = nil
+	for _, n := range []int{r.MinDevices, r.MinIPAddresses, r.MinParticipants} {
+		if n < 0 || n > 1000000 {
+			return ErrInvalidQuery
+		}
+	}
 	if r.TermMonths < 0 || r.TermMonths > 1200 || len(r.Edition) > 80 {
 		return ErrInvalidQuery
 	}
@@ -81,6 +88,10 @@ func parseConstraints(r *Request) error {
 	}
 	if negatedConstraint.MatchString(text) {
 		unsupported("negated_constraint", text)
+		return nil
+	}
+	if mixedCapacityQuery.MatchString(text) {
+		unsupported("mixed_capacity_units", text)
 		return nil
 	}
 	set := func(field, value, fragment string, destination *string) error {
@@ -185,22 +196,20 @@ func parseConstraints(r *Request) error {
 		if err != nil {
 			return err
 		}
-		if strings.HasPrefix(m[2], "пользовател") || strings.HasPrefix(m[2], "user") {
-			if r.MinUsers > 0 && r.MinUsers != n {
-				return fmt.Errorf("%w: conflicting users", ErrInvalidQuery)
-			}
-			r.MinUsers = n
-			add("min_users", strconv.Itoa(n), m[0])
-		} else {
-			field := "min_devices"
-			if strings.HasPrefix(m[2], "участник") {
-				field = "min_participants"
-			}
-			if strings.HasPrefix(m[2], "ip") {
-				field = "min_ip_addresses"
-			}
-			r.UnsupportedConstraints = append(r.UnsupportedConstraints, QueryConstraint{Field: field, Value: strconv.Itoa(n), Text: strings.TrimSpace(m[0]), Source: "query"})
+		field, destination := "min_devices", &r.MinDevices
+		switch {
+		case strings.HasPrefix(m[2], "пользовател"), strings.HasPrefix(m[2], "user"):
+			field, destination = "min_users", &r.MinUsers
+		case strings.HasPrefix(m[2], "участник"):
+			field, destination = "min_participants", &r.MinParticipants
+		case strings.HasPrefix(m[2], "ip"):
+			field, destination = "min_ip_addresses", &r.MinIPAddresses
 		}
+		if *destination > 0 && *destination != n {
+			return fmt.Errorf("%w: conflicting %s", ErrInvalidQuery, field)
+		}
+		*destination = n
+		add(field, strconv.Itoa(n), m[0])
 		return nil
 	}); err != nil {
 		return err
@@ -230,6 +239,17 @@ func parseConstraints(r *Request) error {
 			return err
 		}
 		if err := apply(homeStudentQuery, func(m []string) error { return set("edition", "home_student", m[0], &r.Edition) }); err != nil {
+			return err
+		}
+	}
+	if strings.HasPrefix(context, "microsoft office ") {
+		if err := apply(officeHomeQuery, func(m []string) error {
+			if r.Version != "" && r.Version != "2024" {
+				return ErrInvalidQuery
+			}
+			r.Version = "2024"
+			return set("edition", "home_student", m[0], &r.Edition)
+		}); err != nil {
 			return err
 		}
 	}

@@ -15,7 +15,7 @@ func mapping(spec app.Spec) map[string]any {
 	for _, name := range []string{"FamilyConfirmed", "RoleConflict", "HasPrice", "Available"} {
 		properties[name] = map[string]any{"type": "boolean"}
 	}
-	for _, name := range []string{"UsersLimit", "PriceMinor", "TermMonths"} {
+	for _, name := range []string{"UsersLimit", "DevicesLimit", "IPAddressesLimit", "ParticipantsLimit", "PriceMinor", "TermMonths"} {
 		properties[name] = map[string]any{"type": "long"}
 	}
 	for _, name := range []string{"Name", "ProductName", "Vendor", "FamilyName", "CategoryNames", "Description", "VendorCode"} {
@@ -56,6 +56,14 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 	}
 	if r.MinUsers > 0 {
 		filters = append(filters, map[string]any{"range": map[string]any{"UsersLimit": map[string]int{"gte": r.MinUsers}}})
+	}
+	for _, capacity := range []struct {
+		field   string
+		minimum int
+	}{{"DevicesLimit", r.MinDevices}, {"IPAddressesLimit", r.MinIPAddresses}, {"ParticipantsLimit", r.MinParticipants}} {
+		if capacity.minimum > 0 {
+			filters = append(filters, map[string]any{"range": map[string]any{capacity.field: map[string]int{"gte": capacity.minimum}}})
+		}
 	}
 	for _, condition := range []struct{ field, value string }{{"Edition", r.Edition}, {"TermKind", r.TermKind}, {"Deployment", r.Deployment}} {
 		if condition.value != "" {

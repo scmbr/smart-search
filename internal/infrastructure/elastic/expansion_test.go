@@ -95,6 +95,11 @@ func TestSearchStagesStopOnFirstRelevantPriceTier(t *testing.T) {
 					if strings.Contains(string(raw), `"fuzziness"`) != (requests%2 == 0) {
 						t.Error("incorrect expansion order")
 					}
+					for _, field := range []string{"DevicesLimit", "IPAddressesLimit", "ParticipantsLimit"} {
+						if !strings.Contains(string(raw), `"`+field+`":{"gte":5}`) {
+							t.Errorf("%s filter lost in stage %d", field, requests)
+						}
+					}
 					hits := []any{}
 					if requests == scenario.foundAt {
 						hits = append(hits, map[string]any{"_score": 1, "_source": domain.Document{OfferID: "sku", FamilyID: "family", CatalogID: "catalog"}})
@@ -110,7 +115,7 @@ func TestSearchStagesStopOnFirstRelevantPriceTier(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			r, _ := domain.Prepare(domain.Request{Query: "product", Limit: 4})
+			r, _ := domain.Prepare(domain.Request{Query: "product", Limit: 4, MinDevices: 5, MinIPAddresses: 5, MinParticipants: 5})
 			result, err := c.Search(context.Background(), r)
 			if err != nil || requests != scenario.wantRequests || result.SearchMode != scenario.wantMode || result.UnpricedFallbackUsed != scenario.fallback || len(result.SearchAttempts) != requests {
 				t.Fatalf("result=%+v requests=%d err=%v", result, requests, err)

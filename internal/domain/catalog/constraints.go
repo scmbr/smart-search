@@ -80,8 +80,38 @@ func offerTerm(parameters []Parameter) (TextAttribute, IntegerAttribute) {
 var explicitEditionBefore = regexp.MustCompile(`(?:^|[^\pL])(standard|enterprise|professional|advanced|стандартная|расширенная)\s+редакци[яи](?:$|[^\pL])`)
 var explicitEditionAfter = regexp.MustCompile(`(?:редакци[яи]|основная лицензия)\s+(standard|enterprise|professional|advanced|стандартная|расширенная)(?:$|[^\pL])`)
 var anydeskEdition = regexp.MustCompile(`\b(solo|standard|advanced|ultimate)\b`)
-var titleUsers = regexp.MustCompile(`(?:^|[^\pL\pN])(?:на|до)\s+([1-9][0-9]{0,6})\s+(?:пользовател[ьяей]+|users?)`)
-var titleUserRange = regexp.MustCompile(`(?:от\s+[0-9]+\s+до\s+|[0-9]+\s*[-–/]\s*)[0-9]+\s+пользовател`)
+var titleUsers = capacityPattern(`пользовател[ьяей]+|users?`)
+var deviceCapacity = capacityPattern(`пк|компьютер[аоыев]*|устройств[ао]*|devices?`)
+var ipCapacity = capacityPattern(`ip(?:[- ]адрес[аоыев]*)?`)
+var participantCapacity = capacityPattern(`участник[аоыев]*|participants?`)
+var ambiguousCapacity = regexp.MustCompile(`(?:от\s+[0-9]+\s+до\s+|[0-9]+\s*[-–/]\s*)[0-9]+\s+(?:пользовател|users?|пк|компьютер|устройств|devices?|ip|участник|participants?)|(?:^|[^\pL])(?:не|без)\s+(?:на\s+|до\s+)?[0-9]+`)
+var officeHome2024 = regexp.MustCompile(`^microsoft\s+office\s+(?:для дома|home)\s+2024(?:$|[^\pL\pN])`)
+
+func capacityPattern(unit string) *regexp.Regexp {
+	return regexp.MustCompile(`(?:^|[^\pL\pN])(?:на|до)\s+(-?[0-9]+)\s+(?:` + unit + `)`)
+}
+
+func collectTitleCapacity(title string, pattern *regexp.Regexp, c *collected, rule string) {
+	s := normalized(title)
+	if ambiguousCapacity.MatchString(s) {
+		return
+	}
+	for _, m := range pattern.FindAllStringSubmatchIndex(s, -1) {
+		if m[1] < len(s) {
+			next, _ := utf8.DecodeRuneInString(s[m[1]:])
+			if unicode.IsLetter(next) || unicode.IsDigit(next) || next == '-' || strings.HasPrefix(strings.TrimSpace(s[m[1]:]), "/") {
+				continue
+			}
+		}
+		n, err := strconv.Atoi(s[m[2]:m[3]])
+		if err != nil || n < 1 || n > 1000000 {
+			c.unrecognized = true
+			c.evidence = append(c.evidence, Evidence{Source: "title", Field: "name", RawValue: title, ParameterIndex: -1, RuleID: rule})
+			continue
+		}
+		addTitleValue(c, strconv.Itoa(n), title, rule)
+	}
+}
 
 func addTitleValue(c *collected, value, title, rule string) {
 	c.add(value)
@@ -101,6 +131,10 @@ func collectTitleConstraints(title string, edition, users *collected) {
 		}
 	}
 	if strings.HasPrefix(s, "microsoft office ") {
+		// Vendor-confirmed rename, bounded to Office Home 2024; see query-constraints.md.
+		if officeHome2024.MatchString(s) {
+			addTitleValue(edition, "home_student", title, "edition.title.office-home-2024")
+		}
 		if strings.Contains(s, "для дома и бизнеса") || strings.Contains(s, "home and business") {
 			addTitleValue(edition, "home_business", title, "edition.title.office")
 		}
@@ -108,21 +142,11 @@ func collectTitleConstraints(title string, edition, users *collected) {
 			addTitleValue(edition, "home_student", title, "edition.title.office")
 		}
 	}
-	if !titleUserRange.MatchString(s) {
-		for _, match := range titleUsers.FindAllStringSubmatchIndex(s, -1) {
-			if match[1] < len(s) {
-				next, _ := utf8.DecodeRuneInString(s[match[1]:])
-				if unicode.IsLetter(next) || unicode.IsDigit(next) {
-					continue
-				}
-			}
-			addTitleValue(users, s[match[2]:match[3]], title, "users_limit.title.explicit")
-		}
-	}
+	collectTitleCapacity(title, titleUsers, users, "users_limit.title.explicit")
 }
 
-var serverDeployment = regexp.MustCompile(`(?:^|[^\pL])для\s+(?:(?:физического|файлового|виртуального)\s+)?сервера(?:$|[^\pL])`)
-var workstationDeployment = regexp.MustCompile(`(?:^|[^\pL])для\s+рабочей\s+станции(?:$|[^\pL])`)
+var serverDeployment = regexp.MustCompile(`(?:^|[^\pL])(?:для\s+(?:(?:физического|файлового|виртуального)\s+)?сервера|серверная\s+лицензия|на\s+(?:одном\s+)?сервере)(?:$|[^\pL])`)
+var workstationDeployment = regexp.MustCompile(`(?:^|[^\pL])(?:для\s+рабочей\s+станции|на\s+(?:одном\s+рабочем\s+месте|одной\s+рабочей\s+станции))(?:$|[^\pL])`)
 
 func offerDeployment(title string) TextAttribute {
 	var c collected

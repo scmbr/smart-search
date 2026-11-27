@@ -81,8 +81,8 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 		{"legacy", "legacy", "Legacy product", "софт", "Полная версия", 0, false},
 		{"astra", "astra", "Операционная система Astra Linux Special Edition для рабочей станции", "софт", "Полная версия", 1000, true},
 		{"viewer", "viewer", "Astra Linux viewer", "софт", "Полная версия", 100, true},
-		{"suite-std-12", "backup", "Common Backup на 6 пользователей для сервера", "софт", "Полная версия", 1000, true},
-		{"suite-std-24", "backup", "Common Backup на 6 пользователей для сервера", "софт", "Полная версия", 100, true},
+		{"suite-std-12", "backup", "Common Backup на 6 пользователей для сервера на 6 ПК на 256 IP до 30 участников", "софт", "Полная версия", 1000, true},
+		{"suite-std-24", "backup", "Common Backup на 6 пользователей для сервера на 5 ПК на 255 IP до 29 участников", "софт", "Полная версия", 100, true},
 		{"suite-ent-12", "backup", "Common Backup на 6 пользователей для сервера", "софт", "Полная версия", 50, true},
 	}
 	var docs []domain.Document
@@ -145,6 +145,12 @@ func TestElasticsearchIndexAndSearch(t *testing.T) {
 		{"КриптоПро CSP 5.1", "", "", false},
 		{"csp-6", "", "", false},
 		{"Common Backup редакция Standard на год для сервера на 6 пользователей", "", "suite-std-12", false},
+		{"Common Backup на 6 ПК", "", "suite-std-12", false},
+		{"Common Backup на 256 IP", "", "suite-std-12", false},
+		{"Common Backup на 30 участников", "", "suite-std-12", false},
+		{"Common Backup на 7 ПК", "", "", false},
+		{"Common Backup на 257 IP", "", "", false},
+		{"Common Backup на 31 участников", "", "", false},
 		{"КриптоПро CSP 5.0", "", "csp-5", false}, {"csp-5", "", "csp-5", false},
 		{"Legacy", "", "legacy", true}, {"Legacy", "available_only", "", false},
 	} {

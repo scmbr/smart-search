@@ -78,6 +78,7 @@ type Request struct {
 	Plan                                                               QueryPlan
 	Edition, TermKind, Deployment                                      string
 	TermMonths                                                         int
+	MinDevices, MinIPAddresses, MinParticipants                        int
 	Constraints, UnsupportedConstraints                                []QueryConstraint
 }
 
@@ -163,6 +164,7 @@ type Document struct {
 	RoleConflict                                         bool
 	Platforms                                            []string
 	UsersLimit                                           *int
+	DevicesLimit, IPAddressesLimit, ParticipantsLimit    *int
 	PriceMinor                                           *int64
 	HasPrice, Available                                  bool
 	Edition, TermKind, Deployment                        string
@@ -218,6 +220,17 @@ func BuildDocument(o catalog.Offer, categories map[string]catalog.Category, fami
 	if c.UsersLimit.Status == catalog.Known {
 		v := c.UsersLimit.Value
 		d.UsersLimit = &v
+	}
+	for _, pair := range []struct {
+		source catalog.IntegerAttribute
+		target **int
+	}{
+		{c.DevicesLimit, &d.DevicesLimit}, {c.IPAddressesLimit, &d.IPAddressesLimit}, {c.ParticipantsLimit, &d.ParticipantsLimit},
+	} {
+		if pair.source.Status == catalog.Known {
+			n := pair.source.Value
+			*pair.target = &n
+		}
 	}
 	if product, ok := categories[o.GroupID]; ok {
 		d.ProductName = prefix(product.Name, 512)
