@@ -29,6 +29,18 @@ func TestFamilyResolution(t *testing.T) {
 	}
 }
 
+func TestDocumentProjectsOnlyKnownTypedCapacity(t *testing.T) {
+	f, err := NewFamilies(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	c := catalog.Normalize(catalog.Offer{Name: "Product на 2 ПК на 3 ПК на 256 IP до 30 участников"})
+	d, err := BuildDocument(catalog.Offer{ID: "sku", Name: "Product", Characteristics: &c}, nil, f, "snapshot")
+	if err != nil || d.DevicesLimit != nil || d.IPAddressesLimit == nil || *d.IPAddressesLimit != 256 || d.ParticipantsLimit == nil || *d.ParticipantsLimit != 30 || d.UsersLimit != nil {
+		t.Fatalf("projection=%+v err=%v", d, err)
+	}
+}
+
 func TestRequestRules(t *testing.T) {
 	for _, tc := range []struct{ q, version, kind, product string }{
 		{"крипто про csp 5.0", "5.0", "", ""}, {"продление продукта", "", "renewal", ""},

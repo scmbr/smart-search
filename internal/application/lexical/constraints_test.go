@@ -9,9 +9,40 @@ import (
 
 func TestUnsupportedConstraintDoesNotIssueAnUnverifiedSearch(t *testing.T) {
 	b := &behaviorBackend{}
-	r, err := Search(context.Background(), b, domain.Request{Query: "Backup на 2 ПК", Limit: 4})
+	r, err := Search(context.Background(), b, domain.Request{Query: "Backup на 2 дня", Limit: 4})
 	if err != nil || b.calls != 0 || len(r.Hits) != 0 || r.ShortfallReason != "unsupported_query_constraints" || len(r.UnsupportedConstraints) == 0 {
 		t.Fatalf("result=%+v calls=%d err=%v", r, b.calls, err)
+	}
+}
+
+func TestApplicationRechecksEachCapacityUnit(t *testing.T) {
+	for _, unit := range []string{"ПК", "IP", "участников"} {
+		for _, scenario := range []string{"known", "unknown", "too small", "different unit"} {
+			n, price := 5, int64(100)
+			d := domain.Document{OfferID: "sku", FamilyID: "f", CatalogID: "c", PriceMinor: &price}
+			if scenario == "too small" {
+				n = 4
+			}
+			if scenario != "unknown" {
+				switch unit {
+				case "ПК":
+					d.DevicesLimit = &n
+				case "IP":
+					d.IPAddressesLimit = &n
+				case "участников":
+					d.ParticipantsLimit = &n
+				}
+			}
+			if scenario == "different unit" {
+				d.DevicesLimit, d.IPAddressesLimit, d.ParticipantsLimit = nil, nil, nil
+				d.UsersLimit = &n
+			}
+			b := &behaviorBackend{result: domain.Result{CatalogID: "c", IndexVersion: "i", Hits: []domain.Hit{{Document: d}}}}
+			_, err := Search(context.Background(), b, domain.Request{Query: "Product на 5 " + unit, Limit: 4})
+			if (err == nil) != (scenario == "known") {
+				t.Fatalf("%s %s: %v", unit, scenario, err)
+			}
+		}
 	}
 }
 

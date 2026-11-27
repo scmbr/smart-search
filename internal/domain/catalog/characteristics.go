@@ -10,7 +10,7 @@ import (
 )
 
 // NormalizationVersion must change when rules, evidence, or result semantics change.
-const NormalizationVersion = "characteristics-v3"
+const NormalizationVersion = "characteristics-v4"
 
 type Knowledge string
 
@@ -51,19 +51,20 @@ type IntegerAttribute struct {
 }
 
 type Characteristics struct {
-	PolicyVersion string
-	ProductType   TextAttribute
-	OfferKind     TextAttribute
-	LicenseType   TextAttribute
-	Version       TextAttribute
-	Edition       TextAttribute
-	Platforms     SetAttribute
-	Architectures SetAttribute
-	UsersLimit    IntegerAttribute
-	Nodes         IntegerAttribute
-	TermKind      TextAttribute
-	TermMonths    IntegerAttribute
-	Deployment    TextAttribute
+	PolicyVersion                                     string
+	ProductType                                       TextAttribute
+	OfferKind                                         TextAttribute
+	LicenseType                                       TextAttribute
+	Version                                           TextAttribute
+	Edition                                           TextAttribute
+	Platforms                                         SetAttribute
+	Architectures                                     SetAttribute
+	UsersLimit                                        IntegerAttribute
+	DevicesLimit, IPAddressesLimit, ParticipantsLimit IntegerAttribute
+	Nodes                                             IntegerAttribute
+	TermKind                                          TextAttribute
+	TermMonths                                        IntegerAttribute
+	Deployment                                        TextAttribute
 }
 
 func normalized(s string) string {
@@ -177,7 +178,7 @@ var titleVersions = []struct {
 	rule    string
 	pattern *regexp.Regexp
 }{
-	{"version.title.microsoft-office", regexp.MustCompile(`^microsoft\s+office(?:\s+(?:для дома(?:\s+и\s+(?:бизнеса|учебы))?|home and business|home and student|professional|standard))?\s+(20[0-9]{2})`)},
+	{"version.title.microsoft-office", regexp.MustCompile(`^microsoft\s+office(?:\s+(?:для дома(?:\s+и\s+(?:бизнеса|учебы))?|home and business|home and student|home|professional|standard))?\s+(20[0-9]{2})`)},
 	{"version.title.cryptopro-csp", regexp.MustCompile(`(?:^|[^\pL\pN])(?:крипто\s*про|cryptopro)\s+csp\s+(?:v|верси[яи]\s*)?([0-9]{1,4}(?:\.[0-9]{1,4}){1,3})`)},
 	{"version.title.astra-linux", regexp.MustCompile(`(?:^|[^\pL\pN])astra\s+linux(?:\s+(?:special\s+edition|se))?\s+(?:v|верси[яи]\s*)?([0-9]{1,4}(?:\.[0-9]{1,4}){1,3})`)},
 }
@@ -267,6 +268,15 @@ func Normalize(o Offer) Characteristics {
 		result.Edition = edition.scalar()
 		result.UsersLimit = asInteger(users, "users")
 	}
+	var devices, ips, participants collected
+	if productType.Value != "hardware" && productType.Status != Conflict && role.Value != "upgrade" && licenseType.Value != "migration" && !titleTransition.MatchString(normalized(o.Name)) {
+		collectTitleCapacity(o.Name, deviceCapacity, &devices, "devices_limit.title.explicit")
+		collectTitleCapacity(o.Name, ipCapacity, &ips, "ip_addresses_limit.title.explicit")
+		collectTitleCapacity(o.Name, participantCapacity, &participants, "participants_limit.title.explicit")
+	}
+	result.DevicesLimit = asInteger(devices, "devices")
+	result.IPAddressesLimit = asInteger(ips, "ip_addresses")
+	result.ParticipantsLimit = asInteger(participants, "participants")
 	result.TermKind, result.TermMonths = offerTerm(o.Parameters)
 	result.Deployment = offerDeployment(o.Name)
 	return result

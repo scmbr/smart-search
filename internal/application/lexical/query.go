@@ -37,6 +37,12 @@ func Search(ctx context.Context, backend Backend, input domain.Request) (domain.
 		invalid = invalid || (r.MinUsers > 0 && (d.UsersLimit == nil || *d.UsersLimit < r.MinUsers)) || (r.Policy == "available_only" && !d.Available)
 		invalid = invalid || (r.Edition != "" && d.Edition != r.Edition) || (r.TermKind != "" && d.TermKind != r.TermKind) || (r.Deployment != "" && d.Deployment != r.Deployment)
 		invalid = invalid || (r.TermMonths > 0 && (d.TermMonths == nil || *d.TermMonths != r.TermMonths))
+		for _, capacity := range []struct {
+			required int
+			actual   *int
+		}{{r.MinDevices, d.DevicesLimit}, {r.MinIPAddresses, d.IPAddressesLimit}, {r.MinParticipants, d.ParticipantsLimit}} {
+			invalid = invalid || (capacity.required > 0 && (capacity.actual == nil || *capacity.actual < capacity.required))
+		}
 		invalid = invalid || (result.UnpricedFallbackUsed && d.PriceMinor != nil) || (!result.UnpricedFallbackUsed && (d.PriceMinor == nil || *d.PriceMinor < 1))
 		if invalid {
 			return domain.Result{}, fmt.Errorf("%w: result violates request constraints", domain.ErrUnavailable)
@@ -48,7 +54,7 @@ func Search(ctx context.Context, backend Backend, input domain.Request) (domain.
 	result.QueryPlan = r.Plan
 	result.AppliedConstraints = r.Constraints
 	domain.Describe(&result)
-	if len(result.Hits) == 0 && (len(r.Constraints) > 0 || r.Edition != "" || r.TermKind != "" || r.Deployment != "" || r.MinUsers > 0) {
+	if len(result.Hits) == 0 && (len(r.Constraints) > 0 || r.Edition != "" || r.TermKind != "" || r.Deployment != "" || r.MinUsers > 0 || r.MinDevices > 0 || r.MinIPAddresses > 0 || r.MinParticipants > 0) {
 		result.ShortfallReason = "no_verified_offer_for_constraints"
 	}
 	return result, nil

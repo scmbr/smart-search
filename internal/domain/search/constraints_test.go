@@ -38,7 +38,7 @@ func TestConstraintsCannotSilentlyChangeUnitsOrMeaning(t *testing.T) {
 		t.Fatal("CLI/text term conflict accepted")
 	}
 	r, err := Prepare(Request{Query: "Product на 2 ПК", Limit: 4})
-	if err != nil || r.MinUsers != 0 || len(r.UnsupportedConstraints) == 0 {
+	if err != nil || r.MinUsers != 0 || r.MinDevices != 2 || len(r.UnsupportedConstraints) != 0 {
 		t.Fatalf("device capacity guessed as users: %+v %v", r, err)
 	}
 	r, err = Prepare(Request{Query: "Product не в наличии", Limit: 4})
@@ -48,5 +48,35 @@ func TestConstraintsCannotSilentlyChangeUnitsOrMeaning(t *testing.T) {
 	r, err = Prepare(Request{Query: "AnyDesk не Standard", Limit: 4})
 	if err != nil || len(r.UnsupportedConstraints) == 0 {
 		t.Fatal("negative edition treated as positive")
+	}
+}
+
+func TestTypedCapacityQueries(t *testing.T) {
+	for _, q := range []string{"Product не на 5 ПК", "Product на 5 ПК/пользователей"} {
+		r, err := Prepare(Request{Query: q, Limit: 4})
+		if err != nil || len(r.UnsupportedConstraints) == 0 {
+			t.Fatalf("ambiguous units/negation: %s %+v %v", q, r, err)
+		}
+	}
+	for _, q := range []string{"Microsoft Office Home 2024", "Microsoft Office для дома 2024"} {
+		r, err := Prepare(Request{Query: q, Limit: 4})
+		if err != nil || r.Version != "2024" || r.Edition != "home_student" {
+			t.Fatalf("Office rename not parsed: %+v %v", r, err)
+		}
+	}
+	r, err := Prepare(Request{Query: "Product на 2 ПК на 256 IP на 30 участников", Limit: 4})
+	if err != nil || r.MinDevices != 2 || r.MinIPAddresses != 256 || r.MinParticipants != 30 || r.MinUsers != 0 || len(r.UnsupportedConstraints) != 0 {
+		t.Fatalf("%+v %v", r, err)
+	}
+	for _, q := range []string{"Product на 0 ПК", "Product на -1 IP", "Product на 1000001 участников", "Product на 2 ПК на 3 ПК", "Product от 5 до 10 участников"} {
+		if _, err := Prepare(Request{Query: q, Limit: 4}); err == nil {
+			t.Fatalf("invalid capacity accepted: %s", q)
+		}
+	}
+	if _, err := Prepare(Request{Query: "Product на 2 ПК", Limit: 4, MinDevices: 3}); err == nil {
+		t.Fatal("CLI/text conflict accepted")
+	}
+	if _, err := Prepare(Request{Query: "Product", Limit: 4, MinIPAddresses: -1}); err == nil {
+		t.Fatal("negative CLI capacity accepted")
 	}
 }
