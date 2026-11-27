@@ -1,0 +1,75 @@
+{
+  "manifest_sha256": "ab794c37b78c82dc6361695b7b0964c411eabe1ea9d2ca921eb303439bfa5e2c",
+  "binary_sha256": "7e39963c9d4eba46b5344799a47bf8ef9647a650c2e9b557cbd23539ea101dab",
+  "mode": "independent_cache_only_comparison",
+  "require_complete": true,
+  "limitations": "Raw group/brand hit@4 only; constraints and all-four precision ungraded. Cache misses are fallback, not full hybrid quality. CLI batch time is not request p95.",
+  "report_sha256": "fbaf203e8e8ec1158ba2005674fde4d0bc2175db55832e7f20a106c3f763f68f",
+  "runs": {
+    "baseline": {
+      "batch_elapsed_ms": 2692,
+      "vector_statuses": {
+        "off": 40
+      },
+      "scopes": {
+        "family": {
+          "cases": 34,
+          "hits_at_4": 19
+        },
+        "brand": {
+          "cases": 6,
+          "hits_at_4": 3
+        }
+      },
+      "parser_statuses": {
+        "off": 40
+      }
+    },
+    "hybrid_cache_only": {
+      "batch_elapsed_ms": 11696,
+      "vector_statuses": {
+        "used": 35,
+        "no_candidates": 4,
+        "skipped_exact": 1
+      },
+      "scopes": {
+        "family": {
+          "cases": 34,
+          "hits_at_4": 18
+        },
+        "brand": {
+          "cases": 6,
+          "hits_at_4": 3
+        }
+      },
+      "parser_statuses": {
+        "not_selected": 36,
+        "used": 4
+      }
+    }
+  },
+  "paired": {
+    "both_hit": 17,
+    "baseline_only": 5,
+    "hybrid_only": 4,
+    "both_miss": 14
+  },
+  "budget": {
+    "before_task_nano": 24812375,
+    "after_bad_warmup_nano": 25194365,
+    "after_correct_warmup_nano": 25425085,
+    "after_replay_nano": 25425085,
+    "unsettled_nano": 0,
+    "requests_before_task": 407,
+    "requests_after_replay": 478,
+    "failed_warmup_cost_nano": 381990,
+    "correct_warmup_cost_nano": 230720,
+    "total_task_cost_nano": 612710,
+    "replay_new_requests": 0,
+    "cap_nano": 5000000000
+  },
+  "warmup_reports_sha256": {
+    "holdout-warmup-live-v1.json": "ae609b2ef564520262eb39a08eed6fd6a45aa2cdbae8d8a776acecb270064f42",
+    "holdout-warmup-live-v2.json": "b40df517b68a816d9e49ada31953af170429fb3500cfd99b36b682712fdac09c"
+  }
+}
