@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-const QueryPolicyVersion = "query-v7"
+const QueryPolicyVersion = "query-v8"
 
 type QueryTerm struct {
 	Text      string
