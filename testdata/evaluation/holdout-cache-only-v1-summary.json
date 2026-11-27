@@ -1,0 +1,42 @@
+{
+  "manifest_sha256": "ab794c37b78c82dc6361695b7b0964c411eabe1ea9d2ca921eb303439bfa5e2c",
+  "binary_sha256": "7e39963c9d4eba46b5344799a47bf8ef9647a650c2e9b557cbd23539ea101dab",
+  "mode": "independent_cache_only_comparison",
+  "limitations": "Raw group/brand hit@4 only; constraints and all-four precision ungraded. Cache misses are fallback, not full hybrid quality. CLI batch time is not request p95.",
+  "raw_report_sha256": "71626a6c2b0226221b62165eedb7c5e68f25c5cb3e4212eae91d1d6b88c6ea00",
+  "runs": {
+    "baseline": {
+      "batch_elapsed_ms": 2977,
+      "vector_statuses": {
+        "off": 40
+      },
+      "scopes": {
+        "family": {
+          "cases": 34,
+          "hits_at_4": 19
+        },
+        "brand": {
+          "cases": 6,
+          "hits_at_4": 3
+        }
+      }
+    },
+    "hybrid_cache_only": {
+      "batch_elapsed_ms": 10102,
+      "vector_statuses": {
+        "fallback": 39,
+        "skipped_exact": 1
+      },
+      "scopes": {
+        "family": {
+          "cases": 34,
+          "hits_at_4": 19
+        },
+        "brand": {
+          "cases": 6,
+          "hits_at_4": 3
+        }
+      }
+    }
+  }
+}
