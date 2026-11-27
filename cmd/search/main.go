@@ -24,6 +24,7 @@ func main() {
 func run(ctx context.Context) error {
 	r := domain.Request{}
 	flag.StringVar(&r.Query, "query", "", "search text")
+	flag.StringVar(&r.FamilyID, "family", "", "explicit confirmed family ID")
 	flag.IntVar(&r.Limit, "limit", 4, "maximum families (4..20)")
 	flag.StringVar(&r.Policy, "policy", "priced_first", "priced_first or available_only")
 	flag.StringVar(&r.Version, "version", "", "explicit numeric product version")

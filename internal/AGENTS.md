@@ -94,7 +94,7 @@ XML-токены, HTTP request/response или структуры OpenAI/Elastic
 - Храни деньги в целых копейках, неизвестные значения явно; не угадывай версии,
   роли лицензий и family_id по одной группе.
 - Характеристики вычисляет domain.Normalize в application импорта; правила —
-  docs/normalization.md (characteristics-v4). Меняя семантику/маппинг, повышай NormalizationVersion:
+  docs/normalization.md (characteristics-v5). Меняя семантику/маппинг, повышай NormalizationVersion:
   она включена в identity снимка. Старые ready-снимки не переписывай.
 - Требования поиска/допродаж — в `docs/search.md`, `docs/verification.md` и
   `docs/expert-answers.md`. Проверяй характеристики выбранных SKU программно;

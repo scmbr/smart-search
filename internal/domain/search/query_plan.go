@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-const QueryPolicyVersion = "query-v3"
+const QueryPolicyVersion = "query-v4"
 
 type QueryTerm struct {
 	Text      string
@@ -34,6 +34,7 @@ var queryAliases = [][2]string{
 	{"анидеск", "anydesk"}, {"энидеск", "anydesk"},
 	{"майкрософт", "microsoft"}, {"майков", "microsoft"}, {"офис", "office"},
 	{"резервное копирование", "бэкап"}, {"операционка", "операционная система"},
+	{"макспатрол", "maxpatrol"},
 }
 
 func queryTokens(s string) []string {
@@ -55,7 +56,48 @@ func canonicalQuery(s string) string {
 	for _, alias := range queryAliases {
 		s = strings.ReplaceAll(s, " "+alias[0]+" ", " "+alias[1]+" ")
 	}
+	if strings.Contains(s, " kaspersky ") {
+		for _, alias := range [][2]string{{"смол", "small"}, {"смолл", "small"}, {"секьюрити", "security"}} {
+			s = strings.ReplaceAll(s, " "+alias[0]+" ", " "+alias[1]+" ")
+		}
+	}
+	for _, word := range strings.Fields(s) {
+		if similarProductToken(word, "maxpatrol") {
+			s = strings.ReplaceAll(s, " epp ", " endpoint protection platform ")
+			s = strings.ReplaceAll(s, " епп ", " endpoint protection platform ")
+			break
+		}
+	}
 	return strings.TrimSpace(s)
+}
+
+// Bounded typo hypothesis for acronym context, never a replacement of identifiers.
+func similarProductToken(word, target string) bool {
+	a, b := []rune(word), []rune(target)
+	if len(a) < len(b)-2 || len(a) > len(b)+2 || len(a) == 0 || a[0] != b[0] || strings.ContainsFunc(word, unicode.IsDigit) {
+		return false
+	}
+	d := make([][]int, len(a)+1)
+	for i := range d {
+		d[i] = make([]int, len(b)+1)
+		d[i][0] = i
+	}
+	for j := range d[0] {
+		d[0][j] = j
+	}
+	for i := 1; i <= len(a); i++ {
+		for j := 1; j <= len(b); j++ {
+			cost := 0
+			if a[i-1] != b[j-1] {
+				cost = 1
+			}
+			d[i][j] = min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+cost)
+			if i > 1 && j > 1 && a[i-1] == b[j-2] && a[i-2] == b[j-1] {
+				d[i][j] = min(d[i][j], d[i-2][j-2]+1)
+			}
+		}
+	}
+	return d[len(a)][len(b)] <= 2
 }
 
 func queryPlan(query, kind string) QueryPlan {

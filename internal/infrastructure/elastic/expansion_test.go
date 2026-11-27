@@ -100,6 +100,9 @@ func TestSearchStagesStopOnFirstRelevantPriceTier(t *testing.T) {
 							t.Errorf("%s filter lost in stage %d", field, requests)
 						}
 					}
+					if !strings.Contains(string(raw), `"FamilyID":"family"`) || !strings.Contains(string(raw), `"FamilyConfirmed":true`) {
+						t.Error("confirmed family filter lost in fallback")
+					}
 					hits := []any{}
 					if requests == scenario.foundAt {
 						hits = append(hits, map[string]any{"_score": 1, "_source": domain.Document{OfferID: "sku", FamilyID: "family", CatalogID: "catalog"}})
@@ -115,7 +118,7 @@ func TestSearchStagesStopOnFirstRelevantPriceTier(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			r, _ := domain.Prepare(domain.Request{Query: "product", Limit: 4, MinDevices: 5, MinIPAddresses: 5, MinParticipants: 5})
+			r, _ := domain.Prepare(domain.Request{Query: "product", Limit: 4, FamilyID: "family", MinDevices: 5, MinIPAddresses: 5, MinParticipants: 5})
 			result, err := c.Search(context.Background(), r)
 			if err != nil || requests != scenario.wantRequests || result.SearchMode != scenario.wantMode || result.UnpricedFallbackUsed != scenario.fallback || len(result.SearchAttempts) != requests {
 				t.Fatalf("result=%+v requests=%d err=%v", result, requests, err)

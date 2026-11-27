@@ -73,6 +73,8 @@ func (r *Families) Resolve(o catalog.Offer) Family {
 }
 
 type Request struct {
+	FamilyID                                                           string
+	ProductIntents                                                     []ProductIntent
 	OriginalQuery, Query, Policy, Version, Kind, Platform, ProductType string
 	Limit, MinUsers                                                    int
 	Plan                                                               QueryPlan
@@ -86,6 +88,9 @@ var queryCSPVersion = regexp.MustCompile(`(?:^|\s)(?:csp|цсп)\s*(?:v)?([0-9]{
 var queryDecimal = regexp.MustCompile(`(?:^|\s)v?[0-9]{1,4}(?:\.[0-9]{1,4}){1,3}(?:$|\s)`)
 
 func Prepare(r Request) (Request, error) {
+	if len(r.FamilyID) > 128 || (r.FamilyID != "" && !familyIdentifier.MatchString(r.FamilyID)) {
+		return r, ErrInvalidQuery
+	}
 	if !utf8.ValidString(r.Query) || utf8.RuneCountInString(r.Query) > 256 || strings.TrimSpace(r.Query) == "" || r.Limit < 4 || r.Limit > 20 || r.MinUsers < 0 || r.MinUsers > 1000000 || utf8.RuneCountInString(r.Version) > 80 || utf8.RuneCountInString(r.Platform) > 80 {
 		return r, ErrInvalidQuery
 	}
@@ -254,6 +259,7 @@ type Hit struct {
 	Score    float64
 }
 type Result struct {
+	ProductIntents                              []ProductIntent
 	Query, CatalogID, IndexVersion              string
 	Hits                                        []Hit
 	UnpricedFallbackUsed, FourFamiliesConfirmed bool
