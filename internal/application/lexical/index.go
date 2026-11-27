@@ -51,9 +51,18 @@ type BuildResult struct {
 }
 
 func NewSpec(info CatalogInfo, familyVersion string) Spec {
-	h := sha256.Sum256([]byte(info.ID + "\x00" + catalog.NormalizationVersion + "\x00" + familyVersion + "\x00" + DocumentSchemaVersion))
-	fingerprint := hex.EncodeToString(h[:])
+	fingerprint := indexFingerprint(info.ID, catalog.NormalizationVersion, familyVersion, DocumentSchemaVersion)
 	return Spec{CatalogID: info.ID, Name: "smart-search-" + fingerprint, Fingerprint: fingerprint, NormalizationVersion: catalog.NormalizationVersion, FamilyVersion: familyVersion, DocumentVersion: DocumentSchemaVersion, Count: info.Offers}
+}
+
+func indexFingerprint(catalogID, normalization, family, document string) string {
+	h := sha256.Sum256([]byte(strings.Join([]string{catalogID, normalization, family, document}, "\x00")))
+	return hex.EncodeToString(h[:])
+}
+
+// ValidIdentity checks the stored versions, including historical compatible metadata.
+func (s Spec) ValidIdentity() bool {
+	return s.CatalogID != "" && s.NormalizationVersion != "" && s.FamilyVersion != "" && s.DocumentVersion != "" && s.Count > 0 && s.Name == "smart-search-"+s.Fingerprint && s.Fingerprint == indexFingerprint(s.CatalogID, s.NormalizationVersion, s.FamilyVersion, s.DocumentVersion)
 }
 
 func Build(ctx context.Context, source Source, target Target, families *domain.Families, familyVersion string, batchSize int) (result BuildResult, err error) {

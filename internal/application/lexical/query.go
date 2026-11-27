@@ -22,7 +22,7 @@ func Search(ctx context.Context, backend Backend, input domain.Request) (domain.
 	}
 	result, err := backend.Search(ctx, r)
 	if err != nil {
-		return result, err
+		return domain.Result{}, err
 	}
 	if result.CatalogID == "" || result.IndexVersion == "" || len(result.Hits) > r.Limit {
 		return domain.Result{}, fmt.Errorf("%w: invalid result metadata", domain.ErrUnavailable)
@@ -35,6 +35,7 @@ func Search(ctx context.Context, backend Backend, input domain.Request) (domain.
 		invalid = invalid || !domain.ValidProductRole(d) || !domain.ProductRoleAllowed(r, d.ProductRole)
 		invalid = invalid || !domain.PurposeAllowed(r, d)
 		invalid = invalid || !domain.LicenseDependencyAllowed(r, d)
+		invalid = invalid || !domain.IdentifierAllowed(r, d)
 		invalid = invalid || (r.FamilyID != "" && (d.FamilyID != r.FamilyID || !d.FamilyConfirmed))
 		invalid = invalid || (r.Kind != "" && d.OfferKind != r.Kind) || (r.Kind == "" && slices.Contains([]string{"renewal", "upgrade", "support"}, d.OfferKind))
 		invalid = invalid || (r.Version != "" && d.Version != r.Version) || (r.Platform != "" && !slices.Contains(d.Platforms, r.Platform)) || (r.ProductType != "" && d.ProductType != r.ProductType)

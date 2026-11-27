@@ -41,8 +41,11 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 	}
 	r.Limit = d.CandidateLimit
 	result, err := b.Lexical.Search(ctx, r)
+	if ctx.Err() != nil {
+		return d.Result{}, ctx.Err()
+	}
 	if err != nil {
-		return result, err
+		return d.Result{}, err
 	}
 	trace := &d.HybridTrace{Version: d.HybridVersion, CorpusSHA: b.CorpusSHA, CorpusDocuments: b.CorpusDocuments, LexicalFamilies: len(result.Hits), VectorStatus: "fallback", InterpretationStatus: "not_selected"}
 	result.Hybrid = trace
@@ -97,6 +100,9 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 		}
 	}
 	groups, err := b.Vectors.Candidates(ctx, vectorRequest)
+	if ctx.Err() != nil {
+		return d.Result{}, ctx.Err()
+	}
 	if err != nil {
 		return finish()
 	}
@@ -109,6 +115,9 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 	}
 	trace.VectorCandidates = groups
 	hits, err := b.Lexical.Resolve(ctx, r, groups, true, result.CatalogID, result.IndexVersion)
+	if ctx.Err() != nil {
+		return d.Result{}, ctx.Err()
+	}
 	if err != nil {
 		return finish()
 	}
@@ -119,6 +128,9 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 	}
 	if len(hits) == 0 && (len(lexical) == 0 || result.UnpricedFallbackUsed) {
 		hits, err = b.Lexical.Resolve(ctx, r, groups, false, result.CatalogID, result.IndexVersion)
+		if ctx.Err() != nil {
+			return d.Result{}, ctx.Err()
+		}
 		if err != nil {
 			return finish()
 		}

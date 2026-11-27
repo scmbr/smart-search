@@ -26,7 +26,7 @@ func TestProductRolesFilterBeforeCollapseInEveryBranch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	spec := a.NewSpec(a.CatalogInfo{ID: "roles-" + id, Offers: 9}, "families")
+	spec := a.NewSpec(a.CatalogInfo{ID: "roles-" + id, Offers: 10}, "families")
 	t.Cleanup(func() {
 		meta, exists, err := client.meta(context.Background(), spec.Name)
 		if err != nil {
@@ -58,6 +58,7 @@ func TestProductRolesFilterBeforeCollapseInEveryBranch(t *testing.T) {
 		{OfferID: "IP-1234", FamilyID: "capacity", GroupID: "capacity", Name: "VulnScanner VulnScanner на дополнительный IP к лицензии на 4 IP", HasPrice: true, PriceMinor: &price},
 		{OfferID: "capacity-unpriced", FamilyID: "capacity-unpriced", GroupID: "capacity-unpriced", Name: "CapacityOnly на дополнительный узел"},
 		{OfferID: "migration-1234", FamilyID: "capacity", GroupID: "capacity", Name: "VulnScanner VulnScanner лицензия перехода с OldScanner", HasPrice: true, PriceMinor: &price},
+		{OfferID: "neighbor", VendorCode: "ARTICLE-5678", FamilyID: "neighbor", GroupID: "neighbor", Name: "Reference product", Description: "compatible with MISSING-1234 IP-1234 SDK-1234", HasPrice: true, PriceMinor: &price},
 	}
 	for i := range docs {
 		docs[i].CatalogID = spec.CatalogID
@@ -84,6 +85,7 @@ func TestProductRolesFilterBeforeCollapseInEveryBranch(t *testing.T) {
 		{"VulnScanner", "capacity-base", false}, {"VulnScanner дополнительный IP", "IP-1234", false},
 		{"IP-1234", "IP-1234", false},
 		{"migration-1234", "migration-1234", false},
+		{"MISSING-1234", "", false}, {"article-5678", "neighbor", false},
 		{"CapacityOnly", "", false}, {"CapacityOnly дополнительный узел", "capacity-unpriced", true},
 	} {
 		result, err := a.Search(ctx, client, d.Request{Query: tc.query, Limit: 4})

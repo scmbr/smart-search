@@ -108,8 +108,8 @@ func (c *Client) meta(ctx context.Context, index string) (metadata, bool, error)
 		return metadata{}, false, err
 	}
 	entry, ok := result[index]
-	if !ok || entry.Mappings.Meta.Spec.Name != index || entry.Mappings.Meta.Spec.Name != "smart-search-"+entry.Mappings.Meta.Spec.Fingerprint || entry.Mappings.Meta.Spec.Count < 1 || entry.Mappings.Meta.Spec.CatalogID == "" {
-		return metadata{}, false, errors.New("index metadata mismatch")
+	if !ok || entry.Mappings.Meta.Spec.Name != index || !entry.Mappings.Meta.Spec.ValidIdentity() {
+		return metadata{}, false, fmt.Errorf("%w: index metadata mismatch", domain.ErrNotReady)
 	}
 	return entry.Mappings.Meta, true, nil
 }

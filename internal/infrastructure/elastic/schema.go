@@ -104,7 +104,9 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 	clauses := []any{
 		map[string]any{"term": map[string]any{"OfferID": map[string]any{"value": r.Query, "boost": 50}}},
 		map[string]any{"term": map[string]any{"VendorCode.exact": map[string]any{"value": strings.ToLower(r.Query), "boost": 30}}},
-		map[string]any{"multi_match": map[string]any{"query": r.Query, "fields": []string{"ProductName^64", "Name^8", "FamilyName^4", "VendorCode^12", "Vendor^2", "CategoryNames^3", "Description"}, "operator": "and"}},
+	}
+	if !domain.ExactIdentifier(r) {
+		clauses = append(clauses, map[string]any{"multi_match": map[string]any{"query": r.Query, "fields": []string{"ProductName^64", "Name^8", "FamilyName^4", "VendorCode^12", "Vendor^2", "CategoryNames^3", "Description"}, "operator": "and"}})
 	}
 	if expanded {
 		for _, variant := range r.Plan.Variants {
