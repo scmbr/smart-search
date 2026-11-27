@@ -9,13 +9,13 @@ import (
 
 func mapping(spec app.Spec) map[string]any {
 	properties := map[string]any{}
-	for _, name := range []string{"OfferID", "GroupID", "FamilyID", "FamilySource", "URL", "CategoryID", "CatalogID", "ProductType", "OfferKind", "Version", "Platforms"} {
+	for _, name := range []string{"OfferID", "GroupID", "FamilyID", "FamilySource", "URL", "CategoryID", "CatalogID", "ProductType", "OfferKind", "Version", "Platforms", "Edition", "TermKind", "Deployment"} {
 		properties[name] = map[string]any{"type": "keyword", "ignore_above": 8192}
 	}
 	for _, name := range []string{"FamilyConfirmed", "RoleConflict", "HasPrice", "Available"} {
 		properties[name] = map[string]any{"type": "boolean"}
 	}
-	for _, name := range []string{"UsersLimit", "PriceMinor"} {
+	for _, name := range []string{"UsersLimit", "PriceMinor", "TermMonths"} {
 		properties[name] = map[string]any{"type": "long"}
 	}
 	for _, name := range []string{"Name", "ProductName", "Vendor", "FamilyName", "CategoryNames", "Description", "VendorCode"} {
@@ -57,16 +57,24 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 	if r.MinUsers > 0 {
 		filters = append(filters, map[string]any{"range": map[string]any{"UsersLimit": map[string]int{"gte": r.MinUsers}}})
 	}
+	for _, condition := range []struct{ field, value string }{{"Edition", r.Edition}, {"TermKind", r.TermKind}, {"Deployment", r.Deployment}} {
+		if condition.value != "" {
+			filters = append(filters, term(condition.field, condition.value))
+		}
+	}
+	if r.TermMonths > 0 {
+		filters = append(filters, term("TermMonths", r.TermMonths))
+	}
 	clauses := []any{
 		map[string]any{"term": map[string]any{"OfferID": map[string]any{"value": r.Query, "boost": 50}}},
 		map[string]any{"term": map[string]any{"VendorCode.exact": map[string]any{"value": strings.ToLower(r.Query), "boost": 30}}},
-		map[string]any{"multi_match": map[string]any{"query": r.Query, "fields": []string{"ProductName^24", "Name^8", "FamilyName^4", "VendorCode^12", "Vendor^2", "CategoryNames^3", "Description"}, "operator": "and"}},
+		map[string]any{"multi_match": map[string]any{"query": r.Query, "fields": []string{"ProductName^64", "Name^8", "FamilyName^4", "VendorCode^12", "Vendor^2", "CategoryNames^3", "Description"}, "operator": "and"}},
 	}
 	if expanded {
 		for _, variant := range r.Plan.Variants {
 			var required []any
 			for _, word := range variant.Terms {
-				match := map[string]any{"query": word.Text, "fields": []string{"ProductName^24", "Name^8", "FamilyName^4"}, "operator": "and"}
+				match := map[string]any{"query": word.Text, "fields": []string{"ProductName^64", "Name^8", "FamilyName^4"}, "operator": "and"}
 				if word.Fuzziness > 0 {
 					match["fuzziness"] = word.Fuzziness
 					match["prefix_length"] = 1

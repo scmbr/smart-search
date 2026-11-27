@@ -10,7 +10,7 @@ import (
 )
 
 // NormalizationVersion must change when rules, evidence, or result semantics change.
-const NormalizationVersion = "characteristics-v2"
+const NormalizationVersion = "characteristics-v3"
 
 type Knowledge string
 
@@ -61,6 +61,9 @@ type Characteristics struct {
 	Architectures SetAttribute
 	UsersLimit    IntegerAttribute
 	Nodes         IntegerAttribute
+	TermKind      TextAttribute
+	TermMonths    IntegerAttribute
+	Deployment    TextAttribute
 }
 
 func normalized(s string) string {
@@ -174,6 +177,7 @@ var titleVersions = []struct {
 	rule    string
 	pattern *regexp.Regexp
 }{
+	{"version.title.microsoft-office", regexp.MustCompile(`^microsoft\s+office(?:\s+(?:для дома(?:\s+и\s+(?:бизнеса|учебы))?|home and business|home and student|professional|standard))?\s+(20[0-9]{2})`)},
 	{"version.title.cryptopro-csp", regexp.MustCompile(`(?:^|[^\pL\pN])(?:крипто\s*про|cryptopro)\s+csp\s+(?:v|верси[яи]\s*)?([0-9]{1,4}(?:\.[0-9]{1,4}){1,3})`)},
 	{"version.title.astra-linux", regexp.MustCompile(`(?:^|[^\pL\pN])astra\s+linux(?:\s+(?:special\s+edition|se))?\s+(?:v|верси[яи]\s*)?([0-9]{1,4}(?:\.[0-9]{1,4}){1,3})`)},
 }
@@ -210,12 +214,20 @@ func Normalize(o Offer) Characteristics {
 			if match := numericVersion.FindStringSubmatch(strings.TrimSpace(p.Value)); match != nil {
 				version.observe(p, index, "version.parameter.numeric")
 				version.add(match[1])
-			} else if value, ok := editions[normalized(p.Value)]; ok {
+			} else if value := CanonicalEdition(p.Value); value != "" {
 				edition.observe(p, index, "edition.parameter")
 				edition.add(value)
 			} else {
 				version.observe(p, index, "version.parameter")
 				version.unrecognized = true
+			}
+		case "редакция":
+			if edition.observe(p, index, "edition.parameter") {
+				if value := CanonicalEdition(p.Value); value != "" {
+					edition.add(value)
+				} else {
+					edition.unrecognized = true
+				}
 			}
 		case "платформа", "совместимые платформы":
 			collectSet(&platform, p, index, "platform.parameter", mapPlatform)
@@ -247,9 +259,17 @@ func Normalize(o Offer) Characteristics {
 			}
 		}
 	}
-	return Characteristics{PolicyVersion: NormalizationVersion, ProductType: productType, OfferKind: role, LicenseType: licenseType,
+	result := Characteristics{PolicyVersion: NormalizationVersion, ProductType: productType, OfferKind: role, LicenseType: licenseType,
 		Version: version.scalar(), Edition: edition.scalar(), Platforms: platform.set(), Architectures: architecture.set(),
 		UsersLimit: asInteger(users, "users"), Nodes: asInteger(nodes, "nodes")}
+	if productType.Value != "hardware" && productType.Status != Conflict && role.Value != "upgrade" && licenseType.Value != "migration" && !titleTransition.MatchString(normalized(o.Name)) {
+		collectTitleConstraints(o.Name, &edition, &users)
+		result.Edition = edition.scalar()
+		result.UsersLimit = asInteger(users, "users")
+	}
+	result.TermKind, result.TermMonths = offerTerm(o.Parameters)
+	result.Deployment = offerDeployment(o.Name)
+	return result
 }
 
 func mapPlatform(s string) string {

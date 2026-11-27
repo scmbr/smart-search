@@ -1,4 +1,4 @@
-"""Render the 100 draft judgments for human review; never execute search."""
+"""Render the 100 reviewed judgments for human review; never execute search."""
 import argparse
 import json
 from pathlib import Path
@@ -28,7 +28,7 @@ def cell(value):
 
 def render():
     lines = ["# Проверка 100 поисковых кейсов", "",
-             "**60 tuning + 40 holdout. Все ответы — предварительная разметка, не результаты поиска.**",
+             "**60 tuning + 40 holdout. Разметка принята пользователем 2026-11-27; это не результаты поиска.**",
              "Поиск на holdout не запускался. Исторические regression и 10 исходных примеров",
              "сохранены отдельно и не входят в эти 100. Все варианты бренда остаются на одной стороне.", "",
              "Для проверки прочитайте запрос и ожидаемые группы. Ссылки ведут на примеры SKU",
@@ -41,7 +41,7 @@ def render():
              "Четыре семейства допускают только подходящие товары и проверенные допродажи;",
              "таблица не доказывает совместимость и не требует случайного дополнения выдачи.", "",
              "Источники истины: [tuning](../testdata/evaluation/scenarios.json) и",
-             "[holdout](../testdata/evaluation/holdout-v2.json). Статус всех строк: **требует проверки**.",
+             "[holdout](../testdata/evaluation/holdout-v2.json). Статус всех строк: **принято пользователем**.",
              "Таблица генерируется: `python scripts/render-evaluation.py`; проверка: `--check`."]
     for filename, title in [("scenarios.json", "Tuning — 60 кейсов"), ("holdout-v2.json", "Holdout — 40 кейсов")]:
         dataset = json.loads((Path("testdata/evaluation") / filename).read_text(encoding="utf-8"))
@@ -76,7 +76,7 @@ def main():
     if args.check:
         if not path.exists() or path.read_text(encoding="utf-8") != expected:
             raise SystemExit("FAIL: regenerate docs/evaluation-cases.md with scripts/render-evaluation.py")
-        print("PASS: review table matches the 100 draft judgments")
+        print("PASS: review table matches the 100 reviewed judgments")
     else:
         path.write_text(expected, encoding="utf-8")
 

@@ -20,7 +20,7 @@ def main():
         for ident, family in data["families"].items():
             groups = family["group_ids"]
             rules.append({"ID":ident, "Groups":groups, "VendorPath":"/"+family["brand_id"]+"/", "SourceURL":data["catalog_evidence"][groups[0]]["example_url"]})
-    report = family_audit.audit(args.feed, {"Version":"evaluation-v3", "Rules":rules})
+    report = family_audit.audit(args.feed, {"Version":datasets[0]["dataset_version"], "Rules":rules})
     for data in datasets:
         if data["source_sha256"] != report["source_sha256"]:
             raise SystemExit("FAIL: source feed differs from the frozen dataset snapshot")

@@ -76,6 +76,9 @@ type Request struct {
 	OriginalQuery, Query, Policy, Version, Kind, Platform, ProductType string
 	Limit, MinUsers                                                    int
 	Plan                                                               QueryPlan
+	Edition, TermKind, Deployment                                      string
+	TermMonths                                                         int
+	Constraints, UnsupportedConstraints                                []QueryConstraint
 }
 
 var queryCSPVersion = regexp.MustCompile(`(?:^|\s)(?:csp|цсп)\s*(?:v)?([0-9]{1,4}(?:\.[0-9]{1,4}){1,3})\b`)
@@ -104,6 +107,9 @@ func Prepare(r Request) (Request, error) {
 		return r, ErrInvalidQuery
 	}
 	r.Platform = strings.ToLower(strings.TrimSpace(r.Platform))
+	if err := parseConstraints(&r); err != nil {
+		return r, err
+	}
 	canonical := canonicalQuery(r.Query)
 	c := catalog.Normalize(catalog.Offer{Name: canonical})
 	if c.Version.Status == catalog.Conflict || c.OfferKind.Status == catalog.Conflict {
@@ -128,10 +134,13 @@ func Prepare(r Request) (Request, error) {
 		r.Kind = c.OfferKind.Value
 	}
 	if r.ProductType == "" {
-		switch strings.ToLower(r.Query) {
+		switch strings.ToLower(strings.Join(strings.Fields(r.OriginalQuery), " ")) {
 		case "сервер", "server":
 			r.ProductType = "hardware"
 		case "по для сервера", "программное обеспечение для сервера":
+			r.ProductType = "software"
+		}
+		if head := canonicalQuery(r.OriginalQuery); head == "операционная система" || strings.HasPrefix(head, "операционная система ") {
 			r.ProductType = "software"
 		}
 	}
@@ -156,6 +165,8 @@ type Document struct {
 	UsersLimit                                           *int
 	PriceMinor                                           *int64
 	HasPrice, Available                                  bool
+	Edition, TermKind, Deployment                        string
+	TermMonths                                           *int
 }
 
 func prefix(s string, n int) string {
@@ -187,6 +198,19 @@ func BuildDocument(o catalog.Offer, categories map[string]catalog.Category, fami
 	}
 	if c.Version.Status == catalog.Known {
 		d.Version = c.Version.Value
+	}
+	if c.Edition.Status == catalog.Known {
+		d.Edition = c.Edition.Value
+	}
+	if c.TermKind.Status == catalog.Known {
+		d.TermKind = c.TermKind.Value
+	}
+	if c.TermMonths.Status == catalog.Known {
+		n := c.TermMonths.Value
+		d.TermMonths = &n
+	}
+	if c.Deployment.Status == catalog.Known {
+		d.Deployment = c.Deployment.Value
 	}
 	if c.Platforms.Status == catalog.Known {
 		d.Platforms = c.Platforms.Values
@@ -224,6 +248,7 @@ type Result struct {
 	QueryPlan                                   QueryPlan
 	SearchMode                                  string
 	SearchAttempts                              []SearchAttempt
+	AppliedConstraints, UnsupportedConstraints  []QueryConstraint
 }
 
 type SearchAttempt struct {

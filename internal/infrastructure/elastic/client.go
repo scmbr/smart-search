@@ -284,7 +284,7 @@ func (c *Client) Search(ctx context.Context, r domain.Request) (domain.Result, e
 	if err != nil {
 		return result, err
 	}
-	if !exists || m.State != "ready" || (m.Spec.DocumentVersion != app.DocumentSchemaVersion && m.Spec.DocumentVersion != "lexical-v1") || m.Spec.NormalizationVersion != catalog.NormalizationVersion {
+	if !exists || m.State != "ready" || m.Spec.DocumentVersion != app.DocumentSchemaVersion || m.Spec.NormalizationVersion != catalog.NormalizationVersion {
 		return result, domain.ErrNotReady
 	}
 	result.CatalogID = m.Spec.CatalogID

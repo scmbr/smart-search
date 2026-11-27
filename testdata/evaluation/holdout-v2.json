@@ -1,19 +1,19 @@
 {
-  "dataset_version": "evaluation-v3",
-  "dataset_role": "frozen_draft_holdout_pending_review",
-  "label_status": "draft_requires_independent_review",
+  "dataset_version": "evaluation-v4-reviewed",
+  "dataset_role": "frozen_holdout_user_reviewed",
+  "label_status": "accepted_by_user",
   "independent_evaluation": {
-    "eligible": false,
-    "review_status": "pending",
+    "eligible": true,
+    "review_status": "accepted_by_user",
     "execution_status": "not_run"
   },
   "frozen_on": "2026-11-27",
   "source_sha256": "27eaec9e77942c61d58b3c04dcaa8991c707dc0fcb64a6442a7408d9908cb148",
-  "cases_sha256": "e167d4ac9faab22304c47d5101057b7166a2bb2079bcd7746d6eeb85a016856b",
+  "cases_sha256": "35f40ac6afcfe863f31bd2a707965d7408640fc2f732fd2601248b79713bf52e",
   "families_sha256": "a965340f1e72eb548be165e2d5df72953d026352355393728e59eb68ab98c4f7",
   "split_policy": "All aliases, families and broad requests of a brand stay on the same side. Holdout has no search results and is not used to tune ranking.",
   "result_policy": "Use catalog SKUs only. Four different families require eligible direct matches or verified cross-sells; no random fill. Unknown rights are not confirmed eligibility.",
-  "metric_policy": "Family labels are draft; brand scopes are non-exhaustive diagnostic labels, not Family Hit/Precision/nDCG gold. Do not score independent quality until review.",
+  "metric_policy": "Accepted by user. Tuning is not independent; holdout search has not run. Broad brand scopes remain non-exhaustive, not full Family Precision/nDCG gold. SKU eligibility must be assessed separately.",
   "families": {
     "acrobat": {
       "name": "Adobe Acrobat",
@@ -214,7 +214,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -241,7 +241,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -268,7 +268,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -302,7 +302,7 @@
         ]
       },
       "expected_behavior": "brand_browse_or_clarify",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
     },
     {
@@ -330,7 +330,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -359,7 +359,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -389,7 +389,7 @@
         "availability_policy": "available_only"
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Показывать только доступные SKU; если таких нет, объяснить отсутствие, не подменять продлением."
     },
     {
@@ -417,7 +417,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -440,7 +440,7 @@
         "offer_kind": "renewal"
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
@@ -468,7 +468,7 @@
         ]
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
@@ -495,7 +495,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -522,7 +522,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -549,7 +549,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -577,7 +577,7 @@
         ]
       },
       "expected_behavior": "brand_browse_or_clarify",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
     },
     {
@@ -604,7 +604,7 @@
         ]
       },
       "expected_behavior": "brand_browse_or_clarify",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
     },
     {
@@ -631,7 +631,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -659,7 +659,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -687,7 +687,7 @@
         ]
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
@@ -715,7 +715,7 @@
         ]
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
@@ -738,7 +738,7 @@
         "offer_kind": "new_license"
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Точный ID предложения TrueConf Server из feed; не менять цифры."
     },
     {
@@ -765,7 +765,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -792,7 +792,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -819,7 +819,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -851,7 +851,7 @@
         ]
       },
       "expected_behavior": "brand_browse_or_clarify",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
     },
     {
@@ -879,7 +879,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -906,7 +906,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -934,7 +934,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -963,7 +963,7 @@
         ]
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
@@ -986,7 +986,7 @@
         "offer_kind": "renewal"
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
@@ -1019,7 +1019,7 @@
         ]
       },
       "expected_behavior": "brand_browse_or_clarify",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
     },
     {
@@ -1046,7 +1046,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -1074,7 +1074,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -1101,7 +1101,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -1134,7 +1134,7 @@
         ]
       },
       "expected_behavior": "brand_browse_or_clarify",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Примеры допустимых семейств не исчерпывают бренд; не фиксировать единственный правильный продукт."
     },
     {
@@ -1161,7 +1161,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -1188,7 +1188,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -1215,7 +1215,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -1242,7 +1242,7 @@
         ]
       },
       "expected_behavior": "retrieve_targets",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": ""
     },
     {
@@ -1271,7 +1271,7 @@
         ]
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     },
     {
@@ -1299,10 +1299,18 @@
         ]
       },
       "expected_behavior": "eligible_targets_or_explained_shortfall",
-      "review_status": "pending",
+      "review_status": "accepted_by_user",
       "note_ru": "Проверить выбранный SKU; неизвестная характеристика не считается соответствием."
     }
   ],
   "supersedes_cases_sha256": "4df626635b17782905cc4988be7ed132dd418520f208e2f3740eb18ee0fe4935",
-  "revision_reason": "Expanded from 8 to 40 before the first search run at user request; original eight query IDs and targets retained."
+  "revision_reason": "Expanded from 8 to 40 before the first search run at user request; original eight query IDs and targets retained.",
+  "previous_cases_sha256": "e167d4ac9faab22304c47d5101057b7166a2bb2079bcd7746d6eeb85a016856b",
+  "review_record": {
+    "reviewed_by": "repository_owner",
+    "reviewed_on": "2026-11-27",
+    "scope": "all_100_active_cases",
+    "basis": "User confirmed prior review in chat and requested continuation. Queries, targets and constraints unchanged.",
+    "certification": "user_acceptance_not_vendor_or_expert_certification"
+  }
 }
