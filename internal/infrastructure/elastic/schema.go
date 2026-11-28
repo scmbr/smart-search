@@ -40,6 +40,9 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 		return map[string]any{"term": map[string]any{field: value}}
 	}
 	filters := []any{term("HasPrice", priced), term("RoleConflict", false)}
+	if category, identity := domain.PurposeTaxonomy(r.Plan.Purpose); identity != "" {
+		filters = append(filters, term("ProductType", "software"), map[string]any{"match_phrase": map[string]any{"CategoryNames": category}}, map[string]any{"match": map[string]any{"ProductName": identity}})
+	}
 	for _, phrase := range domain.ExcludedLicenseDependencyPhrases(r) {
 		filters = append(filters, map[string]any{"bool": map[string]any{"must_not": []any{map[string]any{"match_phrase": map[string]any{"Name": phrase}}}}})
 	}

@@ -2,10 +2,21 @@ package search
 
 import (
 	"net/url"
+	"regexp"
 	"strings"
 )
 
 type PurposeScope struct{ Group, Vendor string }
+
+var windowsProductHead = regexp.MustCompile(`^(?:(?:новая лицензия|лицензия|купить|продление|обновление|поддержка)\s+)?(?:microsoft\s+)?windows(?:\s|$)`)
+
+// PurposeTaxonomy describes identity evidence already present in catalog fields.
+func PurposeTaxonomy(purpose string) (category, identity string) {
+	if purpose == "windows_operating_system" {
+		return "Операционные системы", "windows"
+	}
+	return "", ""
+}
 
 // PurposeScopes is bounded product evidence, not SKU eligibility or a family map.
 func PurposeScopes(purpose string) []PurposeScope {
@@ -22,6 +33,9 @@ func requestedPurpose(r Request) string {
 	q := roleText(strings.TrimSpace(r.OriginalQuery))
 	if strings.Contains(q, "не ") || strings.Contains(q, "без ") {
 		return ""
+	}
+	if windowsProductHead.MatchString(canonicalQuery(q)) {
+		return "windows_operating_system"
 	}
 	if explicitSoftwareHead.MatchString(q) && strings.Contains(q, "операционная система") {
 		return "operating_system"
@@ -56,6 +70,20 @@ func PurposeAllowed(r Request, d Document) bool {
 	u, err := url.Parse(d.URL)
 	if err != nil || u.Scheme != "https" || u.Host != "store.softline.ru" {
 		return false
+	}
+	if category, identity := PurposeTaxonomy(p); identity != "" {
+		if d.ProductType != "software" {
+			return false
+		}
+		hasCategory := false
+		for _, name := range d.CategoryNames {
+			hasCategory = hasCategory || strings.Contains(" "+canonicalQuery(name)+" ", " "+canonicalQuery(category)+" ")
+		}
+		hasIdentity := false
+		for _, word := range queryTokens(d.ProductName) {
+			hasIdentity = hasIdentity || word == identity
+		}
+		return hasCategory && hasIdentity
 	}
 	for _, s := range PurposeScopes(p) {
 		if d.GroupID == s.Group && strings.HasPrefix(u.Path, "/"+s.Vendor+"/") {

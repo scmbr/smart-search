@@ -13,6 +13,13 @@ Health, начальный lexical POST /search и минимальный fronte
 Следующий шаг — HTTP hybrid/live отдельной конфигурацией и verifier рекомендаций,
 а также визуальная QA при доступном браузере. Текущий HTTP режим остаётся lexical.
 
+Исправлено по сообщению пользователя: Windows / «виндовс» (D-052).
+Алиасы и проверка собственного имени + категории ОС, query-v9; без нового индекса
+и платных вызовов. Спецификация — [windows-search.md](docs/windows-search.md).
+Проверены domain/application, real ES, полный Go-прогон и реальный HTTP proxy.
+Tuning 52/52 + 6/6 + 2/2, development 8/16 без регрессии, платных вызовов нет.
+Следующий шаг — HTTP hybrid/live и verifier; приоритет этапа 4 сохранён.
+
 Последнее слитое изменение поиска: PR #30, commit `c28347e`, обязательный CI прошёл.
 Baseline: 19/34 group + 3/6 brand, hybrid: 18/34 + 3/6; fallback 0.
 Полный отчёт и ограничения — [independent-evaluation.md](docs/independent-evaluation.md).
