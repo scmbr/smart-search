@@ -57,3 +57,4 @@
 
 - [Независимая оценка](independent-evaluation.md): freeze, cache-only прогон и границы метрик.
 - [Приоритет названия продукта](identity-ranking.md): hybrid-v3 и development-диагностика.
+- [Полные векторы](full-vector-ranking.md): hybrid-v4, task development и расход памяти.

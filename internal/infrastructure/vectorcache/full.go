@@ -32,7 +32,7 @@ func NewFull(x corpus.Corpus, runtime app.Runtime, liveQueries bool) (*Full, err
 	return &Full{manifest: x, runtime: runtime, liveQueries: liveQueries, loading: make(chan struct{}, 1)}, nil
 }
 
-// load keeps only a 512-component copy; partial cache never becomes a ready corpus.
+// load retains the full cached embedding; partial cache never becomes ready.
 func (c *Full) load(ctx context.Context) ([]indexedDocument, error) {
 	select {
 	case c.loading <- struct{}{}:
@@ -58,11 +58,11 @@ func (c *Full) load(ctx context.Context) ([]indexedDocument, error) {
 		}
 		for _, doc := range batch {
 			v := execution.Vectors[embedding.CacheKey(doc.Text)]
-			prefix := append([]float64(nil), v[:512]...)
-			if _, err := embedding.Cosine(prefix, prefix); err != nil {
+			vector := append([]float64(nil), v...)
+			if _, err := embedding.Cosine(vector, vector); err != nil {
 				return nil, err
 			}
-			out = append(out, indexedDocument{document: doc, vector: prefix})
+			out = append(out, indexedDocument{document: doc, vector: vector})
 		}
 	}
 	c.documents = out
@@ -83,7 +83,7 @@ func (c *Full) Candidates(ctx context.Context, r d.Request) ([]d.GroupCandidate,
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
-		score, err := embedding.Cosine(q[:512], doc.vector)
+		score, err := embedding.Cosine(q, doc.vector)
 		if err != nil {
 			return nil, err
 		}

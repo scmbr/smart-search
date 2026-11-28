@@ -16,6 +16,27 @@ type countedStore struct {
 	reads int
 }
 
+func TestFullRankingUsesInformationBeyondPrefix512(t *testing.T) {
+	x := fullManifest()
+	query := make([]float64, embedding.Dimensions)
+	query[0], query[512] = 0.1, 1
+	wrong := append([]float64(nil), query...)
+	wrong[512] = -1
+	s := cachedStore{map[string][]float64{
+		embedding.CacheKey("task"):    query,
+		embedding.CacheKey("product"): wrong,
+		embedding.CacheKey("sku"):     query,
+	}}
+	c, err := NewFull(x, app.Runtime{Store: s}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	hits, err := c.Candidates(context.Background(), search.Request{OriginalQuery: "task"})
+	if err != nil || len(hits) != 1 || hits[0].OfferID != "s" {
+		t.Fatalf("truncated vectors lost distinguishing information: %+v %v", hits, err)
+	}
+}
+
 func TestFullRejectsWeakNeighborsInsteadOfPaddingResults(t *testing.T) {
 	x := fullManifest()
 	q := make([]float64, embedding.Dimensions)

@@ -10,6 +10,22 @@ import (
 
 type cachedStore struct{ vectors map[string][]float64 }
 
+func TestPilotCandidatesAlsoUseFullEmbedding(t *testing.T) {
+	query := make([]float64, d.Dimensions)
+	query[0], query[512] = 0.1, 1
+	wrong := append([]float64(nil), query...)
+	wrong[512] = -1
+	store := cachedStore{map[string][]float64{d.CacheKey("product"): wrong, d.CacheKey("task"): query}}
+	corpus, err := New(dataset(), app.Runtime{Store: store})
+	if err != nil {
+		t.Fatal(err)
+	}
+	hits, err := corpus.Candidates(context.Background(), search.Request{OriginalQuery: "task"})
+	if err != nil || len(hits) != 0 {
+		t.Fatalf("prefix-only match accepted: %+v %v", hits, err)
+	}
+}
+
 func (s cachedStore) Get(context.Context, []string) (map[string][]float64, error) {
 	return s.vectors, nil
 }

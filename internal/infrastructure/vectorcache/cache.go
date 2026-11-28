@@ -57,7 +57,7 @@ func (c *Corpus) Candidates(ctx context.Context, r d.Request) ([]d.GroupCandidat
 			return nil, err
 		}
 		v := execution.Vectors[embedding.CacheKey(doc.Text)]
-		score, err := embedding.Cosine(q[:512], v[:512])
+		score, err := embedding.Cosine(q, v)
 		if err != nil {
 			return nil, err
 		}
