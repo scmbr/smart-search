@@ -3,7 +3,7 @@ info:
   title: Smart Search API
   version: 0.2.0
   description: >-
-    Contract-first local demo. No server is implemented yet. All examples are
+    Contract-first local demo. Only health routes are implemented; other operations are planned. All examples are
     synthetic. Catalog snapshot availability is not live inventory.
 servers:
   - url: http://localhost:8080/api/v1

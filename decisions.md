@@ -696,6 +696,25 @@
 - Спецификация/проверки: docs/full-vector-ranking.md; сводка
   testdata/evaluation/full-vector-development-v1.json. Следующие шаги — todo.md.
 
+## D-049. Ограничить цикл качества и начать сквозной HTTP-стенд
+
+Дата: 2026-11-28. Статус: принято по сообщению пользователя «Тогда двигаемся дальше».
+
+- Уточняет порядок D-046: после приоритета имени и полных векторов фиксируем
+  hybrid-v4, task development 8/16; оставшиеся восемь промахов не скрываются,
+  но не блокируют бесконечно API/frontend/verifier. Полнота четырёх не доказана.
+- Первое HTTP-изменение ограничено существующими health endpoints. Остальные
+  пути контракта не выдавать за реализованные; POST /search — следующий шаг.
+- Ready проверяет current normalized ready PG snapshot и ready compatible ES
+  index, recomputed identity, исполнимость search и повторный active catalog ID.
+  OpenAI/векторы не обязательны для lexical readiness; платных вызовов нет.
+- Выбраны application-порты и тонкий HTTP-handler; отклонены прямые SQL/SDK
+  внутри handler и готовность по одному ping без проверки согласованности.
+- Локальный listener, тайм-ауты/ограничение заголовков, безопасный Error,
+  graceful shutdown. Старт требует PG; runtime сбои дают ready=503/live=200.
+- Точные границы/приёмка: docs/http-server.md. Поиск/идемпотентность/аналитика
+  не добавляются скрыто в этот шаг; следующая очередь — todo.md.
+
 ## Открытые решения
 
 - O-001: RAM — 16 ГБ; PostgreSQL 1 ГБ/2 CPU, Elasticsearch 2 ГБ/2 CPU (heap 512 МБ).
