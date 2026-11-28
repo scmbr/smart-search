@@ -73,3 +73,15 @@ func TestCanceledReadinessDoesNotCallNextPort(t *testing.T) {
 		t.Fatal(err, i.calls)
 	}
 }
+
+type unavailableStore struct{}
+
+func (unavailableStore) CheckStore(context.Context) error { return errors.New("missing migration") }
+func TestSearchStoreFailurePreventsReadiness(t *testing.T) {
+	c := &catalogFake{}
+	i := &indexFake{}
+	err := (Service{Catalog: c, Index: i, SearchStore: unavailableStore{}}).Check(context.Background())
+	if !errors.Is(err, d.ErrNotReady) || c.calls != 0 || i.calls != 0 {
+		t.Fatal(err, c.calls, i.calls)
+	}
+}

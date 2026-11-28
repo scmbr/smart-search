@@ -5,8 +5,8 @@
 Локальное демо умного поиска Softline. Backend — Go 1.25+; целевой frontend —
 React/TypeScript/Vite; хранилище — PostgreSQL, поиск — Elasticsearch, модели — OpenAI.
 Сейчас реализованы каталог/PostgreSQL-снимки и CLI импорта, индексации и поиска;
-HTTP-сервер `cmd/api` пока реализует только health endpoints; поиск доступен
-через CLI. Frontend ещё не создан.
+HTTP-сервер `cmd/api` реализует health и начальный lexical POST /search;
+hybrid/live доступны через CLI. Frontend ещё не создан.
 
 - `internal/` — backend-пакеты; `cmd/` — CLI и composition roots; `contracts/` — Go-тесты API.
   Go-модуль и его конфигурация находятся в корне, отдельной папки `backend/` нет.

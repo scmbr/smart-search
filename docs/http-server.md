@@ -39,3 +39,6 @@ Unit domain/application/HTTP, контрактные тесты реальных
 artifacts/http-health-smoke.json. Graceful shutdown проверен отдельным Go-тестом;
 smoke-процессы после проверки завершены через дескрипторы собственных процессов.
 Сервер не оставлен работающим в фоне, его запускают приведённой выше командой.
+
+Актуализация: теперь подключён [POST /search](http-search.md); readiness также
+проверяет таблицу search_sessions. Без migration 005 ready возвращает 503.

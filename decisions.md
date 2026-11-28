@@ -715,6 +715,29 @@
 - Точные границы/приёмка: docs/http-server.md. Поиск/идемпотентность/аналитика
   не добавляются скрыто в этот шаг; следующая очередь — todo.md.
 
+## D-050. Первый реальный HTTP-поиск и постоянный replay
+
+Дата: 2026-11-28. Статус: реализовано; migration 005 применена локально.
+
+- POST /search вызывает application/lexical.Search с прежними SKU-фильтрами.
+  HTTP hybrid/live пока не подключены; OpenAI не вызывается. Не использовать
+  mock-выдачу или молча игнорировать cursor/context/license_type — пока 400.
+- Сохранять успешный domain result/search_id/duration на 24 часа в PG; canonical
+  JSON hash, scope session/key, advisory lease исключает второй запуск. Изменённый
+  завершённый key — 409, in-flight — 503. Replay работает после перезапуска даже
+  при недоступном ES. Отдельный pool предотвращает исчерпание Runtime-пула locks.
+- Контракт 0.3.0: total_matches nullable, null вместо неизвестного global count;
+  Card.family_confirmed — только идентичность, не eligibility. Top4 содержит
+  подтверждённые семейства; недобор не маскируется. Рекомендации пока пусты.
+- Отклонены in-memory replay (теряется при рестарте), число кандидатов как
+  точный total, повторный поиск при ошибке сохранения и фиктивные допродажи.
+- Body <=16 KiB, exact closed JSON fields, без null/duplicate keys, UTF-8,
+  deadline/cancellation; безопасные 400/409/413/503. Аналитика ещё не реализована.
+- Проверки: domain/application/HTTP и OpenAPI actual responses; real PG lease/
+  replay/conflict/session/expiry; отдельный процесс API с настоящей AnyDesk SKU,
+  перезапуск с недоступным ES воспроизводит прежний JSON, новый поиск даёт 503.
+- Спецификация: docs/http-search.md. Дальнейшие шаги и ограничения — todo.md.
+
 ## Открытые решения
 
 - O-001: RAM — 16 ГБ; PostgreSQL 1 ГБ/2 CPU, Elasticsearch 2 ГБ/2 CPU (heap 512 МБ).

@@ -9,8 +9,9 @@
 Доступны импорт и версионированные PostgreSQL-снимки, Elasticsearch-индекс,
 CLI лексического и гибридного поиска (query-v8 / lexical-v7 / hybrid-v4),
 полный кэш эмбеддингов и выборочный LLM-разбор с общим бюджетом $5.
-HTTP-сервер `cmd/api` реализует только `/api/v1/health/live` и `/health/ready`;
-поиск по HTTP, frontend, verifier и аналитика ещё не реализованы.
+HTTP-сервер `cmd/api` реализует `/api/v1/search` в lexical режиме с постоянным
+replay и health endpoints. HTTP hybrid/live, frontend, verifier и аналитика
+ещё не подключены. [HTTP-поиск и ограничения](docs/http-search.md).
 
 На development: tuning group@1/@4 52/52, task probes @4 8/16, @1 6/16.
 Это не доказательство качества всех четырёх товаров. Независимое сравнение
@@ -19,6 +20,7 @@ HTTP-сервер `cmd/api` реализует только `/api/v1/health/live
 
 ```powershell
 docker compose --profile search up -d --wait postgres elasticsearch
+go run ./cmd/catalog-import -migrate-only
 go run ./cmd/api
 ```
 
