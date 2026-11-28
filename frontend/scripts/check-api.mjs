@@ -6,7 +6,10 @@ const target = new URL('../src/shared/api/generated/schema.ts', import.meta.url)
 const expected = astToString(await openapiTS(schema));
 const actual = await readFile(target, 'utf8');
 // CLI adds a standard generated-file header; compare the generated declarations.
-const declarations = (text) => text.slice(text.indexOf('export interface paths'));
+const declarations = (text) => {
+  const normalized = text.replaceAll('\r\n', '\n');
+  return normalized.slice(normalized.indexOf('export interface paths'));
+};
 if (declarations(actual) !== declarations(expected)) {
   throw new Error('OpenAPI types differ. Run npm run generate:api.');
 }
