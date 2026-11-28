@@ -1,0 +1,12 @@
+{
+  "role": "development_regression_not_independent",
+  "origin": "User-reported failures and spelling controls; not a new holdout",
+  "cases": [
+    {"query": "Adobe", "vendor_path": "/adobe/"},
+    {"query": "адоб", "vendor_path": "/adobe/"},
+    {"query": "адоь", "vendor_path": "/adobe/"},
+    {"query": "Photoshop", "vendor_path": "/adobe/", "product_name": "Adobe Photoshop"},
+    {"query": "фотошоп", "vendor_path": "/adobe/", "product_name": "Adobe Photoshop"},
+    {"query": "фотошор", "vendor_path": "/adobe/", "product_name": "Adobe Photoshop"}
+  ]
+}
