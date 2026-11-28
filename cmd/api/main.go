@@ -35,6 +35,7 @@ func run(ctx context.Context, args []string) error {
 	flags := flag.NewFlagSet("api", flag.ContinueOnError)
 	address := flags.String("listen", "127.0.0.1:8080", "loopback HTTP address")
 	options := searchruntime.Options{}
+	nameCatalog := flags.String("name-catalog", "", "compact snapshot-bound name catalog")
 	flags.StringVar(&options.Corpus, "vector-corpus", "", "enable hybrid using a versioned corpus; cached embeddings by default")
 	flags.BoolVar(&options.LiveQuery, "live-query", false, "explicitly allow new query embeddings within the shared budget")
 	flags.StringVar(&options.ParserMode, "parser-mode", "off", "selective parser: off, replay or live")
@@ -82,6 +83,13 @@ func run(ctx context.Context, args []string) error {
 			fmt.Fprintln(os.Stderr, "Vector cache warmup unavailable; lexical fallback remains enabled")
 		}
 		backend = combined
+	}
+	if *nameCatalog != "" {
+		named, loadErr := searchruntime.WithNames(ctx, pool, *nameCatalog, index, backend)
+		if loadErr != nil {
+			return loadErr
+		}
+		backend = named
 	}
 	listener, err := net.Listen("tcp", *address)
 	if err != nil {

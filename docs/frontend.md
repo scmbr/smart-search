@@ -7,7 +7,9 @@ same-origin `/api/v1/search`; dev/preview proxy направляет `/api` на
 
 ## Запуск
 
-В первом терминале из корня: `go run ./cmd/api` (migration 005 уже нужна).
+В первом терминале из корня: `go run ./cmd/api -name-catalog artifacts/name-catalog.json`
+(migration 005 и подготовленный словарь уже нужны; [подготовка](named-search.md)).
+Без словаря можно запустить `go run ./cmd/api`, но новый поиск названий будет выключен.
 Во втором из `frontend/`:
 
 ```powershell

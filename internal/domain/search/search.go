@@ -73,6 +73,7 @@ func (r *Families) Resolve(o catalog.Offer) Family {
 }
 
 type Request struct {
+	NamedSelection                                                     *NameSelection
 	NamedLibrary                                                       bool
 	RequestedProductRole                                               string
 	SemanticQuery                                                      string

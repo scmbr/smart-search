@@ -165,3 +165,8 @@ HTTP search — docs/http-search.md: idempotency store migration 005, отдел
 для advisory locks. Не обходить application/lexical.Search. HTTP hybrid/live — docs/http-hybrid.md: флаги сервера, общий Runtime/ledger;
 по умолчанию API lexical, Provider отсутствует. Не игнорировать context/cursor/license_type: до реализации 400.
 При неизвестном global total — null; provisional family не входит в подтверждённый top4.
+
+Именованный поиск — docs/named-search.md: -name-catalog подключает компактный
+словарь из feed. Scope/group filters до collapse, повторная проверка ProductName/
+Vendor и catalog ID обязательны. Не заменяй это boost известных целей; не вызывай
+платные модели для уверенного имени. Задачи сохраняют настроенный hybrid backend.

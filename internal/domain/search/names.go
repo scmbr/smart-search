@@ -44,6 +44,11 @@ func NewNameDictionary(snapshot string, entities []NameEntity, aliases []NameAli
 		return nil, errors.New("missing name dictionary snapshot")
 	}
 	d := &NameDictionary{}
+	aliasTargets := map[string][]string{}
+	for _, a := range aliases {
+		key := a.Kind + "\x00" + nameNormalized(a.Name)
+		aliasTargets[key] = append(aliasTargets[key], a.Alias)
+	}
 	seen := map[nameKey]bool{}
 	add := func(text string, e NameEntity) {
 		k := nameKey{nameNormalized(text), e}
@@ -57,10 +62,8 @@ func NewNameDictionary(snapshot string, entities []NameEntity, aliases []NameAli
 			return nil, errors.New("invalid catalog name identity")
 		}
 		add(e.Name, e)
-		for _, a := range aliases {
-			if a.Kind == e.Kind && nameNormalized(a.Name) == nameNormalized(e.Name) {
-				add(a.Alias, e)
-			}
+		for _, alias := range aliasTargets[e.Kind+"\x00"+nameNormalized(e.Name)] {
+			add(alias, e)
 		}
 	}
 	sort.Slice(d.keys, func(i, j int) bool {
@@ -95,10 +98,11 @@ func (d *NameDictionary) ResolveName(query string) NameResolution {
 		return r
 	}
 	best := map[NameEntity]int{}
+	latin := toLatin(q)
 	for _, k := range d.keys {
 		distance := nameDistance(q, k.Text)
 		// Transliteration is a secondary hypothesis, never stronger than exact spelling.
-		if latin := toLatin(q); latin != q {
+		if latin != q {
 			distance = min(distance, nameDistance(latin, k.Text)+1)
 		}
 		limit := 10
