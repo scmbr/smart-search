@@ -8,6 +8,7 @@
 | Задача | Команда |
 | --- | --- |
 | Зависимости | `go mod download`; после изменения импортов — `go mod tidy` |
+| Локальный HTTP-сервер (health) | `go run ./cmd/api` — только /api/v1/health/live и /ready |
 | Запуск текущей CLI | `go run ./cmd/catalog-check -file testdata/catalog/minimal.xml` |
 | PostgreSQL | `docker compose up -d --wait postgres` |
 | Миграции (forward-only) | `go run ./cmd/catalog-import -migrate-only` |
@@ -37,7 +38,7 @@
 | Целостность модулей | `go mod verify` |
 
 `gofmt -l` должен дать пустой вывод. golangci-lint/отдельный task runner не настроены.
-HTTP-сервера пока нет. `catalog-import` читает .env без замены переменных среды,
+HTTP-сервер пока обслуживает только health; остальные операции контракта ещё не реализованы. `catalog-import` читает .env без замены переменных среды,
 применяет встроенные SQL-миграции и пишет staging/active снимки. `catalog-check`
 только читает/проверяет файл. Не передавай DSN с паролем через аргументы команд.
 Тесты PostgreSQL создают/удаляют отдельные схемы; обычные go test их пропускают,
@@ -111,7 +112,7 @@ CI запускает форматирование, vet, сборку и тес�
 Жёсткое правило: **Infrastructure / Presentation → Application → Domain**.
 Внешние слои могут использовать domain, но внутренние никогда не импортируют внешние.
 Структура нового импорта уже использует domain/application/infrastructure;
-presentation появится вместе с HTTP API:
+health presentation находится в internal/presentation/httpapi:
 
 - `internal/domain/`: сущности, Value Objects, бизнес-инварианты, доменные ошибки
   и интерфейсы репозиториев. Только стандартная библиотека; никаких ORM, SQL,

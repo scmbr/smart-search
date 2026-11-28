@@ -1260,6 +1260,22 @@
         "shortfall_reason": null,
         "unpriced_fallback_used": false
       }
+    },
+    {
+      "name": "health process ready",
+      "schema": "Health",
+      "valid": true,
+      "value": {
+        "status": "ok"
+      }
+    },
+    {
+      "name": "unknown health state rejected",
+      "schema": "Health",
+      "valid": false,
+      "value": {
+        "status": "maybe"
+      }
     }
   ]
 }
