@@ -1,0 +1,38 @@
+{
+  "version": "windows-search-development-v1",
+  "query_policy": "query-v9",
+  "document_schema": "lexical-v7",
+  "independent": false,
+  "holdout_searched": false,
+  "new_paid_calls": 0,
+  "reports": {
+    "tuning": {
+      "sha256": "64699f92526541c2b8d1e88c338437653cdb8e10a630988d10383dd0da899bf9",
+      "dataset_cases_sha256": "8a3ce328148f5a6aeae25edcedc17831d67a8686e37de84a1bb564fee1ab1755",
+      "cases": 60,
+      "execution_errors": 0,
+      "draft_group_target_hits_at_1": 52,
+      "draft_group_target_hits_at_4": 52,
+      "draft_brand_scope_hits_at_4": 6,
+      "negative_empty_cases": 2
+    },
+    "probes": {
+      "sha256": "afc867fc2cc119b6d4fe2042b1010b2d6ae1e1e12a3b300f0d6168c8f1fff272",
+      "dataset_cases_sha256": "af7a01d9bf904948afc338accfc70a6003a8931680b1b77c10f5b3daf538dc84",
+      "cases": 16,
+      "execution_errors": 0,
+      "draft_group_target_hits_at_1": 6,
+      "draft_group_target_hits_at_4": 8,
+      "draft_brand_scope_hits_at_4": 0,
+      "negative_empty_cases": 0
+    }
+  },
+  "http_proxy_observations": {
+    "endpoint": "http://127.0.0.1:5173/api/v1/search",
+    "mode": "lexical",
+    "windows_aliases_selected_offer": "Microsoft Windows 11 Pro FQC-10572",
+    "windows_confirmed_families": 1,
+    "player_context_selected_offer": "РАПО Сарма, Плеер для Windows",
+    "visual_browser_check": false
+  }
+}

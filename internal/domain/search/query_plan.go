@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-const QueryPolicyVersion = "query-v8"
+const QueryPolicyVersion = "query-v9"
 
 type QueryTerm struct {
 	Text      string
@@ -30,6 +30,7 @@ type QueryPlan struct {
 
 // Alias phrases are word-boundary replacements, never rules for individual typos.
 var queryAliases = [][2]string{
+	{"виндовс", "windows"}, {"виндоус", "windows"}, {"винда", "windows"},
 	{"астра линукс", "astra linux"}, {"астралинукс", "astra linux"},
 	{"крипто про", "криптопро"}, {"цсп", "csp"},
 	{"маленького офиса", "small office"}, {"малого офиса", "small office"},

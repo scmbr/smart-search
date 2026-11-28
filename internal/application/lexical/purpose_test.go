@@ -22,3 +22,23 @@ func TestPurposeCannotBeBypassedByBackend(t *testing.T) {
 		}
 	}
 }
+
+func TestWindowsPurposeCannotBeBypassedByBackend(t *testing.T) {
+	price := int64(100)
+	for _, valid := range []bool{false, true} {
+		doc := d.Document{OfferID: "fixture", FamilyID: "f", CatalogID: "c", URL: "https://store.softline.ru/microsoft/windows/", PriceMinor: &price, HasPrice: true, Available: true, ProductType: "software", ProductName: "Player for Windows", CategoryNames: []string{"Multimedia"}}
+		if valid {
+			doc.ProductName = "Microsoft Windows 11 Pro"
+			doc.CategoryNames = []string{"Операционные системы"}
+		}
+		d.SetProductRole(&doc)
+		backend := &behaviorBackend{result: d.Result{CatalogID: "c", IndexVersion: "i", Hits: []d.Hit{{Document: doc}}}}
+		result, err := Search(context.Background(), backend, d.Request{Query: "виндовс", Limit: 4})
+		if valid && (err != nil || len(result.Hits) != 1) {
+			t.Fatalf("Windows rejected: %+v %v", result, err)
+		}
+		if !valid && (!errors.Is(err, d.ErrUnavailable) || len(result.Hits) != 0) {
+			t.Fatalf("platform mention bypassed application: %+v %v", result, err)
+		}
+	}
+}

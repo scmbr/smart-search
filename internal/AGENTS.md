@@ -52,7 +52,7 @@ docs/lexical-baseline.md. Маппинг семейств — internal/infrastru
 Query policy — docs/query-normalization.md и docs/query-constraints.md, версионируется QueryPolicyVersion отдельно
 от индекса. Не расширяй цифры/артикулы fuzzy; фильтры сохраняются во всех попытках.
 Роли SKU — docs/product-roles.md и docs/capacity-extensions.md: lexical-v7,
-product-role-v2/query-v8. Дополнительные IP/узлы/устройства — addon;
+product-role-v2/query-v9. См. docs/windows-search.md для Windows intent. Дополнительные IP/узлы/устройства — addon;
 количество дополнительных единиц и узлов пока unsupported, не суммировать с базой.
 Назначение — docs/product-purpose.md: purpose-v1, явный запрос ОС/замены AD,
 vendor/group + условия SKU до collapse и повтор в application; unknown не равен

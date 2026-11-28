@@ -7,7 +7,7 @@
 ## Текущее состояние
 
 Доступны импорт и версионированные PostgreSQL-снимки, Elasticsearch-индекс,
-CLI лексического и гибридного поиска (query-v8 / lexical-v7 / hybrid-v4),
+CLI лексического и гибридного поиска (query-v9 / lexical-v7 / hybrid-v4),
 полный кэш эмбеддингов и выборочный LLM-разбор с общим бюджетом $5.
 HTTP-сервер `cmd/api` реализует `/api/v1/search` в lexical режиме с постоянным
 replay и health endpoints. Frontend доступен в `frontend/`; HTTP hybrid/live, verifier и аналитика
