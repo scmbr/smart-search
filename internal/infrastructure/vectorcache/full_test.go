@@ -108,3 +108,13 @@ func TestFullCorpusLoadedOnceAndSKUIdentityPreserved(t *testing.T) {
 		t.Fatal("partial corpus became ready")
 	}
 }
+
+func TestWarmNeverCallsProviderEvenWithLiveQueries(t *testing.T) {
+	c, err := NewFull(fullManifest(), app.Runtime{Store: cachedStore{map[string][]float64{}}, Provider: forbiddenProvider{}}, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = c.Warm(context.Background()); err == nil || c.documents != nil {
+		t.Fatal("incomplete cache became warm")
+	}
+}

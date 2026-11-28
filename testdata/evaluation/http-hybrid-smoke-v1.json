@@ -1,0 +1,58 @@
+{
+  "version": "http-hybrid-smoke-v1",
+  "independent_quality_evaluation": false,
+  "paid_network_calls": 0,
+  "ledger_before_and_after": {
+    "reservations": 478,
+    "actual_nano_usd": 25425085,
+    "unresolved": 0
+  },
+  "raw_report_sha256": "7957177d42c1b39a3416b6e3e1f5b8eb4b2da6b8d1ad7b0f0017c89b3745fe52",
+  "cases": [
+    {
+      "query": "нужно подключаться к компьютеру сотрудника удалённо и помогать ему",
+      "mode": "hybrid",
+      "degraded_reasons": [],
+      "offer_ids": [
+        "402265",
+        "487234",
+        "368182",
+        "535437"
+      ],
+      "replay_identical": true,
+      "replay_after_lexical_restart_identical": true
+    },
+    {
+      "query": "виндовс",
+      "mode": "lexical",
+      "degraded_reasons": [
+        "embeddings_not_ready"
+      ],
+      "offer_ids": [
+        "380385"
+      ],
+      "replay_identical": true,
+      "replay_after_lexical_restart_identical": true
+    },
+    {
+      "query": "newuncachedwordxyzabcdefghijkl",
+      "mode": "lexical",
+      "degraded_reasons": [
+        "embeddings_not_ready"
+      ],
+      "offer_ids": [],
+      "replay_identical": true,
+      "replay_after_lexical_restart_identical": true
+    },
+    {
+      "query": "FQC-10572",
+      "mode": "lexical",
+      "degraded_reasons": [],
+      "offer_ids": [
+        "380385"
+      ],
+      "replay_identical": true,
+      "replay_after_lexical_restart_identical": true
+    }
+  ]
+}

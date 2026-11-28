@@ -8,7 +8,7 @@
 | Задача | Команда |
 | --- | --- |
 | Зависимости | `go mod download`; после изменения импортов — `go mod tidy` |
-| Локальный HTTP API | `go run ./cmd/api` — lexical /api/v1/search и health; нужна migration 005 |
+| Локальный HTTP API | `go run ./cmd/api` — lexical /api/v1/search и health; hybrid: `-vector-corpus artifacts/vector-corpus.json -parser-mode replay`; нужна migration 005 |
 | Запуск текущей CLI | `go run ./cmd/catalog-check -file testdata/catalog/minimal.xml` |
 | PostgreSQL | `docker compose up -d --wait postgres` |
 | Миграции (forward-only) | `go run ./cmd/catalog-import -migrate-only` |
@@ -38,7 +38,7 @@
 | Целостность модулей | `go mod verify` |
 
 `gofmt -l` должен дать пустой вывод. golangci-lint/отдельный task runner не настроены.
-HTTP-сервер обслуживает health и lexical POST /search; остальные операции контракта ещё не реализованы. `catalog-import` читает .env без замены переменных среды,
+HTTP-сервер обслуживает health и POST /search (lexical либо явно включённый hybrid); остальные операции контракта ещё не реализованы. `catalog-import` читает .env без замены переменных среды,
 применяет встроенные SQL-миграции и пишет staging/active снимки. `catalog-check`
 только читает/проверяет файл. Не передавай DSN с паролем через аргументы команд.
 Тесты PostgreSQL создают/удаляют отдельные схемы; обычные go test их пропускают,
@@ -80,7 +80,7 @@ collapse во всех ветках; application пересчитывает ро
 отдельный лимит 5 USD. Эмбеддинги исполняй через application/embeddingpilot.Runtime:
 общие слоты/ключи и постоянные pending migration 003; см. docs/embedding-runtime.md.
 Не обходи Runtime прямым вызовом Provider/SDK. Не освобождай unresolved claims
-по TTL и не повторяй тайм-ауты/5xx автоматически. HTTP fallback пока не подключён.
+по TTL и не повторяй тайм-ауты/5xx автоматически. HTTP optional fallback — docs/http-hybrid.md.
 CLI-сборка выше рассчитана на Windows; на другой ОС используй исполняемое имя без `.exe`.
 Гибрид — docs/hybrid-search.md; кэшированный development-корпус не означает полное
 покрытие. RRF выполняется по FamilyID после фильтрации SKU; не обходи общий
@@ -162,6 +162,6 @@ XML-токены, HTTP request/response или структуры OpenAI/Elastic
   ссылки и ответ LLM не заменяют passed по обязательным правилам.
 
 HTTP search — docs/http-search.md: idempotency store migration 005, отдельный pool
-для advisory locks. Не обходить application/lexical.Search. HTTP OpenAI/live пока
-не подключены. Не игнорировать context/cursor/license_type: до реализации 400.
+для advisory locks. Не обходить application/lexical.Search. HTTP hybrid/live — docs/http-hybrid.md: флаги сервера, общий Runtime/ledger;
+по умолчанию API lexical, Provider отсутствует. Не игнорировать context/cursor/license_type: до реализации 400.
 При неизвестном global total — null; provisional family не входит в подтверждённый top4.

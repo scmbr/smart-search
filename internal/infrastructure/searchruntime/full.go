@@ -1,0 +1,72 @@
+// Package searchruntime wires shared CLI/HTTP hybrid adapters and budget guards.
+package searchruntime
+
+import (
+	"context"
+	"errors"
+	embedding "github.com/scmbr/smart-search/internal/application/embeddingpilot"
+	hybrid "github.com/scmbr/smart-search/internal/application/hybrid"
+	parser "github.com/scmbr/smart-search/internal/application/queryparser"
+	catalog "github.com/scmbr/smart-search/internal/domain/catalog"
+	"github.com/scmbr/smart-search/internal/infrastructure/elastic"
+	"github.com/scmbr/smart-search/internal/infrastructure/localconfig"
+	provider "github.com/scmbr/smart-search/internal/infrastructure/openai"
+	"github.com/scmbr/smart-search/internal/infrastructure/postgres"
+	"github.com/scmbr/smart-search/internal/infrastructure/vectorcache"
+	"os"
+	"strings"
+)
+
+func NewFull(ctx context.Context, s localconfig.Settings, backend *elastic.Client, options Options) (hybrid.Backend, func(), error) {
+	var result hybrid.Backend
+	if err := options.Validate(); err != nil {
+		return result, nil, err
+	}
+	file, live, parserMode := options.Corpus, options.LiveQuery, options.ParserMode
+	x, err := vectorcache.LoadManifest(file)
+	if err != nil {
+		return result, nil, err
+	}
+	if parserMode == "live" {
+		if err = localconfig.CheckParserLive(); err != nil {
+			return result, nil, err
+		}
+	}
+	var p embedding.Provider
+	if live {
+		if os.Getenv("OPENAI_LIVE_ENABLED") != "true" || os.Getenv("OPENAI_API_KEY") == "" {
+			return result, nil, errors.New("live-query requires OPENAI_LIVE_ENABLED=true and API key")
+		}
+		if model := os.Getenv("OPENAI_EMBEDDING_MODEL"); model != "" && model != x.Model {
+			return result, nil, errors.New("query embedding model differs from manifest")
+		}
+		if budget := os.Getenv("OPENAI_BUDGET_USD"); budget != "" && budget != "5" && budget != "5.00" {
+			return result, nil, errors.New("query budget differs from 5 USD")
+		}
+		p = provider.New(os.Getenv("OPENAI_API_KEY"))
+	}
+	pool, err := s.Pool(ctx)
+	if err != nil {
+		return result, nil, err
+	}
+	var catalogID, schema string
+	err = pool.QueryRow(ctx, `SELECT s.id,s.schema_version FROM catalog_snapshots s JOIN catalog_active a ON a.snapshot_id=s.id WHERE s.status='ready' AND s.source_sha256=$1`, x.SourceSHA).Scan(&catalogID, &schema)
+	if err != nil || !strings.HasSuffix(schema, "/"+catalog.NormalizationVersion) {
+		pool.Close()
+		return result, nil, errors.New("vector corpus does not match active normalized feed")
+	}
+	vectors, err := vectorcache.NewFull(x, embedding.Runtime{Store: postgres.NewEmbeddingStore(pool), Provider: p}, live)
+	if err != nil {
+		pool.Close()
+		return result, nil, err
+	}
+	result = hybrid.Backend{Lexical: backend, Vectors: vectors, ExpectedCatalog: catalogID, CorpusSHA: x.SHA, CorpusDocuments: len(x.Documents)}
+	if parserMode == "replay" || parserMode == "live" {
+		service := parser.Service{Store: postgres.NewQueryParserStore(pool), Live: parserMode == "live"}
+		if service.Live {
+			service.Provider = provider.NewQueryParser(os.Getenv("OPENAI_API_KEY"))
+		}
+		result.Parser = service
+	}
+	return result, pool.Close, nil
+}

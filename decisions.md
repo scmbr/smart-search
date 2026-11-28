@@ -782,6 +782,25 @@
 - Существующих полей lexical-v7 достаточно: индекс, семейства и корпус не меняются;
   платные вызовы не нужны. Спецификация — docs/windows-search.md.
 
+## D-053. HTTP hybrid/live через общие адаптеры и ledger
+
+- Дата: 2026-11-28. Статус: реализовано, сквозной cache-only smoke пройден.
+- Продолжение этапа 4: HTTP использует общий с CLI searchruntime.NewFull;
+  не создаём второй бюджет и не обходим application/lexical.Search.
+- По умолчанию lexical; корпус включает hybrid, live-query и parser-mode
+  задаются только на backend. Live требует существующих env/model/budget guards.
+  Прогрев корпуса только из кэша, optional parser/vector имеют отдельные 2s timeout.
+- Существующая схема API достаточна: mode/degraded_reasons/clarification отражают
+  результат optional веток. Нельзя называть fallback полноценным hybrid.
+  Saved replay сохраняет прежний результат после смены режима и рестарта.
+- Реальный smoke: task probe-01 → hybrid, неизвестный uncached текст → lexical
+  с embeddings_not_ready, артикул → lexical без деградации. Все четыре ответа
+  идентичны при replay после lexical restart. Ledger до/после: 478 reservations,
+  actual 25425085 nanoUSD, unresolved=0; новых оплат нет.
+- Live сетевой вызов не выполнялся: проверены guards и прежние Runtime-тесты.
+  Результаты не доказывают четыре релевантных семейства. Verifier остаётся следующим
+  шагом. Спецификация/запуск — docs/http-hybrid.md; новая независимая оценка нужна отдельно.
+
 ## Открытые решения
 
 - O-001: RAM — 16 ГБ; PostgreSQL 1 ГБ/2 CPU, Elasticsearch 2 ГБ/2 CPU (heap 512 МБ).

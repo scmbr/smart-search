@@ -68,6 +68,10 @@ func (c *Full) load(ctx context.Context) ([]indexedDocument, error) {
 	c.documents = out
 	return out, nil
 }
+
+// Warm preloads the corpus from cache only; it never sends texts to Provider.
+func (c *Full) Warm(ctx context.Context) error { _, err := c.load(ctx); return err }
+
 func (c *Full) Candidates(ctx context.Context, r d.Request) ([]d.GroupCandidate, error) {
 	documents, err := c.load(ctx)
 	if err != nil {

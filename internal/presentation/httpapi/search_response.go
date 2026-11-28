@@ -71,6 +71,20 @@ func mapSearch(record d.Record) (responseDTO, error) {
 	if x.SearchMode == "hybrid" {
 		response.Mode = "hybrid"
 	}
+	if h := x.Hybrid; h != nil {
+		switch h.VectorStatus {
+		case "fallback", "catalog_mismatch":
+			response.Degraded = append(response.Degraded, "embeddings_not_ready")
+		}
+		switch h.InterpretationStatus {
+		case "fallback", "invalid":
+			response.Degraded = append(response.Degraded, "openai_unavailable")
+		case "clarification_required":
+			response.Clarification = append(response.Clarification, "Уточните задачу и тип нужного продукта")
+		case "unsupported":
+			response.Clarification = append(response.Clarification, "Условия запроса пока не поддерживаются; уточните продукт и характеристики")
+		}
+	}
 	for _, hit := range x.Hits {
 		doc := hit.Document
 		u, err := url.Parse(doc.URL)

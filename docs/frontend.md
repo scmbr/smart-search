@@ -65,3 +65,6 @@ Responsive CSS реализован, но это не равно визуаль�
 ESLint 9/TS ESLint 8.46.1 используются с точечным patched minimatch 11.0.1.
 Это явный override transitive dependency; lint/архитектурные тесты проверены.
 На момент настройки npm audit: 0 известных уязвимостей; CI пользуется lockfile.
+
+HTTP hybrid/live подключён на стороне backend: [http-hybrid.md](http-hybrid.md).
+Клиент отображает mode/degraded_reasons; запуск по умолчанию остаётся lexical.

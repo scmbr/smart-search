@@ -19,6 +19,7 @@ import (
 	"github.com/scmbr/smart-search/internal/infrastructure/elastic"
 	"github.com/scmbr/smart-search/internal/infrastructure/localconfig"
 	"github.com/scmbr/smart-search/internal/infrastructure/postgres"
+	"github.com/scmbr/smart-search/internal/infrastructure/searchruntime"
 	"github.com/scmbr/smart-search/internal/presentation/httpapi"
 )
 
@@ -33,12 +34,19 @@ func main() {
 func run(ctx context.Context, args []string) error {
 	flags := flag.NewFlagSet("api", flag.ContinueOnError)
 	address := flags.String("listen", "127.0.0.1:8080", "loopback HTTP address")
+	options := searchruntime.Options{}
+	flags.StringVar(&options.Corpus, "vector-corpus", "", "enable hybrid using a versioned corpus; cached embeddings by default")
+	flags.BoolVar(&options.LiveQuery, "live-query", false, "explicitly allow new query embeddings within the shared budget")
+	flags.StringVar(&options.ParserMode, "parser-mode", "off", "selective parser: off, replay or live")
 	if err := flags.Parse(args); err != nil {
 		return err
 	}
 	host, _, err := net.SplitHostPort(*address)
 	if flags.NArg() != 0 || err != nil || (host != "localhost" && (net.ParseIP(host) == nil || !net.ParseIP(host).IsLoopback())) {
 		return errors.New("listen must be a loopback host:port")
+	}
+	if err := options.Validate(); err != nil {
+		return err
 	}
 	s, err := localconfig.Load()
 	if err != nil {
@@ -59,6 +67,22 @@ func run(ctx context.Context, args []string) error {
 	if err != nil {
 		return err
 	}
+	var backend lexical.Backend = index
+	if options.Corpus != "" {
+		combined, closeRuntime, err := searchruntime.NewFull(ctx, s, index, options)
+		if err != nil {
+			return err
+		}
+		defer closeRuntime()
+		combined, warmErr := searchruntime.ForHTTP(ctx, combined)
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+		if warmErr != nil {
+			fmt.Fprintln(os.Stderr, "Vector cache warmup unavailable; lexical fallback remains enabled")
+		}
+		backend = combined
+	}
 	listener, err := net.Listen("tcp", *address)
 	if err != nil {
 		return errors.New("cannot listen on local HTTP address")
@@ -67,7 +91,7 @@ func run(ctx context.Context, args []string) error {
 	store := postgres.NewSearchStore(searchPool)
 	service := app.Service{Catalog: postgres.New(pool), Index: index, SearchStore: store}
 	searches := searchsession.Service{Store: store, Engine: func(ctx context.Context, r search.Request) (search.Result, error) {
-		return lexical.Search(ctx, index, r)
+		return lexical.Search(ctx, backend, r)
 	}}
 	return serve(ctx, listener, httpapi.New(service, searches))
 }
