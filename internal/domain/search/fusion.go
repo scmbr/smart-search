@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-const HybridVersion = "hybrid-v2"
+const HybridVersion = "hybrid-v3"
 const RankConstant = 60
 const CandidateLimit = 20
 const VectorWindow = 50
@@ -17,6 +17,7 @@ type GroupCandidate struct {
 	Score                    float64
 }
 type HybridTrace struct {
+	IdentityFamilies                                 int
 	InterpretationStatus, SemanticQuery              string
 	Version, CorpusSHA, VectorStatus                 string
 	CorpusDocuments, LexicalFamilies, VectorFamilies int

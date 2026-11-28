@@ -143,7 +143,7 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 			return d.Result{}, fmt.Errorf("%w: vector catalog mismatch", d.ErrUnavailable)
 		}
 	}
-	result.Hits, err = d.Fuse(lexical, hits, limit)
+	result.Hits, trace.IdentityFamilies, err = d.FuseRequest(r, lexical, hits, limit)
 	if err != nil {
 		return d.Result{}, err
 	}

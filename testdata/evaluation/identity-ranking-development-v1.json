@@ -1,0 +1,189 @@
+{
+  "version": "identity-ranking-development-v1",
+  "independent": false,
+  "hybrid_before": "hybrid-v2",
+  "hybrid_after": "hybrid-v3",
+  "holdout_searched": false,
+  "reports": {
+    "before_tuning": {
+      "sha256": "6874c0a22955cd32c98e14be76b278e5688471d87138a22c8ba0efa982a6f8a0",
+      "dataset_cases_sha256": "8a3ce328148f5a6aeae25edcedc17831d67a8686e37de84a1bb564fee1ab1755",
+      "group_cases": 52,
+      "group_hits_at_4": 52,
+      "group_hits_at_1": 50,
+      "brand_hits_at_4": 6,
+      "negative_empty": 2,
+      "execution_errors": 0,
+      "vectors": {
+        "used": 49,
+        "no_candidates": 10,
+        "skipped_exact": 1
+      }
+    },
+    "after_tuning": {
+      "sha256": "c15ea480dff14ad3d5a8b386dad6bb4ef50dff6f1e295e798a90bba56b979db7",
+      "dataset_cases_sha256": "8a3ce328148f5a6aeae25edcedc17831d67a8686e37de84a1bb564fee1ab1755",
+      "group_cases": 52,
+      "group_hits_at_4": 52,
+      "group_hits_at_1": 52,
+      "brand_hits_at_4": 6,
+      "negative_empty": 2,
+      "execution_errors": 0,
+      "vectors": {
+        "used": 49,
+        "no_candidates": 10,
+        "skipped_exact": 1
+      }
+    },
+    "before_probes": {
+      "sha256": "98229b3a3043687889570796a0c8e2cc13d67a4021455f5d98320fa61017ebfd",
+      "dataset_cases_sha256": "af7a01d9bf904948afc338accfc70a6003a8931680b1b77c10f5b3daf538dc84",
+      "group_cases": 16,
+      "group_hits_at_4": 7,
+      "group_hits_at_1": 4,
+      "brand_hits_at_4": 0,
+      "negative_empty": 0,
+      "execution_errors": 0,
+      "vectors": {
+        "used": 16
+      }
+    },
+    "after_probes": {
+      "sha256": "9c03cc5d3acfa33ce474fb0b6c71255120a7ef95d7ba188691c16bb855d12ee5",
+      "dataset_cases_sha256": "af7a01d9bf904948afc338accfc70a6003a8931680b1b77c10f5b3daf538dc84",
+      "group_cases": 16,
+      "group_hits_at_4": 7,
+      "group_hits_at_1": 4,
+      "brand_hits_at_4": 0,
+      "negative_empty": 0,
+      "execution_errors": 0,
+      "vectors": {
+        "used": 16
+      }
+    }
+  },
+  "diagnosis": {
+    "role": "development_diagnosis_not_independent",
+    "cases": [
+      {
+        "id": "probe-01",
+        "target_hit_at_4": true,
+        "target_vector_ranks": [
+          1
+        ],
+        "diagnosis": "hit"
+      },
+      {
+        "id": "probe-02",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [
+          25
+        ],
+        "diagnosis": "target_in_window_not_in_top4_requires_sku_audit"
+      },
+      {
+        "id": "probe-03",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [
+          2
+        ],
+        "diagnosis": "target_in_window_not_in_top4_requires_sku_audit"
+      },
+      {
+        "id": "probe-04",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [],
+        "diagnosis": "target_not_in_vector_window"
+      },
+      {
+        "id": "probe-05",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [],
+        "diagnosis": "target_not_in_vector_window"
+      },
+      {
+        "id": "probe-06",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [],
+        "diagnosis": "target_not_in_vector_window"
+      },
+      {
+        "id": "probe-07",
+        "target_hit_at_4": true,
+        "target_vector_ranks": [
+          4
+        ],
+        "diagnosis": "hit"
+      },
+      {
+        "id": "probe-08",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [],
+        "diagnosis": "target_not_in_vector_window"
+      },
+      {
+        "id": "probe-09",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [],
+        "diagnosis": "target_not_in_vector_window"
+      },
+      {
+        "id": "probe-10",
+        "target_hit_at_4": true,
+        "target_vector_ranks": [
+          1
+        ],
+        "diagnosis": "hit"
+      },
+      {
+        "id": "probe-11",
+        "target_hit_at_4": true,
+        "target_vector_ranks": [
+          29
+        ],
+        "diagnosis": "hit"
+      },
+      {
+        "id": "probe-12",
+        "target_hit_at_4": true,
+        "target_vector_ranks": [
+          12
+        ],
+        "diagnosis": "hit"
+      },
+      {
+        "id": "probe-13",
+        "target_hit_at_4": true,
+        "target_vector_ranks": [
+          2,
+          8
+        ],
+        "diagnosis": "hit"
+      },
+      {
+        "id": "probe-14",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [],
+        "diagnosis": "target_not_in_vector_window"
+      },
+      {
+        "id": "probe-15",
+        "target_hit_at_4": true,
+        "target_vector_ranks": [
+          2,
+          3
+        ],
+        "diagnosis": "hit"
+      },
+      {
+        "id": "probe-16",
+        "target_hit_at_4": false,
+        "target_vector_ranks": [
+          12
+        ],
+        "diagnosis": "target_in_window_not_in_top4_requires_sku_audit"
+      }
+    ],
+    "note": "Candidate absence is retrieval/window/threshold; presence without hit does not prove ranking defect: SKU eligibility must be audited. No labels or rules changed."
+  }
+}
