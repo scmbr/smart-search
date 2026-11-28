@@ -60,7 +60,7 @@ def main():
     if args.batch:
         started = time.perf_counter()
         run = subprocess.run([executable, "-batch"]+corpus_flags,
-                             input="".join(json.dumps(c["query"], ensure_ascii=False)+"\n" for c in source["cases"]),
+                             input="".join(json.dumps(c["query"], ensure_ascii=True)+"\n" for c in source["cases"]),
                              capture_output=True, text=True, encoding="utf-8", timeout=600)
         if run.returncode:
             raise SystemExit(run.stderr.strip() or f"batch exit {run.returncode}")
@@ -80,6 +80,8 @@ def main():
                 if run.returncode:
                     raise RuntimeError(run.stderr.strip() or f"exit {run.returncode}")
                 result = json.loads(run.stdout)
+            if result.get("Query") != case["query"]:
+                raise ValueError("Returned query differs from requested query")
             row.update(diagnose(case, result))
             row.update({"catalog_id":result["CatalogID"], "index_version":result["IndexVersion"],
                         "query_policy_version":result.get("QueryPlan",{}).get("Version","legacy_exact"),
@@ -96,6 +98,7 @@ def main():
               "cases":len(rows), "execution_errors":sum("error" in r for r in rows),
               "family_scope_cases":sum(c["target_scope"] == "family" for c in source["cases"]),
               "draft_group_target_hits_at_4":sum(bool(r.get("draft_group_target_hit_at_4")) for r in rows),
+              "draft_group_target_hits_at_1":sum(r.get("target_scope") == "family" and 1 in r.get("matching_ranks", []) for r in rows),
               "brand_scope_cases":sum(c["target_scope"] == "brand" for c in source["cases"]),
               "draft_brand_scope_hits_at_4":sum(bool(r.get("draft_brand_scope_hit_at_4")) for r in rows),
               "negative_cases":sum(c["target_scope"] == "empty" for c in source["cases"]),

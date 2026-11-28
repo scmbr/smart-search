@@ -56,3 +56,4 @@
 с действующими системами заказчика.
 
 - [Независимая оценка](independent-evaluation.md): freeze, cache-only прогон и границы метрик.
+- [Приоритет названия продукта](identity-ranking.md): hybrid-v3 и development-диагностика.
