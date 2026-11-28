@@ -6,11 +6,11 @@
 React/TypeScript/Vite; хранилище — PostgreSQL, поиск — Elasticsearch, модели — OpenAI.
 Сейчас реализованы каталог/PostgreSQL-снимки и CLI импорта, индексации и поиска;
 HTTP-сервер `cmd/api` реализует health и начальный lexical POST /search;
-hybrid/live доступны через CLI. Frontend ещё не создан.
+hybrid/live доступны через CLI. Frontend создан в `frontend/` и обращается к этому API через Vite proxy.
 
 - `internal/` — backend-пакеты; `cmd/` — CLI и composition roots; `contracts/` — Go-тесты API.
   Go-модуль и его конфигурация находятся в корне, отдельной папки `backend/` нет.
-- `frontend/` — зарезервированная директория frontend; пока содержит только инструкции.
+- `frontend/` — React/TypeScript/Vite приложение, FSD и generated API-типы.
 - `docs/` — спецификации и OpenAPI; `testdata/` — fixtures; `decisions.md` — решения;
   `todo.md` — этапы и фактические статусы.
 - Будущий frontend обращается к Go HTTP API `/api/v1` по контракту `docs/openapi.yaml`.
@@ -75,7 +75,6 @@ go.mod, frontend job — при наличии frontend/package.json. Пропу
 - Источник истины — `docs/openapi.yaml`; это OpenAPI 3.0.3, не GraphQL.
 - Изменение API одновременно отражай в схеме, `docs/api.md`, `testdata/api/cases.json`
   и соответствующих клиентах/тестах. Проверка схемы и примеров: `go test ./contracts` из корня.
-- Кодогенерация Go/TypeScript пока не настроена; реальной команды генерации нет.
-  Не выдумывай scripts и не выдавай вручную написанные типы за сгенерированные.
-  После настройки генератора зафиксируй команду во вложенных инструкциях;
-  генерируемые файлы обновляй генерацией и проверяй отсутствие расхождений с OpenAPI.
+- TypeScript-типы генерируются `npm run generate:api` из `frontend/`;
+  `npm run check:api` проверяет отсутствие расхождений. Go-кодогенерации пока нет.
+  Не редактируй generated/schema.ts вручную; реальные команды — frontend/AGENTS.md.

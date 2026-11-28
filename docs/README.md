@@ -62,3 +62,5 @@
 - [HTTP-сервер](http-server.md): health endpoints и согласованность PG/ES.
 
 - [HTTP-поиск](http-search.md): реальная выдача и постоянная идемпотентность, контракт 0.3.0.
+
+- [Frontend](frontend.md): локальный клиент, FSD, генерация типов и проверки.
