@@ -9,8 +9,9 @@
 Доступны импорт и версионированные PostgreSQL-снимки, Elasticsearch-индекс,
 CLI лексического и гибридного поиска (query-v9 / lexical-v7 / hybrid-v4),
 полный кэш эмбеддингов и выборочный LLM-разбор с общим бюджетом $5.
-HTTP-сервер `cmd/api` реализует `/api/v1/search` в lexical режиме с постоянным
-replay и health endpoints. Frontend доступен в `frontend/`; HTTP hybrid/live, verifier и аналитика
+HTTP-сервер `cmd/api` реализует `/api/v1/search` с постоянным replay и health endpoints.
+По умолчанию lexical; hybrid/live включаются отдельными флагами
+([настройка](docs/http-hybrid.md)). Frontend доступен в `frontend/`; verifier и аналитика
 ещё не подключены. [HTTP-поиск и ограничения](docs/http-search.md).
 
 На development: tuning group@1/@4 52/52, task probes @4 8/16, @1 6/16.
@@ -36,7 +37,7 @@ npm run dev
 Команды проверок и границы: [frontend](docs/frontend.md).
 
 Нужны `.env` с PostgreSQL/ES, применённые миграции и готовые каталог/индекс
-для `/health/ready`. Сервер не импортирует данные и не вызывает OpenAI.
+для `/health/ready`. Сервер не импортирует данные. По умолчанию и в cache-only режиме OpenAI не вызывается.
 По умолчанию: http://127.0.0.1:8080/api/v1/health/live;
 [критерии готовности и запуск](docs/http-server.md).
 

@@ -1436,6 +1436,35 @@
         "shortfall_reason": null,
         "unpriced_fallback_used": false
       }
+    },
+    {
+      "name": "HTTP hybrid cache miss preserves lexical response",
+      "schema": "SearchResponse",
+      "valid": true,
+      "value": {
+        "search_id": "search-fallback",
+        "query": "несуществующий продукт",
+        "corrections": [],
+        "context": {},
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "lexical",
+        "degraded_reasons": [
+          "embeddings_not_ready"
+        ],
+        "matches": [],
+        "alternatives": [],
+        "recommendations": [],
+        "total_matches": 0,
+        "clarification": [
+          "Доступен поиск по словам"
+        ],
+        "duration_ms": 30,
+        "next_cursor": null,
+        "top4": [],
+        "shortfall_reason": "insufficient_relevant_families",
+        "unpriced_fallback_used": false
+      }
     }
   ]
 }

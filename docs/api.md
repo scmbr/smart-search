@@ -1,8 +1,9 @@
 # Контракт API
 
 Машиночитаемый источник истины — [OpenAPI 3.0.3](openapi.yaml). Базовый путь /api/v1.
-Сервер `cmd/api` реализует `/search` (первый lexical режим) и health endpoints.
+Сервер `cmd/api` реализует `/search` (lexical по умолчанию, hybrid по конфигурации) и health endpoints.
 Поддержанные параметры и ограничения — [http-search.md](http-search.md);
+настройка hybrid/live — [http-hybrid.md](http-hybrid.md);
 остальные операции ниже — контракт следующих шагов. [Примеры](../testdata/api/cases.json) содержат
 успех с четырьмя продуктами, пустую выдачу, ограниченный режим и ошибки; они синтетические.
 

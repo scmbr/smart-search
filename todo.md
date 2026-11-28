@@ -10,28 +10,29 @@
 независимый эксперимент этапа 3 выполнен; нужное качество всех четырёх товаров
 ещё не достигнуто. Поиск фиксируется на hybrid-v4, task development 8/16.
 Health, начальный lexical POST /search и минимальный frontend реализованы.
-Следующий шаг — HTTP hybrid/live отдельной конфигурацией и verifier рекомендаций,
-а также визуальная QA при доступном браузере. Текущий HTTP режим остаётся lexical.
+HTTP hybrid/cache/live подключён отдельной конфигурацией (D-053).
+Следующий шаг — verifier рекомендаций и визуальная QA при доступном браузере.
+По умолчанию HTTP lexical; локальный стенд запущен с corpus + replay без оплаты.
 
 Исправлено по сообщению пользователя: Windows / «виндовс» (D-052).
 Алиасы и проверка собственного имени + категории ОС, query-v9; без нового индекса
 и платных вызовов. Спецификация — [windows-search.md](docs/windows-search.md).
 Проверены domain/application, real ES, полный Go-прогон и реальный HTTP proxy.
 Tuning 52/52 + 6/6 + 2/2, development 8/16 без регрессии, платных вызовов нет.
-Следующий шаг — HTTP hybrid/live и verifier; приоритет этапа 4 сохранён.
+Следующий шаг — verifier; приоритет этапа 4 сохранён.
 
-Последнее слитое изменение поиска: PR #30, commit `c28347e`, обязательный CI прошёл.
+Последнее слитое исправление поиска: PR #34, commit `b35cf5a`, обязательный CI прошёл.
 Baseline: 19/34 group + 3/6 brand, hybrid: 18/34 + 3/6; fallback 0.
 Полный отчёт и ограничения — [independent-evaluation.md](docs/independent-evaluation.md).
 Ledger: $0.025425085/$5, pending=0 на момент последнего измерения; перед новыми
 оплатами перепроверить фактический ledger. Ошибочная подготовка также учтена.
 
-Последний реализованный шаг — минимальный React/TS/Vite клиент
-(ветка `feat/search-frontend`):
+Реализован минимальный React/TS/Vite клиент (PR #33):
 реальные POST /search через proxy, карточки/фильтры, ошибки/loading/empty/shortfall,
 отмена и защита stale responses, retry с прежним idempotency key. FSD checker,
 генерация типов из OpenAPI, npm lockfile и реальные CI scripts настроены.
-Go API остаётся lexical, HTTP hybrid/live и verifier не подключены.
+HTTP hybrid/live теперь подключён (D-053); verifier ещё не реализован.
+Проверен реальный hybrid/cache miss/exact/replay через HTTP; ledger не изменился.
 Локальные серверы для QA: API 8080, Vite 5173; команды — docs/frontend.md.
 Браузерный инструмент недоступен/не допущен к Chrome: визуальная desktop/mobile
 и browser e2e проверка НЕ проведены. DOM/model tests и real proxy smoke проведены;
@@ -273,8 +274,9 @@ Query-v3 / characteristics-v4 / lexical-v4: новый полный снимок
   согласованности PG/ES, безопасными ошибками и graceful shutdown.
 - [x] Реализовать начальный lexical POST /search с постоянной идемпотентностью,
   отменой, контрактными ответами и явным 400 для неподдержанных возможностей.
-- [ ] Подключить HTTP hybrid/cache/live с конфигурацией и бюджетом, не обходя
-  Runtime; добавить поддержку context/cursor/license_type по отдельным проверкам.
+- [x] Подключить HTTP hybrid/cache/live с конфигурацией и бюджетом, не обходя
+  Runtime (D-053).
+- [ ] Добавить поддержку context/cursor/license_type по отдельным проверкам; сейчас 400.
 
 - [x] Подключить минимальный frontend к реальному POST /search и настроить
   типы/линтер/архитектурный checker/tests/build. Остальные HTTP endpoints ниже не реализованы.

@@ -1,6 +1,6 @@
 # Frontend: React/TypeScript и FSD
 
-`frontend/` — React/TypeScript/Vite клиент реального lexical POST /search.
+`frontend/` — React/TypeScript/Vite клиент реального POST /search (lexical/hybrid по конфигурации backend).
 Контракт и общий Git workflow — в корневом AGENTS.md. Локальный Node 22.11
 поддерживается; .nvmrc задаёт major 22 для CI. Использовать только npm/lockfile.
 
@@ -28,8 +28,8 @@ Generated types находятся в src/shared/api/generated/schema.ts: мен
 при обновлении линтера проверить необходимость override, engines и audit.
 
 Backend запускается из корня `go run ./cmd/api`; dev/preview proxy /api →
-127.0.0.1:8080. Ключи/БД/ES не доступны браузеру. HTTP hybrid/live, подсказки,
-персонализация и рекомендации ещё не подключены. Браузерный e2e/визуальная QA
+127.0.0.1:8080. Ключи/БД/ES не доступны браузеру. HTTP hybrid/live настраивается на backend: docs/http-hybrid.md в корне.
+Подсказки, персонализация и рекомендации ещё не подключены. Браузерный e2e/визуальная QA
 не заменяются Vitest DOM-тестами; явно указывать непроведённые проверки.
 
 ## Feature-Sliced Design

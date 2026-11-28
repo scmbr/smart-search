@@ -4,6 +4,7 @@ import (
 	"context"
 	"net"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 )
@@ -39,6 +40,15 @@ func TestRunRejectsPublicListenerBeforeDependencies(t *testing.T) {
 	for _, addr := range []string{"0.0.0.0:8080", "[::]:8080", "example.com:8080", "invalid"} {
 		if run(context.Background(), []string{"-listen", addr}) == nil {
 			t.Fatal("accepted", addr)
+		}
+	}
+}
+
+func TestRunRejectsImplicitLiveModesBeforeDependencies(t *testing.T) {
+	for _, args := range [][]string{{"-live-query"}, {"-parser-mode", "replay"}, {"-vector-corpus", "file", "-parser-mode", "live"}, {"-parser-mode", "bad"}} {
+		err := run(context.Background(), args)
+		if err == nil || (!strings.Contains(err.Error(), "requires") && !strings.Contains(err.Error(), "require") && !strings.Contains(err.Error(), "parser-mode")) {
+			t.Fatal(args, err)
 		}
 	}
 }
