@@ -60,3 +60,5 @@
 - [Полные векторы](full-vector-ranking.md): hybrid-v4, task development и расход памяти.
 
 - [HTTP-сервер](http-server.md): health endpoints и согласованность PG/ES.
+
+- [HTTP-поиск](http-search.md): реальная выдача и постоянная идемпотентность, контракт 0.3.0.

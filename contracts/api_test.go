@@ -214,7 +214,7 @@ type searchExample struct {
 		ProductID string `json:"product_id"`
 		FamilyID  string `json:"family_id"`
 	} `json:"top4"`
-	Total     int     `json:"total_matches"`
+	Total     *int    `json:"total_matches"`
 	Fallback  bool    `json:"unpriced_fallback_used"`
 	Shortfall *string `json:"shortfall_reason"`
 }
@@ -266,7 +266,7 @@ func checkSearchExample(t *testing.T, response searchExample) {
 	if len(response.Top4) == 4 && response.Shortfall != nil {
 		t.Error("complete top4 marked as shortfall")
 	}
-	if response.Total < len(response.Matches) {
+	if response.Total != nil && *response.Total < len(response.Matches) {
 		t.Error("total_matches smaller than page")
 	}
 	if response.Fallback != (unpriced > 0) || priced > 0 && unpriced > 0 {

@@ -26,6 +26,9 @@ var embeddingRuntimeSchema string
 //go:embed migrations/004_query_parser.sql
 var queryParserSchema string
 
+//go:embed migrations/005_search_sessions.sql
+var searchSessionsSchema string
+
 const migrationLock int64 = 7362784101
 const importLock int64 = 7362784102
 
@@ -42,7 +45,7 @@ func Migrate(ctx context.Context, pool *pgxpool.Pool) error {
 	if _, err := tx.Exec(ctx, `CREATE TABLE IF NOT EXISTS schema_migrations (version integer PRIMARY KEY, sha256 text NOT NULL, applied_at timestamptz NOT NULL DEFAULT now())`); err != nil {
 		return err
 	}
-	for i, schema := range []string{catalogSchema, embeddingSchema, embeddingRuntimeSchema, queryParserSchema} {
+	for i, schema := range []string{catalogSchema, embeddingSchema, embeddingRuntimeSchema, queryParserSchema, searchSessionsSchema} {
 		version := i + 1
 		h := sha256.Sum256([]byte(schema))
 		checksum := hex.EncodeToString(h[:])

@@ -32,8 +32,11 @@ func writeError(w http.ResponseWriter, status int, code, message string) {
 	}{id, code, message})
 }
 
-func New(ready Readiness) http.Handler {
+func New(ready Readiness, search ...Search) http.Handler {
 	mux := http.NewServeMux()
+	if len(search) > 0 && search[0] != nil {
+		mux.HandleFunc("/api/v1/search", searchHandler(search[0]))
+	}
 	health := func(check bool) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			if r.Method != http.MethodGet {

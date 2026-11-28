@@ -1,4 +1,4 @@
-// Command api starts the local HTTP application; currently health routes only.
+// Command api starts the local HTTP application with persistent search replay.
 package main
 
 import (
@@ -12,7 +12,10 @@ import (
 	"os/signal"
 	"time"
 
+	lexical "github.com/scmbr/smart-search/internal/application/lexical"
 	app "github.com/scmbr/smart-search/internal/application/readiness"
+	searchsession "github.com/scmbr/smart-search/internal/application/searchsession"
+	search "github.com/scmbr/smart-search/internal/domain/search"
 	"github.com/scmbr/smart-search/internal/infrastructure/elastic"
 	"github.com/scmbr/smart-search/internal/infrastructure/localconfig"
 	"github.com/scmbr/smart-search/internal/infrastructure/postgres"
@@ -46,6 +49,12 @@ func run(ctx context.Context, args []string) error {
 		return err
 	}
 	defer pool.Close()
+	// Long-lived idempotency locks must not exhaust the catalog/runtime pool.
+	searchPool, err := s.Pool(ctx)
+	if err != nil {
+		return err
+	}
+	defer searchPool.Close()
 	index, err := elastic.New(s.ElasticsearchURL, s.ElasticsearchKey, "smart-search-active")
 	if err != nil {
 		return err
@@ -55,8 +64,12 @@ func run(ctx context.Context, args []string) error {
 		return errors.New("cannot listen on local HTTP address")
 	}
 	defer listener.Close()
-	service := app.Service{Catalog: postgres.New(pool), Index: index}
-	return serve(ctx, listener, httpapi.New(service))
+	store := postgres.NewSearchStore(searchPool)
+	service := app.Service{Catalog: postgres.New(pool), Index: index, SearchStore: store}
+	searches := searchsession.Service{Store: store, Engine: func(ctx context.Context, r search.Request) (search.Result, error) {
+		return lexical.Search(ctx, index, r)
+	}}
+	return serve(ctx, listener, httpapi.New(service, searches))
 }
 
 func serve(ctx context.Context, listener net.Listener, handler http.Handler) error {

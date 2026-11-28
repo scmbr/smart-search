@@ -9,8 +9,9 @@
 дальше после ограниченного цикла улучшения поиска (D-049). Этапы 0–2 завершены,
 независимый эксперимент этапа 3 выполнен; нужное качество всех четырёх товаров
 ещё не достигнуто. Поиск фиксируется на hybrid-v4, task development 8/16.
-Первый шаг HTTP API — health; затем POST /search с реальной выдачей и
-устойчивой идемпотентностью, минимальный frontend и verifier рекомендаций.
+Health и начальный lexical POST /search реализованы. Следующий шаг —
+минимальный frontend и подключение HTTP hybrid/live отдельной конфигурацией;
+затем verifier рекомендаций. Не выдавать текущий lexical режим за live hybrid.
 
 Последнее слитое изменение поиска: PR #30, commit `c28347e`, обязательный CI прошёл.
 Baseline: 19/34 group + 3/6 brand, hybrid: 18/34 + 3/6; fallback 0.
@@ -18,13 +19,15 @@ Baseline: 19/34 group + 3/6 brand, hybrid: 18/34 + 3/6; fallback 0.
 Ledger: $0.025425085/$5, pending=0 на момент последнего измерения; перед новыми
 оплатами перепроверить фактический ledger. Ошибочная подготовка также учтена.
 
-Текущая ветка: `feat/http-health-server`. `cmd/api` реализует только live/ready;
-POST /search, остальные HTTP-операции и frontend пока не реализованы.
-Согласованность PG/ES проверяется application через порты; запрос к ES и
-повторное чтение active snapshot предотвращают ложную готовность.
-Спецификация: [http-server.md](docs/http-server.md). Поиск hybrid-v4 использует
-полные 1536 компонент и приоритет названия; tuning @1/@4 52/52, brand 6/6,
-negatives 2/2, task probes @4 8/16 и @1 6/16. Новая независимая оценка не проведена.
+Текущая ветка: `feat/http-search`. `cmd/api` реализует health и POST /search:
+реальный lexical backend, PostgreSQL replay 24 часа (migration 005), scope
+session/key, canonical JSON, 409 при изменении тела, in-flight busy=503.
+Миграция 005 применена локально. HTTP OpenAI/live не подключены, платных вызовов нет.
+Контракт 0.3.0: nullable exact total и family_confirmed; provisional карточки
+не доказывают top4. Cursor/context personalization/license_type пока дают 400.
+Спецификации: [HTTP-поиск](docs/http-search.md), [health](docs/http-server.md).
+Поиск CLI hybrid-v4: tuning @1/@4 52/52, brand 6/6, negatives 2/2,
+task probes @4 8/16 и @1 6/16; независимый выигрыш новой версии не проверен.
 Артефакты игнорируются Git; компактная диагностика сохранена в testdata/evaluation.
 
 - [x] Перепроверить тексты и воспроизвести 60 tuning + 16 development probes;
@@ -260,8 +263,10 @@ Query-v3 / characteristics-v4 / lexical-v4: новый полный снимок
 
 - [x] Создать HTTP composition root и health/live, health/ready с проверкой
   согласованности PG/ES, безопасными ошибками и graceful shutdown.
-- [ ] Реализовать POST /search по контракту с постоянной идемпотентностью,
-  отменой и явной обработкой пока неподдержанных возможностей.
+- [x] Реализовать начальный lexical POST /search с постоянной идемпотентностью,
+  отменой, контрактными ответами и явным 400 для неподдержанных возможностей.
+- [ ] Подключить HTTP hybrid/cache/live с конфигурацией и бюджетом, не обходя
+  Runtime; добавить поддержку context/cursor/license_type по отдельным проверкам.
 
 - [ ] Реализовать HTTP API /api/v1 по OpenAPI и подключить frontend к реальному backend.
 - [ ] Добавить синтетические B2B-профили и проверить влияние контекста без смешения с реальной историей.

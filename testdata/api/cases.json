@@ -366,7 +366,8 @@
             "reasons": [
               "Операционная система"
             ],
-            "family_id": "family-p-os"
+            "family_id": "family-p-os",
+            "family_confirmed": true
           },
           {
             "product_id": "p-security",
@@ -388,7 +389,8 @@
             "reasons": [
               "Защита рабочего места"
             ],
-            "family_id": "family-p-security"
+            "family_id": "family-p-security",
+            "family_confirmed": true
           },
           {
             "product_id": "p-backup",
@@ -410,7 +412,8 @@
             "reasons": [
               "Сохранение данных"
             ],
-            "family_id": "family-p-backup"
+            "family_id": "family-p-backup",
+            "family_confirmed": true
           },
           {
             "product_id": "p-remote",
@@ -432,7 +435,8 @@
             "reasons": [
               "Удалённая работа"
             ],
-            "family_id": "family-p-remote"
+            "family_id": "family-p-remote",
+            "family_confirmed": true
           }
         ],
         "alternatives": [],
@@ -488,7 +492,8 @@
           "reasons": [
             "Сохранение данных"
           ],
-          "family_id": "family-p-backup"
+          "family_id": "family-p-backup",
+          "family_confirmed": true
         },
         "relation": "compatible",
         "explanation": "Синтетический пример связи",
@@ -556,7 +561,8 @@
           "reasons": [
             "Сохранение данных"
           ],
-          "family_id": "family-p-backup"
+          "family_id": "family-p-backup",
+          "family_confirmed": true
         },
         "relation": "compatible",
         "explanation": "Без доказательств",
@@ -615,7 +621,8 @@
           "reasons": [
             "Сохранение данных"
           ],
-          "family_id": "family-p-backup"
+          "family_id": "family-p-backup",
+          "family_confirmed": true
         },
         "relation": "compatible",
         "explanation": "Синтетический пример связи",
@@ -656,7 +663,8 @@
           "reasons": [
             "Сохранение данных"
           ],
-          "family_id": "family-p-backup"
+          "family_id": "family-p-backup",
+          "family_confirmed": true
         },
         "relation": "compatible",
         "explanation": "Синтетический пример связи",
@@ -724,7 +732,8 @@
           "reasons": [
             "Сохранение данных"
           ],
-          "family_id": "family-p-backup"
+          "family_id": "family-p-backup",
+          "family_confirmed": true
         },
         "relation": "compatible",
         "explanation": "Синтетический пример связи",
@@ -792,7 +801,8 @@
           "reasons": [
             "Сохранение данных"
           ],
-          "family_id": "family-p-backup"
+          "family_id": "family-p-backup",
+          "family_confirmed": true
         },
         "relation": "compatible",
         "explanation": "Синтетический пример связи",
@@ -883,7 +893,8 @@
             "reasons": [
               "Операционная система"
             ],
-            "family_id": "family-p-os"
+            "family_id": "family-p-os",
+            "family_confirmed": true
           },
           {
             "product_id": "p-security",
@@ -905,7 +916,8 @@
             "reasons": [
               "Защита рабочего места"
             ],
-            "family_id": "family-p-security"
+            "family_id": "family-p-security",
+            "family_confirmed": true
           }
         ],
         "alternatives": [],
@@ -931,7 +943,8 @@
               "reasons": [
                 "Сохранение данных"
               ],
-              "family_id": "family-p-backup"
+              "family_id": "family-p-backup",
+              "family_confirmed": true
             },
             "relation": "compatible",
             "explanation": "Синтетический пример связи",
@@ -994,7 +1007,8 @@
               "reasons": [
                 "Удалённая работа"
               ],
-              "family_id": "family-p-remote"
+              "family_id": "family-p-remote",
+              "family_confirmed": true
             },
             "relation": "compatible",
             "explanation": "Синтетический пример связи",
@@ -1103,7 +1117,8 @@
             "reasons": [
               "Нет подходящих предложений с ценой; второй приоритет"
             ],
-            "family_id": "family-legacy"
+            "family_id": "family-legacy",
+            "family_confirmed": true
           }
         ],
         "alternatives": [],
@@ -1159,7 +1174,8 @@
             "reasons": [
               "Операционная система"
             ],
-            "family_id": "family-p-os"
+            "family_id": "family-p-os",
+            "family_confirmed": true
           },
           {
             "product_id": "p-security",
@@ -1181,7 +1197,8 @@
             "reasons": [
               "Защита рабочего места"
             ],
-            "family_id": "family-p-security"
+            "family_id": "family-p-security",
+            "family_confirmed": true
           },
           {
             "product_id": "p-backup",
@@ -1203,7 +1220,8 @@
             "reasons": [
               "Сохранение данных"
             ],
-            "family_id": "family-p-backup"
+            "family_id": "family-p-backup",
+            "family_confirmed": true
           },
           {
             "product_id": "p-remote",
@@ -1225,7 +1243,8 @@
             "reasons": [
               "Удалённая работа"
             ],
-            "family_id": "family-p-remote"
+            "family_id": "family-p-remote",
+            "family_confirmed": true
           }
         ],
         "alternatives": [],
@@ -1275,6 +1294,147 @@
       "valid": false,
       "value": {
         "status": "maybe"
+      }
+    },
+    {
+      "name": "unknown exact total is explicit null",
+      "schema": "SearchResponse",
+      "valid": true,
+      "value": {
+        "search_id": "search-four",
+        "query": "программы для рабочего места",
+        "corrections": [],
+        "context": {
+          "segment": "small_business"
+        },
+        "catalog_version": "snapshot-1",
+        "index_version": "index-1",
+        "mode": "hybrid",
+        "degraded_reasons": [],
+        "total_matches": null,
+        "clarification": [],
+        "duration_ms": 40,
+        "next_cursor": null,
+        "matches": [
+          {
+            "product_id": "p-os",
+            "name": "Тестовая ОС",
+            "category_id": "os",
+            "selected_offer": {
+              "offer_id": "os-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/os/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 120050,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Операционная система"
+            ],
+            "family_id": "family-p-os",
+            "family_confirmed": true
+          },
+          {
+            "product_id": "p-security",
+            "name": "Тестовая защита",
+            "category_id": "security",
+            "selected_offer": {
+              "offer_id": "security-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/security/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 300000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Защита рабочего места"
+            ],
+            "family_id": "family-p-security",
+            "family_confirmed": true
+          },
+          {
+            "product_id": "p-backup",
+            "name": "Тестовое резервное копирование",
+            "category_id": "backup",
+            "selected_offer": {
+              "offer_id": "backup-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/backup/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 700000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Сохранение данных"
+            ],
+            "family_id": "family-p-backup",
+            "family_confirmed": true
+          },
+          {
+            "product_id": "p-remote",
+            "name": "Тестовый удалённый доступ",
+            "category_id": "remote",
+            "selected_offer": {
+              "offer_id": "remote-new",
+              "name": "Новая лицензия",
+              "url": "https://example.invalid/remote/new",
+              "available": true,
+              "price": {
+                "status": "known",
+                "amount_minor": 80000,
+                "currency": "RUB"
+              },
+              "parameters": [],
+              "offer_kind": "new_license"
+            },
+            "reasons": [
+              "Удалённая работа"
+            ],
+            "family_id": "family-p-remote",
+            "family_confirmed": true
+          }
+        ],
+        "alternatives": [],
+        "recommendations": [],
+        "top4": [
+          {
+            "section": "matches",
+            "product_id": "p-os",
+            "family_id": "family-p-os"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-security",
+            "family_id": "family-p-security"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-backup",
+            "family_id": "family-p-backup"
+          },
+          {
+            "section": "matches",
+            "product_id": "p-remote",
+            "family_id": "family-p-remote"
+          }
+        ],
+        "shortfall_reason": null,
+        "unpriced_fallback_used": false
       }
     }
   ]

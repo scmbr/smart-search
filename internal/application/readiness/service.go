@@ -12,9 +12,11 @@ type Catalog interface {
 type Index interface {
 	ActiveIndex(context.Context) (d.State, error)
 }
+type StoreGate interface{ CheckStore(context.Context) error }
 type Service struct {
-	Catalog Catalog
-	Index   Index
+	Catalog     Catalog
+	Index       Index
+	SearchStore StoreGate
 }
 
 func (s Service) Check(ctx context.Context) error {
@@ -23,6 +25,15 @@ func (s Service) Check(ctx context.Context) error {
 	}
 	if s.Catalog == nil || s.Index == nil {
 		return d.ErrNotReady
+	}
+	if s.SearchStore != nil {
+		err := s.SearchStore.CheckStore(ctx)
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+		if err != nil {
+			return d.ErrNotReady
+		}
 	}
 	catalog, err := s.Catalog.ActiveCatalog(ctx)
 	if ctx.Err() != nil {
