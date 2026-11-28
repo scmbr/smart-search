@@ -27,6 +27,28 @@ func (b SearchBackend) Search(ctx context.Context, r d.Request) (d.Result, error
 		return d.Result{}, d.ErrNotReady
 	}
 	resolution := b.Dictionary.ResolveName(r.Query)
+	if err := ctx.Err(); err != nil {
+		return d.Result{}, err
+	}
+	if resolution.Status == "ambiguous" {
+		result, err := b.Named.Search(ctx, r)
+		if ctx.Err() != nil {
+			return d.Result{}, ctx.Err()
+		}
+		if err != nil {
+			return d.Result{}, err
+		}
+		if result.CatalogID != b.CatalogID {
+			return d.Result{}, d.ErrNotReady
+		}
+		result.Hits = nil
+		result.Hybrid = nil
+		result.SearchMode = "none"
+		result.UnpricedFallbackUsed = false
+		result.NameResolution = &resolution
+		result.NameInput = r.Query
+		return result, nil
+	}
 	if resolution.Status != "resolved" {
 		return b.Fallback.Search(ctx, r)
 	}
@@ -50,5 +72,7 @@ func (b SearchBackend) Search(ctx context.Context, r d.Request) (d.Result, error
 			return d.Result{}, fmt.Errorf("%w: named result scope mismatch", d.ErrUnavailable)
 		}
 	}
+	result.NameResolution = &resolution
+	result.NameInput = r.Query
 	return result, nil
 }

@@ -13,6 +13,7 @@ function validResponse(value: unknown): value is SearchResponse {
   if (typeof data.search_id !== 'string' || typeof data.query !== 'string' ||
       !Array.isArray(data.matches) || !Array.isArray(data.top4) ||
       !Array.isArray(data.clarification) || !Array.isArray(data.degraded_reasons) ||
+      !Array.isArray(data.corrections) || data.corrections.length > 5 || !data.corrections.every((c) => c && typeof c.original === 'string' && c.original.length > 0 && typeof c.replacement === 'string' && c.replacement.length > 0 && ['typo', 'synonym', 'transliteration', 'keyboard_layout'].includes(c.kind)) ||
       !['lexical', 'hybrid'].includes(data.mode ?? '') ||
       !(data.total_matches === null || (typeof data.total_matches === 'number' && Number.isSafeInteger(data.total_matches) && data.total_matches >= 0)) ||
       data.matches.length > 20 || data.top4.length > 4 || !data.clarification.every((text) => typeof text === 'string')) return false;

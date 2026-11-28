@@ -11,7 +11,7 @@ import (
 	"unicode/utf8"
 )
 
-const NamePolicyVersion = "catalog-names-v1"
+const NamePolicyVersion = "catalog-names-v2"
 
 type NameEntity struct{ Kind, Name, Scope string }
 type NameAlias struct{ Alias, Name, Kind string }
@@ -25,8 +25,9 @@ type NameResolution struct {
 	DictionarySHA string
 }
 type nameKey struct {
-	Text   string
-	Entity NameEntity
+	Text     string
+	Cyrillic string
+	Entity   NameEntity
 }
 type NameDictionary struct {
 	keys []nameKey
@@ -51,7 +52,8 @@ func NewNameDictionary(snapshot string, entities []NameEntity, aliases []NameAli
 	}
 	seen := map[nameKey]bool{}
 	add := func(text string, e NameEntity) {
-		k := nameKey{nameNormalized(text), e}
+		normalized := nameNormalized(text)
+		k := nameKey{Text: normalized, Cyrillic: toCyrillic(normalized), Entity: e}
 		if k.Text != "" && !seen[k] {
 			seen[k] = true
 			d.keys = append(d.keys, k)
@@ -99,11 +101,15 @@ func (d *NameDictionary) ResolveName(query string) NameResolution {
 	}
 	best := map[NameEntity]int{}
 	latin := toLatin(q)
+	hasCyrillic := strings.ContainsFunc(q, func(r rune) bool { return unicode.In(r, unicode.Cyrillic) })
 	for _, k := range d.keys {
 		distance := nameDistance(q, k.Text)
 		// Transliteration is a secondary hypothesis, never stronger than exact spelling.
 		if latin != q {
 			distance = min(distance, nameDistance(latin, k.Text)+1)
+		}
+		if hasCyrillic && k.Cyrillic != k.Text {
+			distance = min(distance, nameDistance(q, k.Cyrillic)+1)
 		}
 		limit := 10
 		if utf8.RuneCountInString(q) >= 6 {
@@ -116,8 +122,19 @@ func (d *NameDictionary) ResolveName(query string) NameResolution {
 			best[k.Entity] = distance
 		}
 	}
+	type identity struct{ Name, Scope string }
+	unique := map[identity]NameCandidate{}
 	for e, distance := range best {
-		r.Candidates = append(r.Candidates, NameCandidate{e, distance})
+		key := identity{nameNormalized(e.Name), e.Scope}
+		previous, ok := unique[key]
+		preferred := e.Kind == "product" && previous.Entity.Kind != "product"
+		stableTie := e.Kind == previous.Entity.Kind && e.Name < previous.Entity.Name
+		if !ok || distance < previous.Distance || (distance == previous.Distance && (preferred || stableTie)) {
+			unique[key] = NameCandidate{e, distance}
+		}
+	}
+	for _, candidate := range unique {
+		r.Candidates = append(r.Candidates, candidate)
 	}
 	sort.Slice(r.Candidates, func(i, j int) bool {
 		a, b := r.Candidates[i], r.Candidates[j]
@@ -148,7 +165,15 @@ func (d *NameDictionary) ResolveName(query string) NameResolution {
 // Bounded optimal-string-alignment distance includes adjacent transpositions and
 // errors in the first character; scores use 10 units per edit.
 func nameDistance(a, b string) int {
+	if len(strings.Fields(a)) != len(strings.Fields(b)) {
+		return 1000
+	}
 	x, y := []rune(a), []rune(b)
+	// Short words have too little evidence for a first-letter replacement.
+	// Otherwise ordinary words such as paint become unrelated vendor names.
+	if len(x) > 0 && len(y) > 0 && min(len(x), len(y)) <= 5 && x[0] != y[0] {
+		return 1000
+	}
 	if absName(len(x)-len(y)) > 2 {
 		return 1000
 	}
@@ -182,4 +207,21 @@ func absName(n int) int {
 		return -n
 	}
 	return n
+}
+
+// Vendor paths can name a product line rather than its current owner.
+func VendorPathAlias(e NameEntity) string {
+	if e.Kind != "brand" {
+		return ""
+	}
+	slug := strings.Trim(e.Scope, "/")
+	if len(slug) < 4 || strings.Contains(slug, "/") {
+		return ""
+	}
+	for _, token := range queryTokens(e.Name) {
+		if slug == token || slug == toLatin(token) {
+			return slug
+		}
+	}
+	return ""
 }

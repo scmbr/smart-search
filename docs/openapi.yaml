@@ -390,6 +390,7 @@ components:
         family_id: {$ref: '#/components/schemas/ID'}
     Correction:
       type: object
+      description: Server-confirmed name interpretation; edit-distance heuristics are not probabilities. Original may be the recognized name span of a longer constrained query.
       additionalProperties: false
       required: [original, replacement, kind]
       properties:

@@ -75,6 +75,9 @@ func WithNames(ctx context.Context, pool *pgxpool.Pool, path string, named, fall
 		}
 		entities = append(entities, entry.Entity)
 		groups[entry.Entity] = entry.Groups
+		if alias := d.VendorPathAlias(entry.Entity); alias != "" {
+			aliases = append(aliases, d.NameAlias{Alias: alias, Name: entry.Entity.Name, Kind: "brand"})
+		}
 	}
 	// Derive vendor-less names using catalog vendors and their configured aliases.
 	prefixes := map[string][]string{}

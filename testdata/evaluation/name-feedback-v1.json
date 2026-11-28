@@ -1,0 +1,354 @@
+{
+  "role": "development_not_independent",
+  "policy": "catalog-names-v2",
+  "count": 20,
+  "identical_replays": 20,
+  "raw_sha256": "192e9cb002f98d1d4dc408431bb8915779516a75914d0b7c689cf487071c779e",
+  "rows": [
+    {
+      "query": "Adobe",
+      "names": [
+        "Adobe Presenter",
+        "Adobe Illustrator",
+        "Adobe FrameMaker",
+        "Adobe Dreamweaver"
+      ],
+      "corrections": [
+        {
+          "kind": "synonym",
+          "original": "Adobe",
+          "replacement": "Adobe Systems"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "адоб",
+      "names": [
+        "Adobe Presenter",
+        "Adobe Illustrator",
+        "Adobe FrameMaker",
+        "Adobe Dreamweaver"
+      ],
+      "corrections": [
+        {
+          "kind": "synonym",
+          "original": "адоб",
+          "replacement": "Adobe Systems"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "адоь",
+      "names": [
+        "Adobe Presenter",
+        "Adobe Illustrator",
+        "Adobe FrameMaker",
+        "Adobe Dreamweaver"
+      ],
+      "corrections": [
+        {
+          "kind": "typo",
+          "original": "адоь",
+          "replacement": "Adobe Systems"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "Photoshop",
+      "names": [
+        "Adobe Photoshop"
+      ],
+      "corrections": [
+        {
+          "kind": "synonym",
+          "original": "Photoshop",
+          "replacement": "Adobe Photoshop"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "фотошоп",
+      "names": [
+        "Adobe Photoshop"
+      ],
+      "corrections": [
+        {
+          "kind": "synonym",
+          "original": "фотошоп",
+          "replacement": "Adobe Photoshop"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "фотошор",
+      "names": [
+        "Adobe Photoshop"
+      ],
+      "corrections": [
+        {
+          "kind": "typo",
+          "original": "фотошор",
+          "replacement": "Adobe Photoshop"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "AnyDesk",
+      "names": [
+        "AnyDesk"
+      ],
+      "corrections": [],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "Anydsek",
+      "names": [
+        "AnyDesk"
+      ],
+      "corrections": [
+        {
+          "kind": "typo",
+          "original": "Anydsek",
+          "replacement": "AnyDesk"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "Autodesk",
+      "names": [
+        "Autodesk Arnold",
+        "Autodesk Netfabb",
+        "Autodesk DOCS",
+        "Autodesk Navisworks"
+      ],
+      "corrections": [],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "Autodsek",
+      "names": [
+        "Autodesk Arnold",
+        "Autodesk Netfabb",
+        "Autodesk DOCS",
+        "Autodesk Navisworks"
+      ],
+      "corrections": [
+        {
+          "kind": "typo",
+          "original": "Autodsek",
+          "replacement": "Autodesk"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "Corel",
+      "names": [
+        "Corel Pinnacle Studio 26",
+        "CorelDRAW Essentials 2024",
+        "CorelDRAW Graphics Suite 2026",
+        "Corel PaintShop Pro 2023"
+      ],
+      "corrections": [
+        {
+          "kind": "synonym",
+          "original": "Corel",
+          "replacement": "Corel Corporation"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "корел",
+      "names": [
+        "Corel Pinnacle Studio 26",
+        "CorelDRAW Essentials 2024",
+        "CorelDRAW Graphics Suite 2026",
+        "Corel PaintShop Pro 2023"
+      ],
+      "corrections": [
+        {
+          "kind": "transliteration",
+          "original": "корел",
+          "replacement": "Corel Corporation"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "Доктор Веб",
+      "names": [
+        "Dr.Web Desktop Security Suite",
+        "Dr.Web Katana",
+        "Dr.Web Security Space",
+        "Dr.Web Mail Security Suite"
+      ],
+      "corrections": [],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "доктор веп",
+      "names": [
+        "Dr.Web Desktop Security Suite",
+        "Dr.Web Katana",
+        "Dr.Web Security Space",
+        "Dr.Web Mail Security Suite"
+      ],
+      "corrections": [
+        {
+          "kind": "typo",
+          "original": "доктор веп",
+          "replacement": "Доктор Веб"
+        }
+      ],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "Microsoft",
+      "names": [
+        "Microsoft 365 Personal (Персональный)",
+        "Microsoft Office 2024 для дома и учёбы",
+        "Microsoft Project Professional 2024",
+        "Microsoft Visio Professional 2024"
+      ],
+      "corrections": [
+        {
+          "kind": "synonym",
+          "original": "Microsoft",
+          "replacement": "Программы и лицензии Microsoft Corporation"
+        }
+      ],
+      "clarification": [],
+      "total_matches": null
+    },
+    {
+      "query": "Kaspersky",
+      "names": [
+        "Kaspersky Standard",
+        "Kaspersky Password Manager",
+        "Kaspersky Express Course",
+        "Kaspersky Symphony Security"
+      ],
+      "corrections": [],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "corle",
+      "names": [],
+      "corrections": [],
+      "clarification": [
+        "Уточните продукт и производителя: Corel Corporation, Qlik Core"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "paint",
+      "names": [
+        "Corel PaintShop Pro 2023"
+      ],
+      "corrections": [],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "point",
+      "names": [
+        "Spire.Cloud.PowerPoint",
+        "Websio SharePoint Document Preview",
+        "SharePoint Gantt WebPart",
+        "/n software SharePoint Integrator"
+      ],
+      "corrections": [],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    },
+    {
+      "query": "астра линукс",
+      "names": [
+        "Astra Linux Special Edition",
+        "Granulex Viewer",
+        "Granulex Recovery",
+        "Granulex Insight"
+      ],
+      "corrections": [],
+      "clarification": [
+        "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны"
+      ],
+      "total_matches": null
+    }
+  ],
+  "tuning": {
+    "group_at_1": 52,
+    "group_at_4": 52,
+    "count": 52,
+    "brand_at_4": 6,
+    "negative_empty": 2
+  },
+  "development": {
+    "group_at_1": 6,
+    "group_at_4": 8,
+    "count": 16
+  },
+  "limitations": [
+    "Not independent relevance assessment",
+    "Legacy unresolved-query ranking remains",
+    "Raw search control and candidate selection pending",
+    "No visual/browser QA"
+  ]
+}

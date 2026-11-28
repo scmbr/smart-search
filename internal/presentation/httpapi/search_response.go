@@ -68,6 +68,33 @@ func mapSearch(record d.Record) (responseDTO, error) {
 		return responseDTO{}, d.ErrUnavailable
 	}
 	response := responseDTO{ID: record.ID, Query: x.Query, Catalog: x.CatalogID, Index: x.IndexVersion, Mode: "lexical", Corrections: []any{}, Context: map[string]string{"origin": "unspecified", "segment": "anonymous"}, Degraded: []string{}, Matches: []cardDTO{}, Alternatives: []any{}, Recommendations: []any{}, Clarification: []string{}, Top4: []rankedDTO{}, Duration: record.DurationMS, Unpriced: x.UnpricedFallbackUsed}
+	if n := x.NameResolution; n != nil && len(n.Candidates) > 0 {
+		if n.Status == "resolved" {
+			candidate := n.Candidates[0]
+			if strings.TrimSpace(x.NameInput) != "" && !strings.EqualFold(strings.Join(strings.Fields(x.NameInput), " "), candidate.Entity.Name) {
+				kind := "synonym"
+				if candidate.Distance >= 10 {
+					kind = "typo"
+				} else if candidate.Distance > 0 {
+					kind = "transliteration"
+				}
+				response.Corrections = append(response.Corrections, map[string]string{"original": x.NameInput, "replacement": candidate.Entity.Name, "kind": kind})
+			}
+		} else if n.Status == "ambiguous" {
+			names := []string{}
+			seen := map[string]bool{}
+			for _, c := range n.Candidates {
+				if c.Distance-n.Candidates[0].Distance >= 5 {
+					continue
+				}
+				if !seen[c.Entity.Name] {
+					seen[c.Entity.Name] = true
+					names = append(names, c.Entity.Name)
+				}
+			}
+			response.Clarification = append(response.Clarification, "Уточните продукт и производителя: "+strings.Join(names, ", "))
+		}
+	}
 	if x.SearchMode == "hybrid" {
 		response.Mode = "hybrid"
 	}
