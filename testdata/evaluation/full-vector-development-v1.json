@@ -1,0 +1,523 @@
+{
+  "version": "full-vector-development-v1",
+  "independent": false,
+  "hybrid_before": "hybrid-v3",
+  "hybrid_after": "hybrid-v4",
+  "dimensions_before": 512,
+  "dimensions_after": 1536,
+  "threshold": 0.45,
+  "window": 50,
+  "holdout_searched": false,
+  "reports": {
+    "before_tuning": {
+      "report_sha256": "c15ea480dff14ad3d5a8b386dad6bb4ef50dff6f1e295e798a90bba56b979db7",
+      "cases_sha256": "8a3ce328148f5a6aeae25edcedc17831d67a8686e37de84a1bb564fee1ab1755",
+      "cases": 60,
+      "group_hits_at_1": 52,
+      "group_hits_at_4": 52,
+      "brand_hits": 6,
+      "negative_empty": 2,
+      "errors": 0,
+      "batch_elapsed_ms": 13910,
+      "vectors": {
+        "used": 49,
+        "no_candidates": 10,
+        "skipped_exact": 1
+      }
+    },
+    "before_probes": {
+      "report_sha256": "9c03cc5d3acfa33ce474fb0b6c71255120a7ef95d7ba188691c16bb855d12ee5",
+      "cases_sha256": "af7a01d9bf904948afc338accfc70a6003a8931680b1b77c10f5b3daf538dc84",
+      "cases": 16,
+      "group_hits_at_1": 4,
+      "group_hits_at_4": 7,
+      "brand_hits": 0,
+      "negative_empty": 0,
+      "errors": 0,
+      "batch_elapsed_ms": 15336,
+      "vectors": {
+        "used": 16
+      }
+    },
+    "after_tuning": {
+      "report_sha256": "94f6d74f9f6e110c17cdcd2e9914257f3a391abfdd1f9fff2f47456e0dcabb4d",
+      "cases_sha256": "8a3ce328148f5a6aeae25edcedc17831d67a8686e37de84a1bb564fee1ab1755",
+      "cases": 60,
+      "group_hits_at_1": 52,
+      "group_hits_at_4": 52,
+      "brand_hits": 6,
+      "negative_empty": 2,
+      "errors": 0,
+      "batch_elapsed_ms": 13596,
+      "vectors": {
+        "used": 46,
+        "no_candidates": 13,
+        "skipped_exact": 1
+      }
+    },
+    "after_probes": {
+      "report_sha256": "600d66b3e6b160dcf0786723eadfe0346200d4871d08cabf9abff3b15dfc513a",
+      "cases_sha256": "af7a01d9bf904948afc338accfc70a6003a8931680b1b77c10f5b3daf538dc84",
+      "cases": 16,
+      "group_hits_at_1": 6,
+      "group_hits_at_4": 8,
+      "brand_hits": 0,
+      "negative_empty": 0,
+      "errors": 0,
+      "batch_elapsed_ms": 16508,
+      "vectors": {
+        "used": 16
+      }
+    }
+  },
+  "candidate_audit": [
+    {
+      "1536": [
+        {
+          "rank": 1,
+          "score": 0.5582314603333632
+        }
+      ],
+      "512": [
+        {
+          "rank": 1,
+          "score": 0.5769685596600941
+        }
+      ],
+      "id": "probe-01"
+    },
+    {
+      "1536": [
+        {
+          "rank": 31,
+          "score": 0.5003114525398188
+        },
+        {
+          "rank": 70,
+          "score": 0.47033537273150433
+        }
+      ],
+      "512": [
+        {
+          "rank": 25,
+          "score": 0.5384337724854432
+        },
+        {
+          "rank": 80,
+          "score": 0.4970089715178769
+        }
+      ],
+      "id": "probe-02"
+    },
+    {
+      "1536": [
+        {
+          "rank": 2,
+          "score": 0.518043994772432
+        },
+        {
+          "rank": 74,
+          "score": 0.4528379591311998
+        },
+        {
+          "rank": 791,
+          "score": 0.3786925623496137
+        }
+      ],
+      "512": [
+        {
+          "rank": 2,
+          "score": 0.5555362213421932
+        },
+        {
+          "rank": 88,
+          "score": 0.48669884643703837
+        },
+        {
+          "rank": 1002,
+          "score": 0.4069601462168655
+        }
+      ],
+      "id": "probe-03"
+    },
+    {
+      "1536": [
+        {
+          "rank": 69,
+          "score": 0.41966377152610373
+        },
+        {
+          "rank": 70,
+          "score": 0.41926272421114363
+        }
+      ],
+      "512": [
+        {
+          "rank": 65,
+          "score": 0.4541350231540369
+        },
+        {
+          "rank": 110,
+          "score": 0.4413061623688291
+        }
+      ],
+      "id": "probe-04"
+    },
+    {
+      "1536": [
+        {
+          "rank": 58,
+          "score": 0.4484418390619805
+        },
+        {
+          "rank": 75,
+          "score": 0.4427724993576944
+        }
+      ],
+      "512": [
+        {
+          "rank": 151,
+          "score": 0.45958089736823765
+        },
+        {
+          "rank": 259,
+          "score": 0.44505185661418667
+        }
+      ],
+      "id": "probe-05"
+    },
+    {
+      "1536": [
+        {
+          "rank": 28,
+          "score": 0.4151721370013657
+        }
+      ],
+      "512": [
+        {
+          "rank": 40,
+          "score": 0.4400746758316654
+        }
+      ],
+      "id": "probe-06"
+    },
+    {
+      "1536": [
+        {
+          "rank": 4,
+          "score": 0.4817682049631046
+        }
+      ],
+      "512": [
+        {
+          "rank": 4,
+          "score": 0.5036612559651338
+        }
+      ],
+      "id": "probe-07"
+    },
+    {
+      "1536": [
+        {
+          "rank": 41,
+          "score": 0.42198228352386974
+        }
+      ],
+      "512": [
+        {
+          "rank": 56,
+          "score": 0.4456352057228451
+        }
+      ],
+      "id": "probe-08"
+    },
+    {
+      "1536": [
+        {
+          "rank": 25,
+          "score": 0.4585167739145119
+        }
+      ],
+      "512": [
+        {
+          "rank": 67,
+          "score": 0.46384749181076673
+        }
+      ],
+      "id": "probe-09"
+    },
+    {
+      "1536": [
+        {
+          "rank": 1,
+          "score": 0.46102612371335794
+        }
+      ],
+      "512": [
+        {
+          "rank": 1,
+          "score": 0.506530452837933
+        }
+      ],
+      "id": "probe-10"
+    },
+    {
+      "1536": [
+        {
+          "rank": 6,
+          "score": 0.46694592270499713
+        }
+      ],
+      "512": [
+        {
+          "rank": 29,
+          "score": 0.4700385695537015
+        }
+      ],
+      "id": "probe-11"
+    },
+    {
+      "1536": [
+        {
+          "rank": 7,
+          "score": 0.45243587734105806
+        },
+        {
+          "rank": 19,
+          "score": 0.41846127901237823
+        },
+        {
+          "rank": 35,
+          "score": 0.4041350063798985
+        }
+      ],
+      "512": [
+        {
+          "rank": 12,
+          "score": 0.4594466410887019
+        },
+        {
+          "rank": 28,
+          "score": 0.43498348872576326
+        },
+        {
+          "rank": 56,
+          "score": 0.4158172844222034
+        }
+      ],
+      "id": "probe-12"
+    },
+    {
+      "1536": [
+        {
+          "rank": 2,
+          "score": 0.4683441548754863
+        },
+        {
+          "rank": 24,
+          "score": 0.37169993594414524
+        },
+        {
+          "rank": 32,
+          "score": 0.3607420030497525
+        }
+      ],
+      "512": [
+        {
+          "rank": 2,
+          "score": 0.515342382937104
+        },
+        {
+          "rank": 8,
+          "score": 0.4519820518502066
+        },
+        {
+          "rank": 18,
+          "score": 0.4364965680309209
+        }
+      ],
+      "id": "probe-13"
+    },
+    {
+      "1536": [
+        {
+          "rank": 253,
+          "score": 0.3974246984907998
+        }
+      ],
+      "512": [
+        {
+          "rank": 445,
+          "score": 0.4229973732625773
+        }
+      ],
+      "id": "probe-14"
+    },
+    {
+      "1536": [
+        {
+          "rank": 2,
+          "score": 0.5645101763104099
+        },
+        {
+          "rank": 3,
+          "score": 0.5588660147605363
+        }
+      ],
+      "512": [
+        {
+          "rank": 2,
+          "score": 0.5560146943383394
+        },
+        {
+          "rank": 3,
+          "score": 0.550522267785629
+        }
+      ],
+      "id": "probe-15"
+    },
+    {
+      "1536": [
+        {
+          "rank": 3,
+          "score": 0.5042476415180277
+        },
+        {
+          "rank": 135,
+          "score": 0.3975919263894955
+        },
+        {
+          "rank": 272,
+          "score": 0.37550715473057605
+        }
+      ],
+      "512": [
+        {
+          "rank": 12,
+          "score": 0.5104195252313536
+        },
+        {
+          "rank": 189,
+          "score": 0.42684929693686374
+        },
+        {
+          "rank": 446,
+          "score": 0.39348861775067157
+        }
+      ],
+      "id": "probe-16"
+    }
+  ],
+  "paired": [
+    {
+      "id": "probe-01",
+      "before_ranks": [
+        1
+      ],
+      "after_ranks": [
+        1
+      ]
+    },
+    {
+      "id": "probe-02",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-03",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-04",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-05",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-06",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-07",
+      "before_ranks": [
+        1
+      ],
+      "after_ranks": [
+        1
+      ]
+    },
+    {
+      "id": "probe-08",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-09",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-10",
+      "before_ranks": [
+        1
+      ],
+      "after_ranks": [
+        1
+      ]
+    },
+    {
+      "id": "probe-11",
+      "before_ranks": [
+        2
+      ],
+      "after_ranks": [
+        1
+      ]
+    },
+    {
+      "id": "probe-12",
+      "before_ranks": [
+        2
+      ],
+      "after_ranks": [
+        1
+      ]
+    },
+    {
+      "id": "probe-13",
+      "before_ranks": [
+        1
+      ],
+      "after_ranks": [
+        1
+      ]
+    },
+    {
+      "id": "probe-14",
+      "before_ranks": [],
+      "after_ranks": []
+    },
+    {
+      "id": "probe-15",
+      "before_ranks": [
+        2
+      ],
+      "after_ranks": [
+        2
+      ]
+    },
+    {
+      "id": "probe-16",
+      "before_ranks": [],
+      "after_ranks": [
+        3
+      ]
+    }
+  ]
+}

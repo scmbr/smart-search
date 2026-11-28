@@ -4,6 +4,7 @@ package hybrid
 import (
 	"context"
 	"fmt"
+	embedding "github.com/scmbr/smart-search/internal/domain/embeddingpilot"
 	"strings"
 
 	d "github.com/scmbr/smart-search/internal/domain/search"
@@ -48,6 +49,7 @@ func (b Backend) Search(ctx context.Context, r d.Request) (d.Result, error) {
 		return d.Result{}, err
 	}
 	trace := &d.HybridTrace{Version: d.HybridVersion, CorpusSHA: b.CorpusSHA, CorpusDocuments: b.CorpusDocuments, LexicalFamilies: len(result.Hits), VectorStatus: "fallback", InterpretationStatus: "not_selected"}
+	trace.VectorDimensions = embedding.Dimensions
 	result.Hybrid = trace
 	finish := func() (d.Result, error) {
 		if err := ctx.Err(); err != nil {

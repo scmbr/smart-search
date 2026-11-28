@@ -85,12 +85,14 @@ CLI-сборка выше рассчитана на Windows; на другой �
 покрытие. RRF выполняется по FamilyID после фильтрации SKU; не обходи общий
 application/lexical.Search при выдаче результата. Новые API-тексты требуют отдельного
 live-подключения и общего ledger, отсутствие кэша сейчас даёт явный BM25 fallback.
+Текущий hybrid-v4 использует полные 1536 компонент обоих vectorcache-адаптеров,
+без повторной оплаты кэша; порог 0.45. См. docs/full-vector-ranking.md.
 Полный manifest — docs/vector-corpus.md; разрешение пользователя — D-034.
 Для corpus-index live обязательны approved-sha и OPENAI_LIVE_ENABLED=true;
 предел запуска $0.15 поверх прежнего Runtime cap $0.05 на вызов, общий ledger $5.
 Новый запрос оплачивается только с -live-query, максимум $0.001 на запрос.
 Без group_id ищи точный OfferID с vendor-path; не придумывай группу.
-Полный корпус не загружается частично; prefix-512 сохраняется в памяти процесса.
+Полный корпус не загружается частично; векторы 1536 сохраняются в памяти процесса.
 Для development evaluation используй --vector-corpus <путь> --batch: это cache-only,
 не добавляй live-флаг и не используй holdout для настройки.
 Parser — docs/query-parser-runtime.md: replay без Provider, live только явным
