@@ -13,6 +13,27 @@ const empty: SearchResponse = {
   clarification: [], duration_ms: 1, next_cursor: null, top4: [], shortfall_reason: 'insufficient_relevant_families', unpriced_fallback_used: false,
 };
 beforeEach(() => api.mockReset());
+
+test('shows canonical interpretation and clarification independently of shortfall', async () => {
+  api.mockResolvedValue({ ...empty, query: 'фотошор', shortfall_reason: null,
+    corrections: [{ original: 'фотошор', replacement: 'Adobe Photoshop', kind: 'typo' }],
+    clarification: ['Уточните продукт и производителя: Paint, Point'] });
+  render(<SearchWorkspace />);
+  await userEvent.type(screen.getByRole('searchbox', { name: 'Что вы ищете?' }), 'фотошор{enter}');
+  expect(await screen.findByText(/Распознано: Adobe Photoshop/)).toBeInTheDocument();
+  expect(screen.getByText('Уточните продукт и производителя: Paint, Point')).toBeInTheDocument();
+  expect(screen.getByRole('searchbox')).toHaveValue('фотошор');
+});
+
+test('ambiguous search asks for clarification without claiming no products exist', async () => {
+  api.mockResolvedValue({ ...empty, query: 'corle', total_matches: null, shortfall_reason: null,
+    clarification: ['Уточните продукт и производителя: Corel Corporation, Qlik Core'] });
+  render(<SearchWorkspace />);
+  await userEvent.type(screen.getByRole('searchbox'), 'corle{enter}');
+  expect(await screen.findByRole('heading', { name: 'Уточните запрос' })).toBeInTheDocument();
+  expect(screen.queryByText('Подборка пока неполная')).toBeNull();
+  expect(screen.queryByRole('heading', { name: 'Совпадений не найдено' })).toBeNull();
+});
 test('keyboard submission shows a truthful empty result and shortfall', async () => {
   api.mockResolvedValue(empty);
   render(<SearchWorkspace />);

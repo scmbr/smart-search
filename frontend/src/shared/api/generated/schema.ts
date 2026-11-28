@@ -295,6 +295,7 @@ export interface components {
             product_id: components["schemas"]["ID"];
             family_id: components["schemas"]["ID"];
         };
+        /** @description Server-confirmed name interpretation; edit-distance heuristics are not probabilities. Original may be the recognized name span of a longer constrained query. */
         Correction: {
             original: string;
             replacement: string;

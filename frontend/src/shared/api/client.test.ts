@@ -11,6 +11,13 @@ test('sends a session, idempotency key and cancellation signal to the local API'
     signal, method: 'POST', headers: expect.objectContaining({ 'Idempotency-Key': 'request' }),
   }));
 });
+
+test('rejects malformed correction metadata before rendering it', async () => {
+  const body = { search_id: 's', query: 'x', matches: [], top4: [], clarification: [], degraded_reasons: [], mode: 'lexical', total_matches: 0,
+    corrections: [{ original: 'x', replacement: { unexpected: true }, kind: 'typo' }] };
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify(body))));
+  await expect(searchCatalog({ query: 'x', session_id: 's', limit: 4 }, 'k', new AbortController().signal)).rejects.toBeInstanceOf(ApiError);
+});
 test('does not expose arbitrary server error text', async () => {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ message: 'secret DSN' }), { status: 503 })));
   try { await searchCatalog({ query: 'x', session_id: 's', limit: 4 }, 'k', new AbortController().signal); }
@@ -19,7 +26,7 @@ test('does not expose arbitrary server error text', async () => {
 test('accepts catalog response but rejects zero known prices and unsafe product links', async () => {
   const card = { product_id: 'p', family_id: 'f', name: 'Product', family_confirmed: true,
     selected_offer: { name: 'License', available: true, url: 'https://store.softline.ru/vendor/offer/', price: { currency: 'RUB', status: 'known', amount_minor: 100 } } };
-  const body = { search_id: 's', query: 'Product', matches: [card], top4: [], clarification: [], degraded_reasons: [], mode: 'lexical', total_matches: null };
+  const body = { search_id: 's', query: 'Product', corrections: [], matches: [card], top4: [], clarification: [], degraded_reasons: [], mode: 'lexical', total_matches: null };
   const fetcher = vi.fn().mockImplementation(() => Promise.resolve(new Response(JSON.stringify(body))));
   vi.stubGlobal('fetch', fetcher);
   const request = { query: 'Product', session_id: 's', limit: 4 };

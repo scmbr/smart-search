@@ -1465,6 +1465,16 @@
         "shortfall_reason": "insufficient_relevant_families",
         "unpriced_fallback_used": false
       }
+    },
+    {
+      "name": "named query correction metadata",
+      "schema": "Correction",
+      "valid": true,
+      "value": {
+        "original": "фотошор",
+        "replacement": "Adobe Photoshop",
+        "kind": "typo"
+      }
     }
   ]
 }

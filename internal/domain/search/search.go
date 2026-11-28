@@ -276,6 +276,8 @@ type Hit struct {
 	Score    float64
 }
 type Result struct {
+	NameResolution                              *NameResolution
+	NameInput                                   string
 	Hybrid                                      *HybridTrace
 	ProductIntents                              []ProductIntent
 	Query, CatalogID, IndexVersion              string
