@@ -9,6 +9,7 @@ import (
 	domain "github.com/scmbr/smart-search/internal/domain/search"
 	"github.com/scmbr/smart-search/internal/infrastructure/elastic"
 	"github.com/scmbr/smart-search/internal/infrastructure/localconfig"
+	"github.com/scmbr/smart-search/internal/infrastructure/searchruntime"
 	"os"
 	"os/signal"
 )
@@ -27,6 +28,7 @@ func run(ctx context.Context) error {
 	fullCorpus := flag.String("vector-corpus", "", "complete versioned vector corpus")
 	liveQuery := flag.Bool("live-query", false, "explicitly enable embeddings of new queries with the shared budget")
 	parserMode := flag.String("parser-mode", "off", "selective query parser: off, replay or live")
+	nameCatalog := flag.String("name-catalog", "", "compact snapshot-bound name catalog")
 	batch := flag.Bool("batch", false, "read JSON query strings from stdin, one per line, reusing the loaded corpus")
 	flag.StringVar(&r.Query, "query", "", "search text")
 	flag.StringVar(&r.FamilyID, "family", "", "explicit confirmed family ID")
@@ -88,6 +90,18 @@ func run(ctx context.Context) error {
 		}
 		defer closePool()
 		searchBackend = combined
+	}
+	if *nameCatalog != "" {
+		pool, poolErr := s.Pool(ctx)
+		if poolErr != nil {
+			return poolErr
+		}
+		defer pool.Close()
+		named, loadErr := searchruntime.WithNames(ctx, pool, *nameCatalog, backend, searchBackend)
+		if loadErr != nil {
+			return loadErr
+		}
+		searchBackend = named
 	}
 	if *batch {
 		return searchBatch(ctx, searchBackend, r, os.Stdin, os.Stdout)

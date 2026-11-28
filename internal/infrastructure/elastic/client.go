@@ -288,6 +288,9 @@ func (c *Client) Search(ctx context.Context, r domain.Request) (domain.Result, e
 		return result, domain.ErrNotReady
 	}
 	result.CatalogID = m.Spec.CatalogID
+	if r.NamedSelection != nil && r.NamedSelection.CatalogID != result.CatalogID {
+		return domain.Result{}, domain.ErrNotReady
+	}
 	result.IndexVersion = m.Spec.Fingerprint
 	result.SearchMode = "none"
 	for _, priced := range []bool{true, false} {

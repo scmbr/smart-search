@@ -40,6 +40,14 @@ func searchBody(r domain.Request, priced, expanded bool) map[string]any {
 		return map[string]any{"term": map[string]any{field: value}}
 	}
 	filters := []any{term("HasPrice", priced), term("RoleConflict", false)}
+	if s := r.NamedSelection; s != nil {
+		filters = append(filters, term("CatalogID", s.CatalogID), map[string]any{"prefix": map[string]any{"URL": "https://store.softline.ru" + s.Entity.Scope}})
+		if s.Entity.Kind == "product" {
+			filters = append(filters, map[string]any{"terms": map[string]any{"GroupID": s.Groups}})
+		} else {
+			filters = append(filters, map[string]any{"match_phrase": map[string]any{"Vendor": s.Entity.Name}})
+		}
+	}
 	if category, identity := domain.PurposeTaxonomy(r.Plan.Purpose); identity != "" {
 		filters = append(filters, term("ProductType", "software"), map[string]any{"match_phrase": map[string]any{"CategoryNames": category}}, map[string]any{"match": map[string]any{"ProductName": identity}})
 	}

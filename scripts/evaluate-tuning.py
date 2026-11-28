@@ -30,6 +30,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--exe", default="bin/search.exe")
     parser.add_argument("--output", default="artifacts/tuning-diagnostics.json")
+    parser.add_argument("--name-catalog", help="compact catalog vocabulary; no paid calls")
     corpora = parser.add_mutually_exclusive_group()
     corpora.add_argument("--hybrid-corpus", help="enable cached experimental hybrid; no OpenAI calls")
     corpora.add_argument("--vector-corpus", help="complete corpus, cache-only evaluation")
@@ -56,6 +57,8 @@ def main():
                     ["-vector-corpus", args.vector_corpus] if args.vector_corpus else [])
     if args.parser_replay:
         corpus_flags += ["-parser-mode", "replay"]
+    if args.name_catalog:
+        corpus_flags += ["-name-catalog", args.name_catalog]
     batch_results, batch_elapsed_ms = None, None
     if args.batch:
         started = time.perf_counter()
@@ -91,7 +94,7 @@ def main():
         except (OSError, ValueError, KeyError, RuntimeError, subprocess.TimeoutExpired) as error:
             row["error"] = str(error)
         rows.append(row)
-    report = {"dataset_role":source["dataset_role"], "label_status":source["label_status"], "dataset_cases_sha256":source["cases_sha256"],
+    report = {"name_catalog":args.name_catalog,"dataset_role":source["dataset_role"], "label_status":source["label_status"], "dataset_cases_sha256":source["cases_sha256"],
               "retrieval":"hybrid_full_corpus_cache_only" if args.vector_corpus else "hybrid_cached_experiment" if args.hybrid_corpus else "lexical",
               "parser_mode":"replay" if args.parser_replay else "off",
               "batch_elapsed_ms":batch_elapsed_ms,

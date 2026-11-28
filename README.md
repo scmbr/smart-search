@@ -103,6 +103,13 @@ catalog-import читает .env, переменные процесса имею
 Elasticsearch включается отдельно профилем search: 2 ГБ RAM/2 CPU, heap 512 МБ.
 После импорта запустить `docker compose --profile search up -d --wait elasticsearch`,
 `go run ./cmd/catalog-index`, затем `go run ./cmd/search -query "сервер"`.
+
+Для брендов, русских названий и опечаток подготовь компактный словарь из того же
+feed: `python scripts/prepare-name-catalog.py --feed <путь-к-feed>`.
+Запускай стенд с `go run ./cmd/api -name-catalog artifacts/name-catalog.json`;
+для задач можно добавить `-vector-corpus artifacts/vector-corpus.json -parser-mode replay`.
+Без `-name-catalog` сохраняется прежний поиск. Словарь обновляется вместе с feed;
+правила, ограничения и проверки — [named-search.md](docs/named-search.md).
 Для локального PostgreSQL с лимитом 1 ГБ перед индексацией в PowerShell:
 `$env:PGOPTIONS = '-c max_parallel_workers_per_gather=0 -c jit=off'`.
 Это проверенная конфигурация; без неё чтение категорий полного снимка превышало 30 с.

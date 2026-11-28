@@ -1,0 +1,114 @@
+{
+  "role": "development_regression_not_independent",
+  "catalog_entries": 5642,
+  "catalog_bytes": 676652,
+  "http_smoke_sha256": "396916f7e12da8e2bced911baf1fb2f4f7f2a77bec681672593b38859054b3cc",
+  "rows": [
+    {
+      "query": "Adobe",
+      "ms": 212,
+      "matches": [
+        "Adobe Presenter",
+        "Adobe Illustrator",
+        "Adobe FrameMaker",
+        "Adobe Dreamweaver"
+      ]
+    },
+    {
+      "query": "адоб",
+      "ms": 77,
+      "matches": [
+        "Adobe Presenter",
+        "Adobe Illustrator",
+        "Adobe FrameMaker",
+        "Adobe Dreamweaver"
+      ]
+    },
+    {
+      "query": "адоь",
+      "ms": 258,
+      "matches": [
+        "Adobe Presenter",
+        "Adobe Illustrator",
+        "Adobe FrameMaker",
+        "Adobe Dreamweaver"
+      ]
+    },
+    {
+      "query": "Photoshop",
+      "ms": 140,
+      "matches": [
+        "Adobe Photoshop"
+      ]
+    },
+    {
+      "query": "фотошоп",
+      "ms": 287,
+      "matches": [
+        "Adobe Photoshop"
+      ]
+    },
+    {
+      "query": "фотошор",
+      "ms": 86,
+      "matches": [
+        "Adobe Photoshop"
+      ]
+    },
+    {
+      "query": "bdobe",
+      "ms": 97,
+      "matches": [
+        "Adobe Presenter",
+        "Adobe Illustrator",
+        "Adobe FrameMaker",
+        "Adobe Dreamweaver"
+      ]
+    },
+    {
+      "query": "phtoshop",
+      "ms": 78,
+      "matches": [
+        "Adobe Photoshop"
+      ]
+    },
+    {
+      "query": "фтошоп",
+      "ms": 80,
+      "matches": [
+        "Adobe Photoshop"
+      ]
+    },
+    {
+      "query": "FQC-10572",
+      "ms": 76,
+      "matches": [
+        "Microsoft Windows 11 Pro (Профессиональная)"
+      ]
+    }
+  ],
+  "known_regressions_top1": {
+    "before": 2,
+    "after": 6,
+    "count": 6
+  },
+  "replay_identical": 10,
+  "tuning": {
+    "group_at_1": 52,
+    "group_at_4": 52,
+    "group_count": 52,
+    "brand_at_4": 6,
+    "negative_empty": 2
+  },
+  "development": {
+    "group_at_1": 6,
+    "group_at_4": 8,
+    "count": 16
+  },
+  "limitations": [
+    "Not independent evaluation",
+    "No claim of four relevant confirmed families",
+    "Small sequential HTTP smoke, not p95 under load",
+    "Only explicit name-catalog flag enables named routing"
+  ]
+}
