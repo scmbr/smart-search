@@ -3,6 +3,7 @@ package searchruntime
 import (
 	"context"
 	"errors"
+	h "github.com/scmbr/smart-search/internal/application/hybrid"
 	d "github.com/scmbr/smart-search/internal/domain/search"
 	"testing"
 	"time"
@@ -13,6 +14,38 @@ type waitingVector struct{}
 func (waitingVector) Candidates(ctx context.Context, _ d.Request) ([]d.GroupCandidate, error) {
 	<-ctx.Done()
 	return nil, ctx.Err()
+}
+
+type deadlineVector struct{ t *testing.T }
+
+func (p deadlineVector) Candidates(ctx context.Context, _ d.Request) ([]d.GroupCandidate, error) {
+	deadline, ok := ctx.Deadline()
+	if !ok || time.Until(deadline) < 9*time.Second || time.Until(deadline) > 15*time.Second {
+		p.t.Fatal("live embedding has insufficient or unbounded wait")
+	}
+	return nil, nil
+}
+
+type deadlineParser struct{ t *testing.T }
+
+func (p deadlineParser) Interpret(ctx context.Context, _ string) (d.Interpretation, error) {
+	deadline, ok := ctx.Deadline()
+	if !ok || time.Until(deadline) < 5*time.Second || time.Until(deadline) > 10*time.Second {
+		p.t.Fatal("live parser has insufficient or unbounded wait")
+	}
+	return d.Interpretation{}, nil
+}
+func TestHTTPAllowsMeasuredLiveLatencyWithoutWaiting(t *testing.T) {
+	b, err := ForHTTP(context.Background(), h.Backend{Vectors: deadlineVector{t}, Parser: deadlineParser{t}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = b.Vectors.Candidates(context.Background(), d.Request{}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err = b.Parser.Interpret(context.Background(), "task"); err != nil {
+		t.Fatal(err)
+	}
 }
 
 type waitingParser struct{}

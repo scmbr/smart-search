@@ -17,10 +17,10 @@ func ForHTTP(ctx context.Context, b hybrid.Backend) (hybrid.Backend, error) {
 		cancel()
 	}
 	if b.Vectors != nil {
-		b.Vectors = boundedVectors{b.Vectors, 2 * time.Second}
+		b.Vectors = boundedVectors{b.Vectors, 15 * time.Second}
 	}
 	if b.Parser != nil {
-		b.Parser = boundedParser{b.Parser, 2 * time.Second}
+		b.Parser = boundedParser{b.Parser, 10 * time.Second}
 	}
 	return b, err
 }
