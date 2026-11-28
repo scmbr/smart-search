@@ -1,8 +1,8 @@
 # Первый POST /search
 
-Реальный lexical backend через application/lexical.Search, без прямого обхода
-фильтров. HTTP OpenAI/live пока не подключены; mode=lexical — выбранный режим,
-а не сбой модели. Hybrid/live подключаются отдельным следующим шагом.
+Спецификация начального lexical backend через application/lexical.Search.
+Текущий HTTP поддерживает hybrid/live: [конфигурация](http-hybrid.md).
+Условия и повторная проверка SKU сохраняются во всех режимах.
 
 ## Приёмка
 
@@ -28,10 +28,11 @@
   top4 содержит только подтверждённые семейства среди показанных matches;
   недобор объясняется shortfall_reason. Provisional карточки могут быть в matches,
   но не доказывают выполнение требования четырёх разных семейств.
-- recommendations/alternatives/corrections пока пусты, next_cursor=null.
+- recommendations/alternatives пока пусты, next_cursor=null; corrections и
+  clarification поддержаны [именованным поиском](named-search.md).
   total_matches=null, если точный глобальный total неизвестен; для пустой выдачи 0.
   Это уточнение контракта 0.3.0, а не число кандидатов под видом полного count.
-- Ошибки 400/409/413/503 безопасны; deadline запроса 10 секунд. События аналитики
+- Ошибки 400/409/413/503 безопасны; deadline запроса 30 секунд. События аналитики
   ещё не реализованы; таблица сохранённых поисков не выдаётся за готовую аналитику.
 
 Миграция 005 добавляется forward-only через `go run ./cmd/catalog-import -migrate-only`.

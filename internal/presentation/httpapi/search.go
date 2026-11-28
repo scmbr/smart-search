@@ -214,7 +214,7 @@ func searchHandler(service Search) http.HandlerFunc {
 			writeError(w, 400, "invalid_request", "Invalid or unsupported search parameters; cursor, personalization and license_type are not supported yet")
 			return
 		}
-		ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+		ctx, cancel := context.WithTimeout(r.Context(), 30*time.Second)
 		defer cancel()
 		record, err := service.Search(ctx, id, request)
 		if err != nil {
