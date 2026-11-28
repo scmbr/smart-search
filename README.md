@@ -10,7 +10,7 @@
 CLI лексического и гибридного поиска (query-v8 / lexical-v7 / hybrid-v4),
 полный кэш эмбеддингов и выборочный LLM-разбор с общим бюджетом $5.
 HTTP-сервер `cmd/api` реализует `/api/v1/search` в lexical режиме с постоянным
-replay и health endpoints. HTTP hybrid/live, frontend, verifier и аналитика
+replay и health endpoints. Frontend доступен в `frontend/`; HTTP hybrid/live, verifier и аналитика
 ещё не подключены. [HTTP-поиск и ограничения](docs/http-search.md).
 
 На development: tuning group@1/@4 52/52, task probes @4 8/16, @1 6/16.
@@ -23,6 +23,17 @@ docker compose --profile search up -d --wait postgres elasticsearch
 go run ./cmd/catalog-import -migrate-only
 go run ./cmd/api
 ```
+
+Во втором терминале:
+
+```powershell
+cd frontend
+npm ci
+npm run dev
+```
+
+Открыть http://127.0.0.1:5173 — поиск, реальные карточки и фильтры.
+Команды проверок и границы: [frontend](docs/frontend.md).
 
 Нужны `.env` с PostgreSQL/ES, применённые миграции и готовые каталог/индекс
 для `/health/ready`. Сервер не импортирует данные и не вызывает OpenAI.

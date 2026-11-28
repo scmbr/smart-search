@@ -1,33 +1,40 @@
 # Frontend: React/TypeScript и FSD
 
-`frontend/` — выделенный путь будущего клиента React/TypeScript/Vite.
-Сейчас здесь нет приложения, package.json, lockfile, tsconfig и конфигурации тестов.
-Backend-контракт и порядок синхронизации описаны в корневом AGENTS.md.
+`frontend/` — React/TypeScript/Vite клиент реального lexical POST /search.
+Контракт и общий Git workflow — в корневом AGENTS.md. Локальный Node 22.11
+поддерживается; .nvmrc задаёт major 22 для CI. Использовать только npm/lockfile.
 
-## Команды: фактическое состояние
+## Команды (из frontend/)
 
-| Действие | Состояние |
+| Действие | Команда |
 | --- | --- |
-| Установка зависимостей | Не определена: нет package.json/lockfile |
-| Запуск и сборка | Скриптов нет |
-| Линтер и архитектурный линтер | ESLint/Steiger/eslint-plugin-boundaries не настроены |
-| Проверка типов | tsconfig и команды нет |
-| Генерация API-типов | Генератор не настроен |
-| Unit/component/e2e-тесты | Vitest/Playwright пока только в плане, команд нет |
+| Установка | `npm ci` |
+| Запуск | `npm run dev` — 127.0.0.1:5173; API отдельно на 8080 |
+| Сборка / локальный preview | `npm run build` / `npm run preview` |
+| ESLint | `npm run lint` |
+| Архитектура | `npm run lint:arch` — собственный TypeScript AST checker |
+| Типы | `npm run typecheck` |
+| Генерация API | `npm run generate:api` из ../docs/openapi.yaml |
+| Проверка генерации | `npm run check:api` |
+| Тесты | `npm run test:ci` — generation check, node architecture tests, Vitest |
+| Зависимости | `npm audit`; версии exact, без npm audit fix --force |
 
-Не запускай выдуманные npm/pnpm scripts или npx latest как существующий workflow.
-При инициализации клиента выбери один package manager/lockfile, настрой реальные
-scripts (включая архитектурную проверку) и обнови эту таблицу проверенными командами.
-До этого не сообщай, что frontend собран, типизирован или проверен тестами.
+scripts/check-architecture.mjs проверяет направления слоёв/public API, включая
+re-export и dynamic/type imports, и размещение сетевых вызовов. Steiger и
+eslint-plugin-boundaries не установлены; не выдавать собственный checker за них.
+Generated types находятся в src/shared/api/generated/schema.ts: менять генерацией,
+не вручную. CI запускает все пять обязательных scripts, frontend-job уже применим.
+В package.json точечный override minimatch 11.0.1 для совместимого TS ESLint;
+при обновлении линтера проверить необходимость override, engines и audit.
 
-CI уже задаёт требования к будущему приложению: `frontend/.nvmrc`, npm lockfile
-`package-lock.json` и scripts `lint`, `lint:arch`, `typecheck`, `test:ci`, `build`.
-После инициализации CI выполняет `npm ci` и эти scripts; до неё frontend-job
-явно пропущен. Это требования для настройки, не существующие команды приложения.
+Backend запускается из корня `go run ./cmd/api`; dev/preview proxy /api →
+127.0.0.1:8080. Ключи/БД/ES не доступны браузеру. HTTP hybrid/live, подсказки,
+персонализация и рекомендации ещё не подключены. Браузерный e2e/визуальная QA
+не заменяются Vitest DOM-тестами; явно указывать непроведённые проверки.
 
 ## Feature-Sliced Design
 
-Структура при появлении исходников: `frontend/src/`.
+Структура: `frontend/src/`.
 Строгая иерархия: **app → pages → widgets → features → entities → shared**.
 
 - Импорты идут только в нижележащие слои. Запрещены импорты вверх и между
@@ -51,7 +58,7 @@ CI уже задаёт требования к будущему приложен
 - UI отображает состояние и вызывает действия; сценарии и переходы состояния
   тестируются в model/lib, а маппинг транспортных данных остаётся в api.
 - Сначала ищи существующие компоненты в shared/ui, хуки и функции нижних слоёв;
-  не копируй их между слайсами. Сейчас этих реализаций нет — не выдавай их за готовые.
+  не копируй их между слайсами. Текущие общие API и UI находятся в shared/api и shared/ui.
 - После настройки кодогенерации переиспользуй API-типы через public API shared/api;
   не дублируй DTO вручную и не редактируй сгенерированные файлы.
 - Для поиска учитывай loading/error/empty/degraded, отмену или игнорирование

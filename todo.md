@@ -9,9 +9,9 @@
 дальше после ограниченного цикла улучшения поиска (D-049). Этапы 0–2 завершены,
 независимый эксперимент этапа 3 выполнен; нужное качество всех четырёх товаров
 ещё не достигнуто. Поиск фиксируется на hybrid-v4, task development 8/16.
-Health и начальный lexical POST /search реализованы. Следующий шаг —
-минимальный frontend и подключение HTTP hybrid/live отдельной конфигурацией;
-затем verifier рекомендаций. Не выдавать текущий lexical режим за live hybrid.
+Health, начальный lexical POST /search и минимальный frontend реализованы.
+Следующий шаг — HTTP hybrid/live отдельной конфигурацией и verifier рекомендаций,
+а также визуальная QA при доступном браузере. Текущий HTTP режим остаётся lexical.
 
 Последнее слитое изменение поиска: PR #30, commit `c28347e`, обязательный CI прошёл.
 Baseline: 19/34 group + 3/6 brand, hybrid: 18/34 + 3/6; fallback 0.
@@ -19,15 +19,16 @@ Baseline: 19/34 group + 3/6 brand, hybrid: 18/34 + 3/6; fallback 0.
 Ledger: $0.025425085/$5, pending=0 на момент последнего измерения; перед новыми
 оплатами перепроверить фактический ledger. Ошибочная подготовка также учтена.
 
-Текущая ветка: `feat/http-search`. `cmd/api` реализует health и POST /search:
-реальный lexical backend, PostgreSQL replay 24 часа (migration 005), scope
-session/key, canonical JSON, 409 при изменении тела, in-flight busy=503.
-Миграция 005 применена локально. HTTP OpenAI/live не подключены, платных вызовов нет.
-Контракт 0.3.0: nullable exact total и family_confirmed; provisional карточки
-не доказывают top4. Cursor/context personalization/license_type пока дают 400.
-Спецификации: [HTTP-поиск](docs/http-search.md), [health](docs/http-server.md).
-Поиск CLI hybrid-v4: tuning @1/@4 52/52, brand 6/6, negatives 2/2,
-task probes @4 8/16 и @1 6/16; независимый выигрыш новой версии не проверен.
+Последний реализованный шаг — минимальный React/TS/Vite клиент
+(ветка `feat/search-frontend`):
+реальные POST /search через proxy, карточки/фильтры, ошибки/loading/empty/shortfall,
+отмена и защита stale responses, retry с прежним idempotency key. FSD checker,
+генерация типов из OpenAPI, npm lockfile и реальные CI scripts настроены.
+Go API остаётся lexical, HTTP hybrid/live и verifier не подключены.
+Локальные серверы для QA: API 8080, Vite 5173; команды — docs/frontend.md.
+Браузерный инструмент недоступен/не допущен к Chrome: визуальная desktop/mobile
+и browser e2e проверка НЕ проведены. DOM/model tests и real proxy smoke проведены;
+это не заменяет визуальную проверку. Новый frontend-job CI теперь обязателен.
 Артефакты игнорируются Git; компактная диагностика сохранена в testdata/evaluation.
 
 - [x] Перепроверить тексты и воспроизвести 60 tuning + 16 development probes;
@@ -268,10 +269,17 @@ Query-v3 / characteristics-v4 / lexical-v4: новый полный снимок
 - [ ] Подключить HTTP hybrid/cache/live с конфигурацией и бюджетом, не обходя
   Runtime; добавить поддержку context/cursor/license_type по отдельным проверкам.
 
-- [ ] Реализовать HTTP API /api/v1 по OpenAPI и подключить frontend к реальному backend.
+- [x] Подключить минимальный frontend к реальному POST /search и настроить
+  типы/линтер/архитектурный checker/tests/build. Остальные HTTP endpoints ниже не реализованы.
+- [ ] Проверить frontend визуально desktop/mobile и выполнить browser e2e,
+  когда разрешён доступ к браузеру; текущая QA ограничена DOM и HTTP proxy smoke.
+- [ ] Дореализовать оставшиеся HTTP endpoints по OpenAPI: suggest, products,
+  events, trace и analytics по соответствующим этапам.
 - [ ] Добавить синтетические B2B-профили и проверить влияние контекста без смешения с реальной историей.
-- [ ] Реализовать поиск, подсказки, фильтры и выбор вариантов лицензии.
-- [ ] Показать исправление запроса, наличие и цену без ложной трактовки нуля.
+- [x] Реализовать frontend поиска, availability/offer_kind фильтры и карточки.
+- [ ] Реализовать подсказки и получение/выбор вариантов лицензии.
+- [x] Показать наличие и цену без ложной трактовки нуля/«под заказ».
+- [ ] Показать подтверждённые исправления запроса после поддержки в API.
 - [ ] Подготовить рекомендации с источниками и ограничениями совместимости.
 - [ ] Реализовать программный verifier характеристик/лицензий; unknown/failed
   не допускаются как подтверждённая допродажа, отчёт привязан к обоим SKU.

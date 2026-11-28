@@ -738,6 +738,32 @@
   перезапуск с недоступным ES воспроизводит прежний JSON, новый поиск даёт 503.
 - Спецификация: docs/http-search.md. Дальнейшие шаги и ограничения — todo.md.
 
+## D-051. Минимальный frontend поверх реального HTTP-поиска
+
+Дата: 2026-11-28. Статус: реализован; визуальная/browser QA не проведена.
+
+- React/TypeScript/Vite, npm exact dependencies + lockfile, FSD и собственный
+  TypeScript AST checker. Types генерируются openapi-typescript из контракта;
+  check:api в test:ci запрещает расхождение. Steiger/plugin-boundaries не установлены.
+- Same-origin /api через Vite proxy на 127.0.0.1:8080; ни ключей, ни прямого
+  доступа к PG/ES/OpenAI в браузере. Go пока не раздаёт dist. HTTP режим lexical.
+- Новая отправка — новый key; retry ошибки — прежний key/body. Abort+sequence
+  защищают от устаревших ответов; смена query/filters очищает старую выдачу.
+- Данные цены/наличия/порядок/shortfall от backend; unknown price не 0,
+  unavailable не «под заказ», provisional не подтверждает четыре семейства.
+- Для Node 22.11: Vite 6.4.6, Vitest 4.1.12, TS ESLint 8.46.1;
+  точечный minimatch 11.0.1 override исправляет audit без несовместимого
+  обновления visitor-keys. Lint/typecheck/tests проверены, npm audit=0.
+  Совместимость: https://v6.vite.dev/guide/ и https://v4.vitest.dev/guide/migration.html;
+  точные engines дополнительно проверены через npm registry.
+- Отвергнут mock-каталог вместо реального API. Реальный proxy smoke: AnyDesk
+  SKU 402265, lexical, total_matches=null. DOM/model проверяют клавиатуру,
+  empty/error/retry, stale responses и безопасную карточку.
+- Встроенный browser недоступен, Chrome automation не допущен инструментом:
+  визуальный desktop/mobile и browser e2e не пройдены и не объявляются успешными.
+- Спецификация/запуск: docs/frontend.md. Следующее — HTTP hybrid/live и verifier,
+  визуальная QA при доступе к браузеру; остальной план — todo.md.
+
 ## Открытые решения
 
 - O-001: RAM — 16 ГБ; PostgreSQL 1 ГБ/2 CPU, Elasticsearch 2 ГБ/2 CPU (heap 512 МБ).

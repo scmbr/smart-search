@@ -9,6 +9,7 @@
 /bin/
 /build/
 /dist/
+/frontend/dist/
 *.exe
 *.test
 *.out
