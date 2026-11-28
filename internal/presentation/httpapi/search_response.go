@@ -59,6 +59,11 @@ type responseDTO struct {
 
 func mapSearch(record d.Record) (responseDTO, error) {
 	x := record.Result
+	view := d.Summarize(x)
+	topOffers := map[string]bool{}
+	for _, id := range view.TopOfferIDs {
+		topOffers[id] = true
+	}
 	if !d.ValidID(record.ID) || !d.ValidID(x.CatalogID) || !d.ValidID(x.IndexVersion) || strings.TrimSpace(x.Query) == "" || record.DurationMS < 0 {
 		return responseDTO{}, d.ErrUnavailable
 	}
@@ -101,20 +106,13 @@ func mapSearch(record d.Record) (responseDTO, error) {
 		}
 		card := cardDTO{Family: doc.FamilyID, Confirmed: doc.FamilyConfirmed, Product: product, Name: name, Category: doc.CategoryID, Offer: offerDTO{ID: doc.OfferID, Name: doc.Name, URL: doc.URL, Available: doc.Available, Price: price, Kind: doc.OfferKind, Parameters: []any{}}, Reasons: []string{"Совпадение по поисковому запросу; условия лицензии требуют проверки перед покупкой"}}
 		response.Matches = append(response.Matches, card)
-		if doc.FamilyConfirmed && len(response.Top4) < 4 {
+		if topOffers[doc.OfferID] {
 			response.Top4 = append(response.Top4, rankedDTO{Section: "matches", Product: product, Family: doc.FamilyID})
 		}
 	}
-	if len(x.Hits) == 0 {
-		zero := 0
-		response.Total = &zero
-	}
-	if len(response.Top4) < 4 {
-		reason := "insufficient_relevant_families"
-		if len(x.Hits) >= 4 {
-			reason = "verification_incomplete"
-		}
-		response.Shortfall = &reason
+	response.Total = view.ExactTotal
+	if view.Shortfall != "" {
+		response.Shortfall = &view.Shortfall
 		response.Clarification = append(response.Clarification, "Меньше четырёх подтверждённых семейств; проверенные допродажи пока недоступны")
 	}
 	return response, nil
